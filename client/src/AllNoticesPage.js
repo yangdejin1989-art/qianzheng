@@ -2,6 +2,7 @@
 // 完整的公告页面，显示所有公告
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { buildApiUrl } from './config';
 
 function AllNoticesPage({ onBack }) {
   const [notices, setNotices] = useState([]);
@@ -15,7 +16,7 @@ function AllNoticesPage({ onBack }) {
     const fetchNotices = async () => {
       try {
         setLoading(true);
-        const response = await axios.get('http://localhost:5000/api/notices');
+        const response = await axios.get(buildApiUrl('/api/notices'));
         // 只显示可见的公告，按创建时间倒序排列
         const visibleNotices = response.data
           .filter(notice => notice.visible)

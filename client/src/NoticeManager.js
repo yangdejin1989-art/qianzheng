@@ -2,6 +2,7 @@
 // 公告栏管理组件
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { buildApiUrl } from './config';
 import ManagerLayout from './components/ManagerLayout';
 
 function NoticeManager({ token }) {
@@ -12,7 +13,7 @@ function NoticeManager({ token }) {
   const [showForm, setShowForm] = useState(false);
 
   const fetchNotices = () => {
-    axios.get('http://localhost:5000/api/notices').then(res => setNotices(res.data));
+    axios.get(buildApiUrl('/api/notices')).then(res => setNotices(res.data));
   };
   useEffect(fetchNotices, []);
 
@@ -32,7 +33,7 @@ function NoticeManager({ token }) {
   
   const handleDelete = async (id) => {
     if(window.confirm('确定删除？')){
-      await axios.delete(`http://localhost:5000/api/notices/${id}`, { headers: { Authorization: `Bearer ${token}` } });
+      await axios.delete(buildApiUrl(`/api/notices/${id}`), { headers: { Authorization: `Bearer ${token}` } });
       fetchNotices();
     }
   };
@@ -42,9 +43,9 @@ function NoticeManager({ token }) {
     setError('');
     try {
       if(editing){
-        await axios.put(`http://localhost:5000/api/notices/${editing}`, form, { headers: { Authorization: `Bearer ${token}` } });
+        await axios.put(buildApiUrl(`/api/notices/${editing}`), form, { headers: { Authorization: `Bearer ${token}` } });
       }else{
-        await axios.post('http://localhost:5000/api/notices', form, { headers: { Authorization: `Bearer ${token}` } });
+        await axios.post(buildApiUrl('/api/notices'), form, { headers: { Authorization: `Bearer ${token}` } });
       }
       setEditing(null);
       setForm({ title: '', content: '', visible: true });

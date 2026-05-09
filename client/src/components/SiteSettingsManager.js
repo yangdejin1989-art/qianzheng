@@ -2,6 +2,7 @@
 // Logo与公司名称设置组件
 import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
 import axios from 'axios';
+import { buildApiUrl } from '../config';
 
 const SiteSettingsManager = forwardRef(({ onSave }, ref) => {
   const [settings, setSettings] = useState({
@@ -26,7 +27,7 @@ const SiteSettingsManager = forwardRef(({ onSave }, ref) => {
   const fetchSettings = async () => {
     try {
       setLoading(true);
-      const response = await axios.get('http://localhost:5000/api/site-settings');
+      const response = await axios.get(buildApiUrl('/api/site-settings'));
       setSettings({
         siteName: response.data.siteName || '',
         logoUrl: response.data.logoUrl || '',
@@ -46,7 +47,7 @@ const SiteSettingsManager = forwardRef(({ onSave }, ref) => {
       setError('');
       setSuccess('');
       
-      await axios.put('http://localhost:5000/api/site-settings', settings);
+      await axios.put(buildApiUrl('/api/site-settings'), settings);
       setSuccess('设置保存成功！');
       
       // 调用父组件的保存回调
@@ -95,7 +96,7 @@ const SiteSettingsManager = forwardRef(({ onSave }, ref) => {
       
       console.log('开始上传图片:', file.name, '大小:', file.size);
       
-      const response = await axios.post('http://localhost:5000/api/upload', formData, {
+      const response = await axios.post(buildApiUrl('/api/upload'), formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         },

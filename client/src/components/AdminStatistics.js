@@ -2,6 +2,7 @@
 // 后台数据统计组件
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { buildApiUrl } from '../config';
 
 function AdminStatistics() {
   const [stats, setStats] = useState(null);
@@ -15,7 +16,7 @@ function AdminStatistics() {
   const fetchStatistics = async () => {
     try {
       setLoading(true);
-      const response = await axios.get('http://localhost:5000/api/statistics');
+      const response = await axios.get(buildApiUrl('/api/statistics'));
       setStats(response.data);
     } catch (err) {
       console.error('获取统计数据失败:', err);

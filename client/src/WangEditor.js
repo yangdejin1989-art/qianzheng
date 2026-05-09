@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { Editor, Toolbar } from '@wangeditor/editor-for-react';
 import '@wangeditor/editor/dist/css/style.css';
+import { buildApiUrl } from './config';
 import './styles/EditorStyles.css';
 
 function WangEditor({ value, onChange, height = 400, placeholder = '', toolbarConfig = null }) {
@@ -110,7 +111,7 @@ function WangEditor({ value, onChange, height = 400, placeholder = '', toolbarCo
         ]
       },
       uploadImage: {
-        server: 'http://localhost:5000/api/upload',
+        server: buildApiUrl('/api/upload'),
         fieldName: 'image',
         maxFileSize: 100 * 1024 * 1024,
         allowedFileTypes: ['image/*'],
@@ -125,7 +126,7 @@ function WangEditor({ value, onChange, height = 400, placeholder = '', toolbarCo
         },
         customInsert(res, insertFn) {
           if (res?.success && res?.url) {
-            const imageUrl = res.url.startsWith('http') ? res.url : `http://localhost:5000${res.url}`;
+            const imageUrl = res.url.startsWith('http') ? res.url : buildApiUrl(res.url);
             insertFn(imageUrl, res.alt || '', res.href || '');
           }
         }

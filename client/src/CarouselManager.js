@@ -2,6 +2,7 @@
 // 轮播图管理组件
 import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
+import { buildApiUrl } from './config';
 import ManagerLayout from './components/ManagerLayout';
 
 function CarouselManager({ token }) {
@@ -14,7 +15,7 @@ function CarouselManager({ token }) {
   const fileInput = useRef();
 
   const fetchCarousels = () => {
-    axios.get('http://localhost:5000/api/carousels').then(res => setCarousels(res.data));
+    axios.get(buildApiUrl('/api/carousels')).then(res => setCarousels(res.data));
   };
   useEffect(fetchCarousels, []);
 
@@ -38,7 +39,7 @@ function CarouselManager({ token }) {
       formData.append('image', file);
       formData.append('order', order);
       formData.append('visible', visible);
-      await axios.post('http://localhost:5000/api/carousels', formData, {
+      await axios.post(buildApiUrl('/api/carousels'), formData, {
         headers: { 'Content-Type': 'multipart/form-data', Authorization: `Bearer ${token}` }
       });
       setFile(null); 
@@ -67,13 +68,13 @@ function CarouselManager({ token }) {
 
   const handleDelete = async (id) => {
     if(window.confirm('确定删除？')){
-      await axios.delete(`http://localhost:5000/api/carousels/${id}`, { headers: { Authorization: `Bearer ${token}` } });
+      await axios.delete(buildApiUrl(`/api/carousels/${id}`), { headers: { Authorization: `Bearer ${token}` } });
       fetchCarousels();
     }
   };
 
   const handleUpdate = async (id, data) => {
-    await axios.put(`http://localhost:5000/api/carousels/${id}`, data, { headers: { Authorization: `Bearer ${token}` } });
+    await axios.put(buildApiUrl(`/api/carousels/${id}`), data, { headers: { Authorization: `Bearer ${token}` } });
     fetchCarousels();
   };
 
@@ -98,7 +99,7 @@ function CarouselManager({ token }) {
               <div className="col-md-4 mb-4" key={c._id}>
                 <div className="card shadow-sm" style={{border: c.visible ? '2px solid #1976d2' : '2px solid #eee'}}>
                   <img 
-                    src={`http://localhost:5000${c.imageUrl}`} 
+                    src={buildApiUrl(c.imageUrl)}
                     alt="carousel" 
                     style={{width:'100%',height:180,objectFit:'cover',borderRadius:'8px 8px 0 0'}} 
                   />

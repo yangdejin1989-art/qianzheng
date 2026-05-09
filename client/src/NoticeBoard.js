@@ -2,13 +2,14 @@
 // 公告栏展示组件（手风琴样式，最多显示8条）
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { buildApiUrl } from './config';
 
 function NoticeBoard() {
   const [notices, setNotices] = useState([]);
   const [openIndex, setOpenIndex] = useState(null);
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/notices').then(res => {
+    axios.get(buildApiUrl('/api/notices')).then(res => {
       setNotices(res.data.filter(n => n.visible).slice(0, 8));
     });
   }, []);

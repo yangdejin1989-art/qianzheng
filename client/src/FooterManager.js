@@ -2,6 +2,7 @@
 // 后台管理底部内容组件
 import React, { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
+import { buildApiUrl } from './config';
 import WangEditor from './WangEditor';
 import ManagerLayout from './components/ManagerLayout';
 
@@ -19,7 +20,7 @@ function FooterManager({ token, subTab }) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/footer');
+        const response = await axios.get(buildApiUrl('/api/footer'));
         const data = response.data || {};
         
         // 确保数据结构完整
@@ -63,7 +64,7 @@ function FooterManager({ token, subTab }) {
     setError('');
     try {
       console.log('准备保存的数据:', footer);
-      const response = await axios.put('http://localhost:5000/api/footer', footer, {
+      const response = await axios.put(buildApiUrl('/api/footer'), footer, {
         headers: { Authorization: `Bearer ${token}` }
       });
       console.log('保存成功，服务器返回:', response.data);
@@ -118,7 +119,7 @@ function FooterManager({ token, subTab }) {
     const formData = new FormData();
     formData.append('image', file);
     try {
-      const res = await axios.post('http://localhost:5000/api/footer/qrcode', formData, {
+      const res = await axios.post(buildApiUrl('/api/footer/qrcode'), formData, {
         headers: { 'Content-Type': 'multipart/form-data', Authorization: `Bearer ${token}` }
       });
       
@@ -519,7 +520,7 @@ function FooterManager({ token, subTab }) {
                           {item.imageUrl ? (
                             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                               <img 
-                                src={`http://localhost:5000${item.imageUrl}`} 
+                            src={buildApiUrl(item.imageUrl)}
                                 alt="二维码" 
                                 style={{
                                   width: '40px', 

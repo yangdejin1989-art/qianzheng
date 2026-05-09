@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { buildApiUrl } from './config';
 import ManagerLayout from './components/ManagerLayout';
 
 function IntroductionManager({ token }) {
@@ -17,7 +18,7 @@ function IntroductionManager({ token }) {
 
   const fetchIntroduction = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/introduction');
+      const response = await axios.get(buildApiUrl('/api/introduction'));
       setIntroduction(response.data);
     } catch (error) {
       console.error('获取产品简介失败:', error);
@@ -29,7 +30,7 @@ function IntroductionManager({ token }) {
   const handleSave = async () => {
     setSaving(true);
     try {
-      await axios.put('http://localhost:5000/api/introduction', introduction, {
+      await axios.put(buildApiUrl('/api/introduction'), introduction, {
         headers: { Authorization: `Bearer ${token}` }
       });
       alert('保存成功！');
@@ -47,7 +48,7 @@ function IntroductionManager({ token }) {
     
     try {
       console.log('开始上传图片:', file.name);
-      const response = await axios.post('http://localhost:5000/api/introduction/image', formData, {
+      const response = await axios.post(buildApiUrl('/api/introduction/image'), formData, {
         headers: { 
           'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${token}`
@@ -329,7 +330,7 @@ function IntroductionManager({ token }) {
                         {section.imageUrl && (
                           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                             <img 
-                              src={`http://localhost:5000${section.imageUrl}`} 
+                              src={buildApiUrl(section.imageUrl)}
                               alt="预览" 
                               style={{ 
                                 width: '60px', 

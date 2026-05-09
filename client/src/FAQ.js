@@ -2,6 +2,7 @@
 // 常见问题展示组件
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { buildApiUrl } from './config';
 
 function FAQ() {
   const [faqs, setFaqs] = useState([]);
@@ -12,7 +13,7 @@ function FAQ() {
     const fetchFaqs = async () => {
       try {
         setLoading(true);
-        const response = await axios.get('http://localhost:5000/api/faqs');
+        const response = await axios.get(buildApiUrl('/api/faqs'));
         // 只显示可见的FAQ，并按排序字段排序
         const visibleFaqs = response.data
           .filter(faq => faq.visible)

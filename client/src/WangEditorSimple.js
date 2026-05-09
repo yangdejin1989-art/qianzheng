@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Editor, Toolbar } from '@wangeditor/editor-for-react';
 import '@wangeditor/editor/dist/css/style.css';
+import { buildApiUrl } from './config';
 
 function WangEditorSimple({ value, onChange, height = 400, placeholder = '' }) {
   const [editor, setEditor] = useState(null);
@@ -52,7 +53,7 @@ function WangEditorSimple({ value, onChange, height = 400, placeholder = '' }) {
         ]
       },
       uploadImage: {
-        server: 'http://localhost:5000/api/upload',
+        server: buildApiUrl('/api/upload'),
         fieldName: 'image',
         maxFileSize: 100 * 1024 * 1024, // 设置为100MB，实际上相当于无限制
         allowedFileTypes: ['image/*'],
@@ -76,10 +77,10 @@ function WangEditorSimple({ value, onChange, height = 400, placeholder = '' }) {
           console.log('处理上传结果:', res);
           try {
             if (res && res.success && res.url) {
-              const imageUrl = res.url.startsWith('http') ? res.url : `http://localhost:5000${res.url}`;
+              const imageUrl = res.url.startsWith('http') ? res.url : buildApiUrl(res.url);
               insertFn(imageUrl, res.alt || '', res.href || '');
             } else if (res && res.url) {
-              const imageUrl = res.url.startsWith('http') ? res.url : `http://localhost:5000${res.url}`;
+              const imageUrl = res.url.startsWith('http') ? res.url : buildApiUrl(res.url);
               insertFn(imageUrl, res.alt || '', res.href || '');
             } else {
               console.error('图片上传返回格式错误:', res);

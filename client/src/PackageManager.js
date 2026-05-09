@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
+import { buildApiUrl } from './config';
 import WangEditor from './WangEditor';
 import ManagerLayout from './components/ManagerLayout';
 
@@ -48,7 +49,7 @@ function PackageManager({ token }) {
   const [showForm, setShowForm] = useState(false);
 
   const fetchPackages = () => {
-    axios.get('http://localhost:5000/api/packages').then(res => setPackages(res.data));
+    axios.get(buildApiUrl('/api/packages')).then(res => setPackages(res.data));
   };
 
   useEffect(() => {
@@ -101,7 +102,7 @@ function PackageManager({ token }) {
   const handleDelete = async (id) => {
     if (window.confirm('确定删除这个套餐？')) {
       try {
-        await axios.delete(`http://localhost:5000/api/packages/${id}`, {
+        await axios.delete(buildApiUrl(`/api/packages/${id}`), {
           headers: { Authorization: `Bearer ${token}` }
         });
         fetchPackages();
@@ -212,14 +213,14 @@ function PackageManager({ token }) {
       }
 
       if (editing) {
-        await axios.put(`http://localhost:5000/api/packages/${editing}`, formData, {
+        await axios.put(buildApiUrl(`/api/packages/${editing}`), formData, {
           headers: { 
             'Content-Type': 'multipart/form-data',
             Authorization: `Bearer ${token}` 
           }
         });
       } else {
-        await axios.post('http://localhost:5000/api/packages', formData, {
+        await axios.post(buildApiUrl('/api/packages'), formData, {
           headers: { 
             'Content-Type': 'multipart/form-data',
             Authorization: `Bearer ${token}` 
@@ -275,7 +276,7 @@ function PackageManager({ token }) {
                 <div className="card h-100 shadow-sm" style={{ borderRadius: 6, fontSize: 13 }}>
                   {pkg.imageUrl && (
                     <img
-                      src={`http://localhost:5000${pkg.imageUrl}`}
+                      src={buildApiUrl(pkg.imageUrl)}
                       className="card-img-top"
                       alt={pkg.name}
                       style={{ height: '120px', objectFit: 'cover', borderTopLeftRadius: 6, borderTopRightRadius: 6 }}
@@ -602,7 +603,7 @@ function PackageManager({ token }) {
                           boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
                         }}>
                           <img 
-                            src={previewUrl || `http://localhost:5000${form.imageUrl}`} 
+                            src={previewUrl || buildApiUrl(form.imageUrl)} 
                             alt="套餐图片" 
                             style={{ 
                               width: '100%', 
