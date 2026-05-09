@@ -4,6 +4,7 @@
 // 1. 连接 MongoDB 数据库
 // 2. 加载数据模型
 // 3. 提供 API 接口：/api/apply（提交申请）、/api/status（查询进度）等
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
