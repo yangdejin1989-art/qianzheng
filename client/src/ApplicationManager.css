@@ -1,0 +1,59 @@
+/* ApplicationManager.css */
+
+/* 容器布局样式 */
+.application-table-container {
+  flex: 1;
+  overflow: auto;
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  background: #fff;
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+  min-height: 500px;
+}
+
+.application-table-container thead th {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: #f8f9fa;
+  border-bottom: 2px solid #dee2e6;
+  font-weight: 600;
+}
+
+/* 表格样式：黑线边框 + 美观效果 */
+.application-table-container .table {
+  margin: 0;
+  border: none;
+  border-radius: 0;
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.application-table-container .table th,
+.application-table-container .table td {
+  border: 1px solid #000 !important;
+  padding: 8px 6px;
+}
+
+/* 创建时间居中样式 */
+.creation-time {
+  text-align: center;
+  font-weight: 500;
+}
+
+/* 表格行悬停效果 */
+.application-table-container .table tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+/* 其它原有样式保留 */
+.text-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.table td,
+.table th { vertical-align: middle; } 

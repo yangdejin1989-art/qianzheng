@@ -1,0 +1,415 @@
+/* 管理页面统一样式 */
+
+/* 页面布局 */
+.manager-layout {
+  padding: 0;
+}
+
+.page-header {
+  background: #fff;
+  border-radius: 8px;
+  padding: 24px 32px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  border: 1px solid #e5e7eb;
+  margin-bottom: 24px;
+}
+
+.page-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0;
+}
+
+.page-subtitle {
+  font-size: 16px;
+  color: #6b7280;
+}
+
+.page-content {
+  background: #fff;
+  border-radius: 8px;
+  padding: 32px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  border: 1px solid #e5e7eb;
+}
+
+/* 区域标题 */
+.section-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+/* 表单区域 */
+.form-section {
+  background: #f9fafb;
+  border-radius: 8px;
+  padding: 24px;
+  border: 1px solid #e5e7eb;
+  margin-bottom: 24px;
+}
+
+.form-container {
+  background: #fff;
+  border-radius: 6px;
+  padding: 20px;
+  border: 1px solid #d1d5db;
+}
+
+/* 列表区域 */
+.list-section {
+  background: #f9fafb;
+  border-radius: 8px;
+  padding: 24px;
+  border: 1px solid #e5e7eb;
+}
+
+/* 卡片样式 */
+.card {
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.card:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transform: translateY(-2px);
+}
+
+.card-header {
+  background: #f8fafc;
+  border-bottom: 1px solid #e5e7eb;
+  padding: 16px 20px;
+}
+
+/* 表格样式 */
+.table {
+  background: #fff;
+  border-radius: 6px;
+  /* 移除 overflow:hidden，防止干扰 sticky 表头 */
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  width: 100%;
+  max-width: 100%;
+}
+
+.table-responsive {
+  border-radius: 6px;
+  overflow: visible; /* 允许内部元素自行控制滚动 */
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.table thead th {
+  background: #f8fafc;
+  border-bottom: 2px solid #e5e7eb;
+  font-weight: 600;
+  color: #374151;
+  padding: 12px 16px;
+  white-space: nowrap;
+}
+
+.table tbody td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #f3f4f6;
+  vertical-align: middle;
+  word-wrap: break-word;
+  word-break: break-word;
+}
+
+.table tbody tr:hover {
+  background: #f9fafb;
+}
+
+/* FAQ表格特定样式 */
+.faq-table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+.faq-table th,
+.faq-table td {
+  padding: 12px 8px;
+  vertical-align: top;
+}
+
+.faq-table .question-cell {
+  width: 25%;
+  min-width: 150px;
+}
+
+.faq-table .answer-cell {
+  width: 40%;
+  min-width: 200px;
+}
+
+.faq-table .order-cell {
+  width: 10%;
+  min-width: 80px;
+  text-align: center;
+}
+
+.faq-table .visible-cell {
+  width: 10%;
+  min-width: 80px;
+  text-align: center;
+}
+
+.faq-table .action-cell {
+  width: 15%;
+  min-width: 140px;
+  text-align: center;
+}
+
+/* 按钮样式 */
+.btn-lg {
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 500;
+  border-radius: 6px;
+}
+
+.btn-outline-primary {
+  border-color: #3b82f6;
+  color: #3b82f6;
+}
+
+.btn-outline-primary:hover {
+  background: #3b82f6;
+  border-color: #3b82f6;
+  color: #fff;
+}
+
+.btn-outline-danger {
+  border-color: #ef4444;
+  color: #ef4444;
+}
+
+.btn-outline-danger:hover {
+  background: #ef4444;
+  border-color: #ef4444;
+  color: #fff;
+}
+
+/* FAQ操作按钮样式 */
+.faq-table .btn-sm {
+  font-size: 12px;
+  padding: 4px 8px;
+  font-weight: 500;
+  min-width: 50px;
+}
+
+.faq-table .btn-group {
+  display: flex;
+  gap: 4px;
+}
+
+/* 表单控件样式 */
+.form-control-lg {
+  padding: 12px 16px;
+  font-size: 16px;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  transition: border-color 0.2s ease;
+}
+
+.form-control-lg:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.form-select-lg {
+  padding: 12px 16px;
+  font-size: 16px;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+}
+
+/* 标签样式 */
+.form-label {
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 8px;
+}
+
+/* 复选框样式 */
+.form-check-input:checked {
+  background-color: #3b82f6;
+  border-color: #3b82f6;
+}
+
+.form-check-label {
+  color: #374151;
+  font-weight: 500;
+}
+
+/* 徽章样式 */
+.badge {
+  font-size: 12px;
+  font-weight: 500;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+/* 警告框样式 */
+.alert {
+  border-radius: 6px;
+  border: none;
+  padding: 16px 20px;
+}
+
+.alert-info {
+  background: #eff6ff;
+  color: #1e40af;
+  border-left: 4px solid #3b82f6;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .page-header {
+    padding: 16px 20px;
+  }
+  
+  .page-content {
+    padding: 20px;
+  }
+  
+  .form-section {
+    padding: 16px;
+  }
+  
+  .list-section {
+    padding: 16px;
+  }
+  
+  .section-title {
+    font-size: 18px;
+  }
+  
+  .btn-lg {
+    padding: 10px 20px;
+    font-size: 14px;
+  }
+  
+  .form-control-lg {
+    padding: 10px 14px;
+    font-size: 14px;
+  }
+}
+
+/* 动画效果 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.form-section,
+.list-section {
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* 加载状态 */
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  color: #6b7280;
+  font-size: 16px;
+}
+
+/* 错误状态 */
+.error-message {
+  background: #fef2f2;
+  color: #dc2626;
+  padding: 12px 16px;
+  border-radius: 6px;
+  border: 1px solid #fecaca;
+  margin: 16px 0;
+}
+
+/* 成功状态 */
+.success-message {
+  background: #f0fdf4;
+  color: #16a34a;
+  padding: 12px 16px;
+  border-radius: 6px;
+  border: 1px solid #bbf7d0;
+  margin: 16px 0;
+} 
+
+/* 紧凑模式（非申请管理页面） */
+.compact-manager .page-header {
+  padding: 12px 16px;
+  margin-bottom: 12px;
+}
+.compact-manager .page-title {
+  font-size: 20px;
+}
+.compact-manager .page-subtitle {
+  font-size: 13px;
+}
+.compact-manager .page-content {
+  padding: 16px;
+}
+.compact-manager .form-section,
+.compact-manager .list-section {
+  padding: 12px;
+  margin-bottom: 12px;
+}
+.compact-manager .section-title {
+  font-size: 15px;
+  margin-bottom: 8px;
+  padding-bottom: 4px;
+}
+.compact-manager .form-label {
+  font-size: 13px;
+  margin-bottom: 4px;
+}
+.compact-manager .form-control-lg,
+.compact-manager .form-select-lg {
+  padding: 6px 10px;
+  font-size: 13px;
+  border-radius: 4px;
+}
+.compact-manager .btn-lg {
+  padding: 6px 14px;
+  font-size: 13px;
+  border-radius: 4px;
+}
+.compact-manager .btn,
+.compact-manager .btn-sm {
+  font-size: 12px;
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+.compact-manager .card {
+  border-radius: 6px;
+  margin-bottom: 10px;
+}
+.compact-manager .card-header {
+  padding: 8px 12px;
+}
+.compact-manager .badge {
+  font-size: 11px;
+  padding: 2px 6px;
+}
+.compact-manager .form-text {
+  font-size: 11px;
+}
+.compact-manager .table th,
+.compact-manager .table td {
+  padding: 6px 8px;
+  font-size: 12px;
+}
+.compact-manager .faq-table .btn-group {
+  gap: 2px;
+} 

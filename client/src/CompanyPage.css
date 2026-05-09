@@ -1,0 +1,98 @@
+/* CompanyPage组件样式 */
+
+/* 移动端优化 */
+@media (max-width: 768px) {
+    /* 移动端滑动优化 */
+    .company-page {
+      -webkit-overflow-scrolling: touch !important;
+      touch-action: pan-y !important;
+      padding: 20px 15px !important;
+    }
+    
+    .company-content {
+      padding: 25px !important;
+      border-radius: 10px !important;
+    }
+    
+    .company-title h1 {
+      font-size: 24px !important;
+      margin-bottom: 15px !important;
+    }
+    
+    .company-title p {
+      font-size: 14px !important;
+      margin: '8px 0 0 0' !important;
+  }
+    
+    .company-content-text {
+      font-size: 15px !important;
+      line-height: 1.6 !important;
+    }
+    
+    /* 图片移动端优化 */
+    .company-content-text img {
+      max-width: 100% !important;
+      height: auto !important;
+      border-radius: 8px !important;
+      margin: 10px 0 !important;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
+    }
+    
+    /* 返回按钮移动端优化 */
+    .company-back-btn {
+      padding: 10px 25px !important;
+    font-size: 15px !important;
+      border-radius: 8px !important;
+    }
+    
+    /* 底部信息移动端优化 */
+    .company-footer {
+      margin-top: 25px !important;
+      padding-top: 15px !important;
+      font-size: 12px !important;
+    }
+  }
+  
+  /* 小屏幕手机优化 */
+  @media (max-width: 480px) {
+    .company-page {
+      padding: 15px 10px !important;
+    }
+    
+    .company-content {
+      padding: 20px !important;
+      border-radius: 8px !important;
+    }
+    
+    .company-title h1 {
+      font-size: 22px !important;
+      margin-bottom: 12px !important;
+    }
+    
+    .company-title p {
+      font-size: 13px !important;
+    }
+    
+    .company-content-text {
+      font-size: 14px !important;
+      line-height: 1.5 !important;
+    }
+    
+    /* 图片小屏幕优化 */
+    .company-content-text img {
+      border-radius: 6px !important;
+      margin: 8px 0 !important;
+    }
+    
+    .company-back-btn {
+      padding: 8px 20px !important;
+      font-size: 14px !important;
+      border-radius: 6px !important;
+    }
+    
+    .company-footer {
+      margin-top: 20px !important;
+      padding-top: 12px !important;
+      font-size: 11px !important;
+    }
+  }

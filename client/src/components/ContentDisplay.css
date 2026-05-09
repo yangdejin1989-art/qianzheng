@@ -1,0 +1,127 @@
+/* 内容显示组件样式 */
+.content-display {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #333;
+}
+
+/* 图片样式 - 限制大小并居中显示 */
+.content-display img {
+  max-width: 100% !important;
+  max-height: 300px !important; /* 进一步限制最大高度 */
+  width: auto !important;
+  height: auto !important;
+  display: block !important;
+  margin: 10px auto !important;
+  border-radius: 4px !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+  object-fit: contain !important;
+  overflow: hidden !important; /* 防止图片溢出 */
+}
+
+/* 大图片的响应式处理 */
+@media (max-width: 768px) {
+  .content-display img {
+    max-height: 250px !important;
+    max-width: 90% !important; /* 在平板端进一步限制宽度 */
+  }
+}
+
+@media (max-width: 480px) {
+  .content-display img {
+    max-height: 180px !important;
+    max-width: 85% !important; /* 在手机端进一步限制宽度 */
+  }
+}
+
+/* 超小屏幕的处理 */
+@media (max-width: 320px) {
+  .content-display img {
+    max-height: 150px !important;
+    max-width: 80% !important;
+  }
+}
+
+/* 表格样式 */
+.content-display table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.content-display table td,
+.content-display table th {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.content-display table th {
+  background-color: #f8f9fa;
+  font-weight: 600;
+}
+
+/* 链接样式 */
+.content-display a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.content-display a:hover {
+  text-decoration: underline;
+}
+
+/* 引用样式 */
+.content-display blockquote {
+  border-left: 4px solid #007bff;
+  margin: 0 0 10px 0;
+  padding: 10px 20px;
+  background-color: #f8f9fa;
+  font-style: italic;
+}
+
+/* 代码样式 */
+.content-display code {
+  background-color: #f8f9fa;
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9em;
+}
+
+.content-display pre {
+  background-color: #f8f9fa;
+  padding: 10px;
+  border-radius: 5px;
+  overflow-x: auto;
+  margin: 0 0 10px 0;
+}
+
+/* 列表样式 */
+.content-display ul,
+.content-display ol {
+  margin: 0 0 10px 20px;
+  padding: 0;
+}
+
+.content-display li {
+  margin-bottom: 5px;
+}
+
+/* 标题样式 */
+.content-display h1,
+.content-display h2,
+.content-display h3,
+.content-display h4,
+.content-display h5,
+.content-display h6 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+/* 段落样式 */
+.content-display p {
+  margin: 0 0 10px 0;
+} 

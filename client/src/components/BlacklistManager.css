@@ -1,0 +1,151 @@
+.blacklist-manager {
+    padding: 20px;
+  }
+  
+  .blacklist-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #e9ecef;
+  }
+  
+  .blacklist-header h2 {
+    margin: 0;
+    color: #495057;
+  }
+  
+  .add-blacklist-form {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .add-blacklist-form h4 {
+    margin-bottom: 15px;
+    color: #495057;
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+    color: #495057;
+  }
+  
+  .form-control {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 14px;
+  }
+  
+  .form-control:focus {
+    outline: none;
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+  }
+  
+  .form-actions {
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid #e9ecef;
+  }
+  
+  .blacklist-table {
+    background: white;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 20px;
+  }
+  
+  .blacklist-table h4 {
+    margin-bottom: 15px;
+    color: #495057;
+  }
+  
+  .table {
+    margin-bottom: 0;
+  }
+  
+  .table th {
+    background: #f8f9fa;
+    border-bottom: 2px solid #dee2e6;
+    font-weight: 600;
+    color: #495057;
+  }
+  
+  .table td {
+    vertical-align: middle;
+  }
+  
+  .badge {
+    font-size: 12px;
+  }
+  
+  code {
+    background: #f8f9fa;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 12px;
+    color: #e83e8c;
+  }
+  
+  .btn-sm {
+    padding: 4px 8px;
+    font-size: 12px;
+  }
+  
+  .pagination {
+    margin-top: 20px;
+    margin-bottom: 0;
+  }
+  
+  .page-link {
+    color: #0d6efd;
+    border: 1px solid #dee2e6;
+  }
+  
+  .page-link:hover {
+    color: #0a58ca;
+    background-color: #e9ecef;
+    border-color: #dee2e6;
+  }
+  
+  .page-item.disabled .page-link {
+    color: #6c757d;
+    background-color: #fff;
+    border-color: #dee2e6;
+  }
+  
+  .alert {
+    margin-bottom: 20px;
+    padding: 12px 16px;
+    border-radius: 4px;
+  }
+  
+  .alert-info {
+    background-color: #d1ecf1;
+    border: 1px solid #bee5eb;
+    color: #0c5460;
+  }
+  
+  .text-muted {
+    color: #6c757d !important;
+  }
+  
+  .text-danger {
+    color: #dc3545 !important;
+  }
+  
+  .text-success {
+    color: #198754 !important;
+  }

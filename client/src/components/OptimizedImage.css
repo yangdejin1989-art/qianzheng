@@ -1,0 +1,116 @@
+/* 优化图片容器 */
+.optimized-image-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px 0;
+  overflow: hidden;
+  border-radius: 4px;
+  background-color: #f8f9fa;
+  min-height: 100px;
+}
+
+/* 优化图片样式 */
+.optimized-image {
+  max-width: 100% !important;
+  max-height: 250px !important; /* 严格控制最大高度 */
+  width: auto !important;
+  height: auto !important;
+  display: block !important;
+  border-radius: 4px !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+  object-fit: contain !important;
+  transition: opacity 0.3s ease;
+  opacity: 0;
+}
+
+.optimized-image.loaded {
+  opacity: 1;
+}
+
+/* 加载状态 */
+.image-loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: #666;
+  font-size: 12px;
+}
+
+.loading-spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #e0e0e0;
+  border-top: 2px solid #007bff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* 错误状态 */
+.optimized-image-error {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100px;
+  background-color: #f8f9fa;
+  border: 1px dashed #ddd;
+  border-radius: 4px;
+  color: #666;
+  font-size: 12px;
+}
+
+.error-content {
+  text-align: center;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .optimized-image {
+    max-height: 200px !important;
+    max-width: 95% !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .optimized-image {
+    max-height: 150px !important;
+    max-width: 90% !important;
+  }
+  
+  .optimized-image-container {
+    min-height: 80px;
+  }
+}
+
+@media (max-width: 320px) {
+  .optimized-image {
+    max-height: 120px !important;
+    max-width: 85% !important;
+  }
+  
+  .optimized-image-container {
+    min-height: 60px;
+  }
+}
+
+/* 在富文本内容中的特殊处理 */
+.content-display .optimized-image-container {
+  margin: 10px auto;
+  max-width: 100%;
+}
+
+.wang-editor-content .optimized-image-container {
+  margin: 10px auto;
+  max-width: 100%;
+} 

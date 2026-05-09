@@ -1,0 +1,98 @@
+/* AboutPage组件样式 */
+
+/* 移动端优化 */
+@media (max-width: 768px) {
+  /* 移动端滑动优化 */
+  .about-page {
+    -webkit-overflow-scrolling: touch !important;
+    touch-action: pan-y !important;
+    padding: 20px 15px !important;
+  }
+  
+  .about-content {
+    padding: 25px !important;
+    border-radius: 10px !important;
+  }
+  
+  .about-title h1 {
+    font-size: 24px !important;
+    margin-bottom: 15px !important;
+  }
+  
+  .about-title p {
+    font-size: 14px !important;
+    margin: '8px 0 0 0' !important;
+  }
+  
+  .about-content-text {
+    font-size: 15px !important;
+    line-height: 1.6 !important;
+  }
+  
+  /* 图片移动端优化 */
+  .about-content-text img {
+    max-width: 100% !important;
+    height: auto !important;
+    border-radius: 8px !important;
+    margin: 10px 0 !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
+  }
+  
+  /* 返回按钮移动端优化 */
+  .about-back-btn {
+    padding: 10px 25px !important;
+    font-size: 15px !important;
+    border-radius: 8px !important;
+  }
+  
+  /* 底部信息移动端优化 */
+  .about-footer {
+    margin-top: 25px !important;
+    padding-top: 15px !important;
+    font-size: 12px !important;
+  }
+}
+
+/* 小屏幕手机优化 */
+@media (max-width: 480px) {
+  .about-page {
+    padding: 15px 10px !important;
+  }
+  
+  .about-content {
+    padding: 20px !important;
+    border-radius: 8px !important;
+  }
+  
+  .about-title h1 {
+    font-size: 22px !important;
+    margin-bottom: 12px !important;
+  }
+  
+  .about-title p {
+    font-size: 13px !important;
+  }
+  
+  .about-content-text {
+    font-size: 14px !important;
+    line-height: 1.5 !important;
+  }
+  
+  /* 图片小屏幕优化 */
+  .about-content-text img {
+    border-radius: 6px !important;
+    margin: 8px 0 !important;
+  }
+  
+  .about-back-btn {
+    padding: 8px 20px !important;
+    font-size: 15px !important;
+    border-radius: 6px !important;
+  }
+  
+  .about-footer {
+    margin-top: 20px !important;
+    padding-top: 12px !important;
+    font-size: 11px !important;
+  }
+}

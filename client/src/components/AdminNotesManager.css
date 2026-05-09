@@ -1,0 +1,157 @@
+.admin-notes-manager {
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  padding: 16px;
+  margin-top: 16px;
+}
+
+.admin-notes-manager h4 {
+  margin: 0 0 8px 0;
+  color: #495057;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.admin-notes-manager .description {
+  color: #6c757d;
+  font-size: 13px;
+  margin-bottom: 12px;
+  line-height: 1.4;
+}
+
+/* 添加备注区域 */
+.add-note-section {
+  margin-bottom: 16px;
+}
+
+.note-textarea {
+  width: 100%;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  padding: 8px 12px;
+  font-size: 14px;
+  resize: vertical;
+  min-height: 60px;
+  font-family: inherit;
+  box-sizing: border-box;
+}
+
+.note-textarea:focus {
+  outline: none;
+  border-color: #0d6efd;
+  box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
+
+.add-note-btn {
+  background: #0d6efd;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: background-color 0.2s;
+}
+
+.add-note-btn:hover:not(:disabled) {
+  background: #0b5ed7;
+}
+
+.add-note-btn:disabled {
+  background: #6c757d;
+  cursor: not-allowed;
+}
+
+/* 消息提示 */
+.message {
+  padding: 8px 12px;
+  border-radius: 4px;
+  margin-bottom: 12px;
+  font-size: 14px;
+  background: #d1ecf1;
+  color: #0c5460;
+  border: 1px solid #bee5eb;
+}
+
+/* 备注列表 */
+.notes-list {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.no-notes {
+  text-align: center;
+  color: #6c757d;
+  font-style: italic;
+  padding: 20px;
+  background: white;
+  border-radius: 4px;
+  border: 1px dashed #dee2e6;
+}
+
+.note-item {
+  background: white;
+  border: 1px solid #e9ecef;
+  border-radius: 6px;
+  padding: 12px;
+  margin-bottom: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.note-content {
+  color: #212529;
+  font-size: 14px;
+  line-height: 1.5;
+  margin-bottom: 8px;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.note-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  border-top: 1px solid #f0f0f0;
+  padding-top: 6px;
+}
+
+.note-time {
+  color: #6c757d;
+}
+
+.delete-note-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 2px 6px;
+  border-radius: 3px;
+  transition: background-color 0.2s;
+}
+
+.delete-note-btn:hover {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+/* 滚动条样式 */
+.notes-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.notes-list::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.notes-list::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.notes-list::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}

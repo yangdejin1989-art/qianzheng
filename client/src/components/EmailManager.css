@@ -1,0 +1,522 @@
+/* 邮件管理组件样式 */
+.email-manager {
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 20px 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.email-manager-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.email-manager-header h3 {
+  margin: 0;
+  color: #333;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* 开关样式 */
+.email-toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 24px;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: 0.3s;
+  border-radius: 24px;
+}
+
+.toggle-slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.3s;
+  border-radius: 50%;
+}
+
+.toggle-switch input:checked + .toggle-slider {
+  background-color: #2196F3;
+}
+
+.toggle-switch input:checked + .toggle-slider:before {
+  transform: translateX(26px);
+}
+
+.toggle-label {
+  font-size: 14px;
+  color: #666;
+  font-weight: 500;
+}
+
+/* 邮件信息区域 */
+.email-info {
+  background: #f8f9fa;
+  padding: 15px;
+  border-radius: 6px;
+  margin-bottom: 20px;
+}
+
+/* 发送记录表格 */
+.sent-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+.sent-item { 
+  display: flex; 
+  flex-direction: column; 
+  background: #fff; 
+  border: 1px solid #e9ecef; 
+  padding: 8px 12px; 
+  border-radius: 6px; 
+  min-width: 120px;
+}
+.sent-name { color: #495057; font-size: 13px; margin-bottom: 4px; }
+
+/* 可展开的状态区域 */
+.sent-status-expandable {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.sent-status-expandable:hover {
+  opacity: 0.8;
+}
+
+.expand-icon {
+  font-size: 10px;
+  color: #6c757d;
+  transition: transform 0.2s ease;
+}
+
+/* 展开的详细记录 */
+.sent-details {
+  margin-top: 6px;
+  padding-top: 6px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.sent-detail-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  color: #6c757d;
+  margin: 2px 0;
+  padding: 2px 0;
+}
+
+.sent-time {
+  color: #495057;
+}
+
+.sent-type {
+  color: #6c757d;
+  font-style: italic;
+}
+
+.tag {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+}
+.tag-success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+.tag-muted { background: #f1f3f5; color: #6c757d; border: 1px solid #dee2e6; }
+
+.email-info p {
+  margin: 8px 0;
+  color: #555;
+  font-size: 14px;
+}
+
+.email-info strong {
+  color: #333;
+  font-weight: 600;
+}
+
+/* 状态标签 */
+.status-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  color: white;
+  margin-left: 8px;
+}
+
+.status-待处理 {
+  background-color: #ffc107;
+  color: #000;
+}
+
+.status-待确认 {
+  background-color: #17a2b8;
+}
+
+.status-处理中 {
+  background-color: #007bff;
+}
+
+.status-已完成 {
+  background-color: #28a745;
+}
+
+.status-已取消 {
+  background-color: #dc3545;
+}
+
+/* 邮件操作区域 */
+.email-actions {
+  margin-bottom: 20px;
+}
+
+.email-actions .btn {
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.email-actions .btn-primary {
+  background-color: #007bff;
+  color: white;
+}
+
+.email-actions .btn-primary:hover {
+  background-color: #0056b3;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+}
+
+.email-actions .btn-primary:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* 手动发送提示 */
+.manual-notice {
+  background: #fff3cd;
+  border: 1px solid #ffeaa7;
+  border-radius: 6px;
+  padding: 12px;
+  margin-top: 15px;
+}
+
+.manual-notice p {
+  margin: 0;
+  color: #856404;
+  font-size: 13px;
+  text-align: center;
+}
+
+/* 消息提示 */
+.message {
+  padding: 12px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+  margin-top: 15px;
+}
+
+.message.success {
+  background-color: #d4edda;
+  border: 1px solid #c3e6cb;
+  color: #155724;
+}
+
+.message.error {
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  color: #721c24;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .email-manager-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+  
+  .email-toggle {
+    align-self: flex-end;
+  }
+  
+  .email-manager {
+    padding: 15px;
+    margin: 15px 0;
+  }
+  
+  .email-actions .btn {
+    width: 100%;
+    padding: 12px 20px;
+  }
+}
+.email-manager {
+    background: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .email-manager-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #f0f0f0;
+  }
+  
+  .email-manager-header h3 {
+    margin: 0;
+    color: #333;
+    font-size: 18px;
+    font-weight: 600;
+  }
+  
+  /* 开关样式 */
+  .email-toggle {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+  }
+  
+  .toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  
+  .toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: 0.3s;
+    border-radius: 24px;
+  }
+  
+  .toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: 0.3s;
+    border-radius: 50%;
+  }
+  
+  .toggle-switch input:checked + .toggle-slider {
+    background-color: #2196F3;
+  }
+  
+  .toggle-switch input:checked + .toggle-slider:before {
+    transform: translateX(26px);
+  }
+  
+  .toggle-label {
+    font-size: 14px;
+    color: #666;
+    font-weight: 500;
+  }
+  
+  /* 邮件信息区域 */
+  .email-info {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+  }
+  
+  .email-info p {
+    margin: 8px 0;
+    color: #555;
+    font-size: 14px;
+  }
+  
+  .email-info strong {
+    color: #333;
+    font-weight: 600;
+  }
+  
+  /* 状态标签 */
+  .status-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    color: white;
+    margin-left: 8px;
+  }
+  
+  .status-待处理 {
+    background-color: #ffc107;
+    color: #000;
+  }
+  
+  .status-待确认 {
+    background-color: #17a2b8;
+  }
+  
+  .status-处理中 {
+    background-color: #007bff;
+  }
+  
+  .status-已完成 {
+    background-color: #28a745;
+  }
+  
+  .status-已取消 {
+    background-color: #dc3545;
+  }
+  
+  /* 邮件操作区域 */
+  .email-actions {
+    margin-bottom: 20px;
+  }
+  
+  .email-actions .btn {
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .email-actions .btn-primary {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  .email-actions .btn-primary:hover {
+    background-color: #0056b3;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+  }
+  
+  .email-actions .btn-primary:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+  
+  /* 手动发送提示 */
+  .manual-notice {
+    background: #fff3cd;
+    border: 1px solid #ffeaa7;
+    border-radius: 6px;
+    padding: 12px;
+    margin-top: 15px;
+  }
+  
+  .manual-notice p {
+    margin: 0;
+    color: #856404;
+    font-size: 13px;
+    text-align: center;
+  }
+  
+  /* 消息提示 */
+  .message {
+    padding: 12px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    text-align: center;
+    margin-top: 15px;
+  }
+  
+  .message.success {
+    background-color: #d4edda;
+    border: 1px solid #c3e6cb;
+    color: #155724;
+  }
+  
+  .message.error {
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    color: #721c24;
+  }
+  
+  /* 响应式设计 */
+  @media (max-width: 768px) {
+    .email-manager-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 15px;
+    }
+    
+    .email-toggle {
+      align-self: flex-end;
+    }
+    
+    .email-manager {
+      padding: 15px;
+      margin: 15px 0;
+    }
+    
+    .email-actions .btn {
+      width: 100%;
+      padding: 12px 20px;
+    }
+  }

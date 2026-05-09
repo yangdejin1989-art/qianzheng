@@ -1,0 +1,19 @@
+{
+  "name": "jishu-visa",
+  "version": "1.0.0",
+  "description": "签证申请网站",
+  "scripts": {
+    "install-all": "npm install && cd client && npm install && cd ../server && npm install",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "cd server && node index.js",
+    "client": "cd client && npm start",
+    "start": "npm run dev"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "dependencies": {
+    "axios": "^1.11.0",
+    "puppeteer": "^24.16.0"
+  }
+}

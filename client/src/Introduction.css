@@ -1,0 +1,89 @@
+/* Introduction组件样式 */
+
+/* 移动端优化 */
+@media (max-width: 768px) {
+  .introduction-section {
+    margin-bottom: 0.5rem !important;
+  }
+  
+  .introduction-section .row {
+    flex-direction: column !important;
+  }
+  
+  .introduction-section .col-md-6 {
+    width: 100% !important;
+    margin-bottom: 0.4rem !important;
+  }
+  
+  .introduction-section .col-md-6:last-child {
+    margin-bottom: 0 !important;
+  }
+  
+  /* 图片容器移动端优化 */
+  .introduction-image {
+    order: 1 !important;
+    margin-bottom: 0.4rem !important;
+  }
+  
+  /* 文字容器移动端优化 */
+  .introduction-content {
+    order: 2 !important;
+  }
+  
+  /* 图片移动端优化 */
+  .introduction-section img {
+    height: 200px !important;
+    width: 100% !important;
+    object-fit: cover !important;
+    border-radius: 12px !important;
+  }
+  
+  /* 卡片移动端优化 */
+  .introduction-section .card {
+    padding: 1rem !important;
+    border-radius: 12px !important;
+  }
+  
+  /* 标题移动端优化 */
+  .introduction-section .card-title {
+    font-size: 1.1rem !important;
+    margin-bottom: 0.5rem !important;
+  }
+  
+  /* 文字移动端优化 */
+  .introduction-section .card-text {
+    font-size: 0.9rem !important;
+    line-height: 1.5 !important;
+  }
+}
+
+/* 小屏幕手机优化 */
+@media (max-width: 480px) {
+  .introduction-section {
+    margin-bottom: 0.4rem !important;
+  }
+  
+  .introduction-section .col-md-6 {
+    margin-bottom: 0.3rem !important;
+  }
+  
+  .introduction-section img {
+    height: 180px !important;
+    border-radius: 10px !important;
+  }
+  
+  .introduction-section .card {
+    padding: 0.6rem !important;
+    border-radius: 10px !important;
+  }
+  
+  .introduction-section .card-title {
+    font-size: 1rem !important;
+    margin-bottom: 0.4rem !important;
+  }
+  
+  .introduction-section .card-text {
+    font-size: 0.85rem !important;
+    line-height: 1.4 !important;
+  }
+}
