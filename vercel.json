@@ -19,7 +19,7 @@
       "dest": "/server/index.js"
     },
     {
-      "src": "/upload/(.*)",
+      "src": "/uploads/(.*)",
       "dest": "/server/index.js"
     },
     {
