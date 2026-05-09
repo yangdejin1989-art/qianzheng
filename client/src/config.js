@@ -1,5 +1,6 @@
 // 动态API配置
 const getApiBaseUrl = () => {
+  // 获取当前页面的主机名和端口
   const hostname = window.location.hostname;
   const port = window.location.port;
   
@@ -17,36 +18,29 @@ const getApiBaseUrl = () => {
     return 'http://192.168.80.98:5000';
   }
   
-  // 生产环境（Vercel 部署）- 使用相对路径
-  console.log('🌍 使用生产环境API（相对路径）');
+  // 其他情况，使用相对路径（生产环境）
+  console.log('🌍 使用相对路径API（生产环境）');
   return '';
 };
 
 export const API_BASE_URL = getApiBaseUrl();
 
-// 创建预配置的 axios 实例
-import axios from 'axios';
+// 导出完整的API URL构建函数
+export const buildApiUrl = (endpoint) => {
+  return `${API_BASE_URL}${endpoint}`;
+};
 
-export const api = axios.create({
-  baseURL: API_BASE_URL || undefined,
-  timeout: 30000,
-});
-
-// 请求日志
-api.interceptors.request.use(config => {
-  console.log('📡 API 请求:', config.method.toUpperCase(), config.url);
-  return config;
-});
-
-api.interceptors.response.use(
-  response => {
-    console.log('✅ API 响应:', response.config.url, response.status);
-    return response;
-  },
-  error => {
-    console.error('❌ API 错误:', error.config?.url, error.message);
-    return Promise.reject(error);
+// 导出图片URL构建函数
+export const buildImageUrl = (imagePath) => {
+  if (!imagePath) {
+    console.log('⚠️ 图片路径为空');
+    return '';
   }
-);
-
-export default api;
+  if (imagePath.startsWith('http')) {
+    console.log('🌐 图片已经是完整URL:', imagePath);
+    return imagePath;
+  }
+  const fullUrl = `${API_BASE_URL}${imagePath}`;
+  console.log('🔗 构建图片URL:', imagePath, '->', fullUrl);
+  return fullUrl;
+};

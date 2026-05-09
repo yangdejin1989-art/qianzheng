@@ -12,8 +12,9 @@ function FAQ() {
     const fetchFaqs = async () => {
       try {
         setLoading(true);
-        const response = await axios.get('/api/faqs');
-        // 只显示可见的FAQ，并按排序字段排�?        const visibleFaqs = response.data
+        const response = await axios.get('http://localhost:5000/api/faqs');
+        // 只显示可见的FAQ，并按排序字段排序
+        const visibleFaqs = response.data
           .filter(faq => faq.visible)
           .sort((a, b) => a.order - b.order);
         setFaqs(visibleFaqs);
@@ -33,7 +34,7 @@ function FAQ() {
       <div className="container mt-5">
         <div className="text-center py-5">
           <div className="spinner-border text-primary" role="status">
-            <span className="visually-hidden">加载�?..</span>
+            <span className="visually-hidden">加载中...</span>
           </div>
           <div className="mt-3 text-muted">正在加载常见问题...</div>
         </div>
@@ -62,7 +63,7 @@ function FAQ() {
             <i className="fas fa-question-circle" style={{ fontSize: '3rem', opacity: 0.3 }}></i>
           </div>
           <h5 className="text-muted">暂无常见问题</h5>
-          <p className="text-muted">请稍后再来查�?/p>
+          <p className="text-muted">请稍后再来查看</p>
         </div>
       </div>
     );
@@ -142,7 +143,8 @@ function FAQ() {
         <div className="text-center mt-5">
           <div className="alert alert-info" role="alert">
             <i className="fas fa-info-circle me-2"></i>
-            还有其他问题？请联系我们的客服团�?          </div>
+            还有其他问题？请联系我们的客服团队
+          </div>
         </div>
       </div>
     </div>

@@ -7,7 +7,7 @@ import './StatusQuery.css';
 
 function StatusQuery() {
   const [step, setStep] = useState(1); // 1: 输入查询信息, 2: 邮箱验证, 3: 显示结果
-  const [queryType, setQueryType] = useState('phone'); // 'phone' �?'code'
+  const [queryType, setQueryType] = useState('phone'); // 'phone' 或 'code'
   const [countryCode, setCountryCode] = useState('+81'); // 默认日本
   const [query, setQuery] = useState({ 
     name: '', 
@@ -31,7 +31,8 @@ function StatusQuery() {
   });
   const [showMaterialForm, setShowMaterialForm] = useState(false);
   const [materialSubmitted, setMaterialSubmitted] = useState(false);
-  const [activePersonIndex, setActivePersonIndex] = useState(0); // 0=主申请人, 1+=同行�?
+  const [activePersonIndex, setActivePersonIndex] = useState(0); // 0=主申请人, 1+=同行人
+
   // 支持从外部链接直达：自动使用 token 查询，并可直接展开材料表单
   useEffect(() => {
     const token = sessionStorage.getItem('statusQueryToken');
@@ -70,7 +71,7 @@ function StatusQuery() {
     
     // 验证必填字段
     if (!query.name) {
-      setError('请填写姓�?);
+      setError('请填写姓名');
       return;
     }
     
@@ -80,12 +81,12 @@ function StatusQuery() {
     }
     
     if (queryType === 'code' && !query.applyCode) {
-      setError('请填写申请编�?);
+      setError('请填写申请编码');
       return;
     }
     
     if (!query.email) {
-      setError('请填写邮箱地址用于接收验证�?);
+      setError('请填写邮箱地址用于接收验证码');
       return;
     }
     
@@ -122,7 +123,8 @@ function StatusQuery() {
     }
   };
 
-  // 开始倒计�?  const startCountdown = () => {
+  // 开始倒计时
+  const startCountdown = () => {
     setCountdown(60);
     const timer = setInterval(() => {
       setCountdown(prev => {
@@ -165,7 +167,8 @@ function StatusQuery() {
     }
   };
 
-  // 第二步：验证邮箱验证�?  const handleVerifyCode = async e => {
+  // 第二步：验证邮箱验证码
+  const handleVerifyCode = async e => {
     e.preventDefault();
     setError('');
     setSuccess('');
@@ -214,7 +217,8 @@ function StatusQuery() {
       setResult(resultData);
       setStep(3);
       
-      // 如果已经有确认信息，预填充表�?      setConfirmData({
+      // 如果已经有确认信息，预填充表单
+      setConfirmData({
         materials: {},
         materialPreviews: {},
         answers: response.data.answers || {},
@@ -226,16 +230,19 @@ function StatusQuery() {
     }
   };
 
-  // 返回第一�?  const goBackToStep1 = () => {
+  // 返回第一步
+  const goBackToStep1 = () => {
     setStep(1);
     setVerificationCode('');
     setResult(null);
     setError('');
     setSuccess('');
     setQueryToken('');
-    setCountryCode('+81'); // 重置为默认日�?  };
+    setCountryCode('+81'); // 重置为默认日本
+  };
 
-  // 返回第二�?  const goBackToStep2 = () => {
+  // 返回第二步
+  const goBackToStep2 = () => {
     setStep(2);
     setResult(null);
     setError('');
@@ -245,7 +252,7 @@ function StatusQuery() {
   // 处理确认提交
   const handleConfirm = async () => {
     if (!result || !result.id) {
-      setError('未能获取到申请单ID，无法提交。请刷新页面重试�?);
+      setError('未能获取到申请单ID，无法提交。请刷新页面重试。');
       return;
     }
 
@@ -255,16 +262,18 @@ function StatusQuery() {
     }
     
     try {
-      // 构建所有人员列�?      const allPersons = [
+      // 构建所有人员列表
+      const allPersons = [
         { personId: 'main', personName: result.name || '主申请人' },
         ...(result.companions || []).map((name, i) => ({ 
           personId: `comp${i}`, 
-          personName: name || `同行�?${i + 1}`
+          personName: name || `同行人 ${i + 1}`
         }))
       ];
       const hasMultiplePeople = allPersons.length > 1;
       
-      // 检查缺失的必填材料（改为警告而非阻止�?      const missingMaterials = [];
+      // 检查缺失的必填材料（改为警告而非阻止）
+      const missingMaterials = [];
       if (result.customerType.materials && result.customerType.materials.length > 0) {
         result.customerType.materials.forEach(material => {
           if (material.required) {
@@ -277,7 +286,8 @@ function StatusQuery() {
                 }
               });
             } else {
-              // 单人情况：只检查一�?              const uploadKey = material.materialId;
+              // 单人情况：只检查一次
+              const uploadKey = material.materialId;
               if (!confirmData.materials[uploadKey] || confirmData.materials[uploadKey].length === 0) {
                 missingMaterials.push(material.name);
               }
@@ -290,7 +300,8 @@ function StatusQuery() {
       const missingAnswers = [];
       if (result.customerType.questions && result.customerType.questions.length > 0) {
         result.customerType.questions.forEach(question => {
-          // 所有问题答案都是多人共用的，只检查一�?          if (question.required) {
+          // 所有问题答案都是多人共用的，只检查一次
+          if (question.required) {
             const answerKey = question.questionId;
             if (!confirmData.answers[answerKey] || !confirmData.answers[answerKey].trim()) {
               missingAnswers.push(question.question);
@@ -304,33 +315,35 @@ function StatusQuery() {
         let confirmMessage = '⚠️ 检测到以下必填项尚未完成：\n\n';
         
         if (missingMaterials.length > 0) {
-          confirmMessage += '📄 缺失材料：\n' + missingMaterials.map(m => `  �?${m}`).join('\n') + '\n\n';
+          confirmMessage += '📄 缺失材料：\n' + missingMaterials.map(m => `  • ${m}`).join('\n') + '\n\n';
         }
         
         if (missingAnswers.length > 0) {
-          confirmMessage += '�?未回答问题：\n' + missingAnswers.map(q => `  �?${q}`).join('\n') + '\n\n';
+          confirmMessage += '❓ 未回答问题：\n' + missingAnswers.map(q => `  • ${q}`).join('\n') + '\n\n';
         }
         
         confirmMessage += '您可以：\n';
-        confirmMessage += '�?现在提交已有材料，稍后补充缺失的部分\n';
-        confirmMessage += '�?取消提交，继续准备材料\n\n';
-        confirmMessage += '是否现在提交�?;
+        confirmMessage += '✅ 现在提交已有材料，稍后补充缺失的部分\n';
+        confirmMessage += '❌ 取消提交，继续准备材料\n\n';
+        confirmMessage += '是否现在提交？';
         
         if (!window.confirm(confirmMessage)) {
-          return; // 用户选择不提�?        }
+          return; // 用户选择不提交
+        }
       }
 
       if (hasSubmittedMaterials() && !confirmData.modificationReason) {
-        setError('请填写修改理�?);
+        setError('请填写修改理由');
         return;
       }
       
       setError('');
-      setSuccess('正在处理�?..');
+      setSuccess('正在处理中...');
       
       const formDataObj = new FormData();
       
-      // 添加答案（JSON格式�?      formDataObj.append('answers', JSON.stringify(confirmData.answers || {}));
+      // 添加答案（JSON格式）
+      formDataObj.append('answers', JSON.stringify(confirmData.answers || {}));
       formDataObj.append('notes', confirmData.notes || '');
       formDataObj.append('modificationReason', confirmData.modificationReason || '');
       
@@ -353,26 +366,28 @@ function StatusQuery() {
         timeout: 60000
       });
       
-      // 根据是否有缺失项显示不同的成功消�?      let successMsg = '�?材料已提交成功！';
+      // 根据是否有缺失项显示不同的成功消息
+      let successMsg = '✅ 材料已提交成功！';
       const hasMissingItems = missingMaterials.length > 0 || missingAnswers.length > 0;
       
       if (hasMissingItems) {
         successMsg += '\n\n📌 您还有部分必填项未完成，请后续通过"申请修改"补充：\n';
         if (missingMaterials.length > 0) {
-          successMsg += '�?' + missingMaterials.join('�?) + '\n';
+          successMsg += '• ' + missingMaterials.join('、') + '\n';
         }
         if (missingAnswers.length > 0) {
-          successMsg += '�?问题�? + missingAnswers.map(q => q.length > 20 ? q.substring(0, 20) + '...' : q).join('�?) + '\n';
+          successMsg += '• 问题：' + missingAnswers.map(q => q.length > 20 ? q.substring(0, 20) + '...' : q).join('、') + '\n';
         }
       }
       
-      successMsg += '\n我们的客服团队将�?-2个工作日内通过微信/LINE或电话与您联系！';
+      successMsg += '\n我们的客服团队将在1-2个工作日内通过微信/LINE或电话与您联系！';
       
       setSuccess(successMsg);
       setShowMaterialForm(false);
       setMaterialSubmitted(true);
       
-      // 重新查询最新状�?      try {
+      // 重新查询最新状态
+      try {
         const refreshResponse = await axios.get(buildApiUrl(`/api/status`), {
           params: {
             name: result.name,
@@ -387,32 +402,32 @@ function StatusQuery() {
       }
     } catch (err) {
       console.error('提交失败:', err);
-      setError('提交失败�? + (err.response?.data?.message || err.message || '网络错误'));
+      setError('提交失败：' + (err.response?.data?.message || err.message || '网络错误'));
     }
   };
 
   // 处理取消申请
   const handleCancel = async () => {
     if (!result || !result.id) {
-      setError('未能获取到申请单ID，无法取消。请刷新页面重试�?);
+      setError('未能获取到申请单ID，无法取消。请刷新页面重试。');
       return;
     }
     
     try {
       setError('');
-      setSuccess('正在处理�?..');
+      setSuccess('正在处理中...');
       
-      let newStatus = '已取�?;
-      if (result.status === '已完�?) {
-        newStatus = '待处�?;
+      let newStatus = '已取消';
+      if (result.status === '已完成') {
+        newStatus = '待处理';
       }
       
       await axios.put(buildApiUrl(`/api/applications/${result.id}`), {
         status: newStatus
       });
       
-      setSuccess('申请已取�?);
-      // 重新查询最新状�?- 使用原始查询方式避免token问题
+      setSuccess('申请已取消');
+      // 重新查询最新状态 - 使用原始查询方式避免token问题
       try {
         const response = await axios.get(buildApiUrl(`/api/status`), {
           params: {
@@ -425,10 +440,11 @@ function StatusQuery() {
         setResult(resultData);
       } catch (err) {
         console.error('重新查询失败:', err);
-        // 即使重新查询失败，也不影响用户看到成功消�?      }
+        // 即使重新查询失败，也不影响用户看到成功消息
+      }
     } catch (err) {
       console.error('取消申请失败:', err);
-      setError('取消申请失败�? + (err.response?.data?.message || err.message || '网络错误'));
+      setError('取消申请失败：' + (err.response?.data?.message || err.message || '网络错误'));
     }
   };
 
@@ -446,11 +462,11 @@ function StatusQuery() {
 
   // 提交修改申请
   const submitModificationRequest = async () => {
-    console.log('🚀 submitModificationRequest 被调�?);
+    console.log('🚀 submitModificationRequest 被调用');
     console.log('📦 confirmData:', confirmData);
     
     if (!result || !result.id) {
-      setError('未能获取到申请单ID，无法提交修改申请。请刷新页面重试�?);
+      setError('未能获取到申请单ID，无法提交修改申请。请刷新页面重试。');
       return;
     }
     
@@ -459,8 +475,9 @@ function StatusQuery() {
       return;
     }
     
-    // 修改理由改为可�?    // if (!confirmData.modificationReason || !confirmData.modificationReason.trim()) {
-    //   setError('请填写修改理�?);
+    // 修改理由改为可选
+    // if (!confirmData.modificationReason || !confirmData.modificationReason.trim()) {
+    //   setError('请填写修改理由');
     //   return;
     // }
 
@@ -468,10 +485,11 @@ function StatusQuery() {
       setError('');
       setSuccess('正在提交修改申请...');
       
-      console.log('�?开始创�?FormData');
+      console.log('✅ 开始创建 FormData');
       const formDataObj = new FormData();
       
-      // 添加答案（JSON格式�?      formDataObj.append('answers', JSON.stringify(confirmData.answers || {}));
+      // 添加答案（JSON格式）
+      formDataObj.append('answers', JSON.stringify(confirmData.answers || {}));
       formDataObj.append('notes', confirmData.notes || '');
       formDataObj.append('modificationReason', (confirmData.modificationReason || '').trim());
       
@@ -486,13 +504,13 @@ function StatusQuery() {
             console.log(`📎 材料 uploadKey=${uploadKey}: ${files.length} 个文件`);
             files.forEach((file, index) => {
               const fieldName = `materials_${uploadKey}`;
-              console.log(`  �?添加文件: fieldName=${fieldName}, 文件�?${file.name}, 大小=${file.size}`);
+              console.log(`  ✅ 添加文件: fieldName=${fieldName}, 文件名=${file.name}, 大小=${file.size}`);
               formDataObj.append(fieldName, file);
             });
           }
         });
         
-        console.log('📋 FormData 中的所有字�?');
+        console.log('📋 FormData 中的所有字段:');
         for (let [key, value] of formDataObj.entries()) {
           if (value instanceof File) {
             console.log(`  ${key}: [File] ${value.name}`);
@@ -504,9 +522,9 @@ function StatusQuery() {
       
       console.log('📤 准备发送请求到:', `/api/applications/${result.id}/request-modification`);
       const response = await axios.post(buildApiUrl(`/api/applications/${result.id}/request-modification`), formDataObj);
-      console.log('�?服务器响�?', response.data);
+      console.log('✅ 服务器响应:', response.data);
       
-      setSuccess("修改申请已提交，请等待客服审�?);
+      setSuccess("修改申请已提交，请等待客服审核");
       setShowMaterialForm(false);
       setConfirmData({
         materials: {},
@@ -515,7 +533,8 @@ function StatusQuery() {
         notes: '',
         modificationReason: ''
       });
-      // 重新查询最新状�?      try {
+      // 重新查询最新状态
+      try {
         const response = await axios.get(buildApiUrl(`/api/status`), {
           params: {
             name: result.name,
@@ -529,9 +548,9 @@ function StatusQuery() {
         console.error('重新查询失败:', err);
       }
     } catch (err) {
-      console.error('�?提交修改申请失败:', err);
-      console.error('�?错误详情:', err.response?.data);
-      console.error('�?错误信息:', err.message);
+      console.error('❌ 提交修改申请失败:', err);
+      console.error('❌ 错误详情:', err.response?.data);
+      console.error('❌ 错误信息:', err.message);
       setError(err.response?.data?.message || '提交修改申请失败');
       setSuccess('');
     }
@@ -540,18 +559,18 @@ function StatusQuery() {
   // 申请取消订单
   const handleRequestCancellation = async () => {
     if (!result || !result.id) {
-      setError('未能获取到申请单ID，无法申请取消。请刷新页面重试�?);
+      setError('未能获取到申请单ID，无法申请取消。请刷新页面重试。');
       return;
     }
     
-    const reason = prompt("请说明需要取消申请的原因�?);
+    const reason = prompt("请说明需要取消申请的原因：");
     if (reason && reason.trim()) {
       try {
         await axios.post(buildApiUrl(`/api/applications/${result.id}/request-cancellation`), {
           reason: reason.trim()
         });
-        setSuccess("取消申请已提交，请等待客服审�?);
-        // 重新查询最新状�?- 使用原始查询方式避免token问题
+        setSuccess("取消申请已提交，请等待客服审核");
+        // 重新查询最新状态 - 使用原始查询方式避免token问题
         try {
           const response = await axios.get(buildApiUrl(`/api/status`), {
             params: {
@@ -564,7 +583,8 @@ function StatusQuery() {
           setResult(resultData);
         } catch (err) {
           console.error('重新查询失败:', err);
-          // 即使重新查询失败，也不影响用户看到成功消�?        }
+          // 即使重新查询失败，也不影响用户看到成功消息
+        }
       } catch (err) {
         setError(err.response?.data?.message || '提交取消申请失败');
       }
@@ -601,42 +621,45 @@ function StatusQuery() {
 
   // 判断是否应该显示操作按钮
   const shouldShowActionButtons = () => {
-    return result && result.status === '待处�?;
+    return result && result.status === '待处理';
   };
 
-  // 判断是否已提交材�?  const hasSubmittedMaterials = () => {
-    console.log('🔍 检查是否有材料可提�?);
+  // 判断是否已提交材料
+  const hasSubmittedMaterials = () => {
+    console.log('🔍 检查是否有材料可提交');
     console.log('confirmData.materials:', confirmData.materials);
     console.log('confirmData.answers:', confirmData.answers);
     
     if (!result || !result.customerType) {
-      console.log('�?没有result或customerType');
+      console.log('❌ 没有result或customerType');
       return false;
     }
     
-    // 检查是否有新上传的材料（未提交�?    if (confirmData.materials && Object.keys(confirmData.materials).length > 0) {
-      console.log('�?有新上传的材�?);
+    // 检查是否有新上传的材料（未提交）
+    if (confirmData.materials && Object.keys(confirmData.materials).length > 0) {
+      console.log('✅ 有新上传的材料');
       return true;
     }
     
     // 检查是否有新填写的答案
     if (confirmData.answers && Object.keys(confirmData.answers).length > 0) {
-      console.log('�?有新填写的答�?);
+      console.log('✅ 有新填写的答案');
       return true;
     }
     
     // 检查是否有补充说明
     if (confirmData.notes && confirmData.notes.trim()) {
-      console.log('�?有补充说�?);
+      console.log('✅ 有补充说明');
       return true;
     }
     
-    console.log('�?没有任何可提交的内容');
+    console.log('❌ 没有任何可提交的内容');
     return false;
   };
 
-  // 判断是否已确认安装申�?  const hasConfirmedInstallation = () => {
-    return result && result.status === '已完�?;
+  // 判断是否已确认安装申请
+  const hasConfirmedInstallation = () => {
+    return result && result.status === '已完成';
   };
 
   return (
@@ -655,7 +678,7 @@ function StatusQuery() {
         </div>
         
         <div className="status-query-body">
-          {/* 步骤指示�?*/}
+          {/* 步骤指示器 */}
           <div className="steps-indicator mb-4">
             <div className="d-flex justify-content-between">
               <div className={`step ${step >= 1 ? 'active' : ''}`}>
@@ -678,7 +701,7 @@ function StatusQuery() {
             <form onSubmit={handleQuerySubmit}>
               {/* 查询方式选择 */}
               <div className="mb-4">
-                <label className="form-label fw-bold">选择查询方式�?/label>
+                <label className="form-label fw-bold">选择查询方式：</label>
                 <div className="row g-3">
                   <div className="col-md-6">
                     <div className="form-check">
@@ -692,9 +715,9 @@ function StatusQuery() {
                         onChange={(e) => setQueryType(e.target.value)}
                       />
                       <label className="form-check-label" htmlFor="queryTypePhone">
-                        <strong>方式一：姓�?+ 手机�?+ 邮箱验证</strong>
+                        <strong>方式一：姓名 + 手机号 + 邮箱验证</strong>
                         <br />
-                        <small className="text-muted">适用于记住手机号的用�?/small>
+                        <small className="text-muted">适用于记住手机号的用户</small>
                       </label>
                     </div>
                   </div>
@@ -712,7 +735,7 @@ function StatusQuery() {
                       <label className="form-check-label" htmlFor="queryTypeCode">
                         <strong>方式二：姓名 + 申请编码 + 邮箱验证</strong>
                         <br />
-                        <small className="text-muted">适用于有申请编码的用�?/small>
+                        <small className="text-muted">适用于有申请编码的用户</small>
                       </label>
                     </div>
                   </div>
@@ -722,14 +745,14 @@ function StatusQuery() {
               <div className="row g-3">
                 {/* 姓名字段 */}
                 <div className="col-12">
-                  <label className="form-label">姓名�?span className="text-danger">*</span></label>
+                  <label className="form-label">姓名：<span className="text-danger">*</span></label>
                   <input
                     type="text"
                     className="form-control"
                     name="name"
                     value={query.name}
                     onChange={handleChange}
-                    placeholder="请输入申请时填写的姓�?
+                    placeholder="请输入申请时填写的姓名"
                     required
                   />
                 </div>
@@ -770,7 +793,7 @@ function StatusQuery() {
 
                 {queryType === 'code' && (
                   <div className="col-12">
-                    <label className="form-label">申请编码�?span className="text-danger">*</span></label>
+                    <label className="form-label">申请编码：<span className="text-danger">*</span></label>
                     <input
                       type="text"
                       className="form-control"
@@ -780,12 +803,12 @@ function StatusQuery() {
                       placeholder="请输入申请编码（申请成功后获得）"
                       required
                     />
-                    <small className="text-muted">申请编码在申请成功后会提供给�?/small>
+                    <small className="text-muted">申请编码在申请成功后会提供给您</small>
                   </div>
                 )}
 
                 <div className="col-12">
-                  <label className="form-label">邮箱地址�?span className="text-danger">*</span></label>
+                  <label className="form-label">邮箱地址：<span className="text-danger">*</span></label>
                   <input
                     type="email"
                     className="form-control"
@@ -795,7 +818,7 @@ function StatusQuery() {
                     placeholder="请输入申请时填写的邮箱地址"
                     required
                   />
-                  <small className="text-muted">验证码将发送到此邮�?/small>
+                  <small className="text-muted">验证码将发送到此邮箱</small>
                 </div>
               </div>
               <div className="text-center mt-3">
@@ -831,7 +854,7 @@ function StatusQuery() {
                     className="form-control text-center"
                     value={verificationCode}
                     onChange={(e) => setVerificationCode(e.target.value)}
-                    placeholder="请输�?位验证码"
+                    placeholder="请输入6位验证码"
                     maxLength="6"
                     style={{ fontSize: '1.2rem', letterSpacing: '0.2rem' }}
                   />
@@ -839,7 +862,8 @@ function StatusQuery() {
                 
                 <div className="d-flex justify-content-between align-items-center">
                   <button type="button" className="btn btn-outline-secondary" onClick={goBackToStep1}>
-                    返回上一�?                  </button>
+                    返回上一步
+                  </button>
                   
                   <div className="d-flex gap-2">
                     <button 
@@ -848,17 +872,17 @@ function StatusQuery() {
                       onClick={resendCode}
                       disabled={countdown > 0 || loading}
                     >
-                      {countdown > 0 ? `重新发�?${countdown}s)` : '重新发�?}
+                      {countdown > 0 ? `重新发送(${countdown}s)` : '重新发送'}
                     </button>
                     
                     <button type="submit" className="btn btn-primary" disabled={loading}>
                       {loading ? (
                         <>
                           <span className="spinner-border spinner-border-sm me-2" role="status"></span>
-                          验证�?..
+                          验证中...
                         </>
                       ) : (
-                        '验证并查�?
+                        '验证并查询'
                       )}
                     </button>
                   </div>
@@ -877,42 +901,43 @@ function StatusQuery() {
                 </button>
               </div>
 
-              {/* 动态提示信�?*/}
+              {/* 动态提示信息 */}
               {result.feedback ? (
                 <div className="alert alert-info text-center mb-3" style={{ border: '1px solid #dc3545' }}>
                   <i className="fas fa-comment me-2"></i>
                   <strong>{result.feedback}</strong>
                 </div>
-              ) : (result.status === '处理�?) ? (
+              ) : (result.status === '处理中') ? (
                 <div className="alert alert-success text-center mb-3">
                   <i className="fas fa-check-circle me-2"></i>
-                  <strong>材料已经合格，我司会尽快安排提交签证中心审核。如有问题或需要额外补充材料，专属客服会另外联系通知�?/strong>
+                  <strong>材料已经合格，我司会尽快安排提交签证中心审核。如有问题或需要额外补充材料，专属客服会另外联系通知。</strong>
                 </div>
               ) : (
                 <>
-                  {result.status === '待处�? && (
+                  {result.status === '待处理' && (
                     <div className="alert alert-info text-center mb-3">
                       <i className="fas fa-clock me-2"></i>
                       <strong>您的申请已提交成功！</strong><br />
-                      我们会有专属客服将在1-2个工作日内通过微信/LINE或电话与您联系�?                    </div>
-                  )}
-                  {result.status === '待确�? && (
-                    <div className="alert alert-success text-center mb-3">
-                      <i className="fas fa-check-circle me-2"></i>
-                      <strong>您的申请已通过，请提交申请人的材料给我们，以便继续后续的申请流程�?/strong>
+                      我们会有专属客服将在1-2个工作日内通过微信/LINE或电话与您联系。
                     </div>
                   )}
-                  {result.status === '处理�? && (
+                  {result.status === '待确认' && (
                     <div className="alert alert-success text-center mb-3">
                       <i className="fas fa-check-circle me-2"></i>
-                      <strong>材料已经合格，我司会尽快安排提交签证中心审核。如有问题或需要额外补充材料，专属客服会另外联系通知�?/strong>
+                      <strong>您的申请已通过，请提交申请人的材料给我们，以便继续后续的申请流程。</strong>
                     </div>
                   )}
-                  {result.status === '已完�? && (
+                  {result.status === '处理中' && (
+                    <div className="alert alert-success text-center mb-3">
+                      <i className="fas fa-check-circle me-2"></i>
+                      <strong>材料已经合格，我司会尽快安排提交签证中心审核。如有问题或需要额外补充材料，专属客服会另外联系通知。</strong>
+                    </div>
+                  )}
+                  {result.status === '已完成' && (
                     <div className="alert alert-success text-center mb-3">
                       <i className="fas fa-check-circle me-2"></i>
                       <strong>🎉 恭喜！您的签证已经成功办理！</strong><br />
-                      <span className="text-success">签证的证件，请联系专属客服索取。如有任何使用问题，可以咨询联系客服�?/span>
+                      <span className="text-success">签证的证件，请联系专属客服索取。如有任何使用问题，可以咨询联系客服。</span>
                     </div>
                   )}
                 </>
@@ -926,31 +951,31 @@ function StatusQuery() {
                 <div className="card-body">
                   <div className="row">
                     <div className="col-md-6">
-                      <p><strong>姓名�?/strong>{result.name}</p>
+                      <p><strong>姓名：</strong>{result.name}</p>
                       <p><strong>手机号：</strong>{result.phone}</p>
-                      <p><strong>地址�?/strong>{result.address}</p>
-                      <p><strong>签证类型�?/strong>{result.package}</p>
-                      {result.customerType && <p><strong>办理类型�?/strong>{result.customerType.typeName}</p>}
-                      {result.networkType && <p><strong>办理方式�?/strong>{result.networkType}</p>}
+                      <p><strong>地址：</strong>{result.address}</p>
+                      <p><strong>签证类型：</strong>{result.package}</p>
+                      {result.customerType && <p><strong>办理类型：</strong>{result.customerType.typeName}</p>}
+                      {result.networkType && <p><strong>办理方式：</strong>{result.networkType}</p>}
                       {result.wechat && <p><strong>微信号：</strong>{result.wechat}</p>}
                       {result.line && <p><strong>LINE号：</strong>{result.line}</p>}
-                      {result.email && <p><strong>邮箱地址�?/strong>{result.email}</p>}
+                      {result.email && <p><strong>邮箱地址：</strong>{result.email}</p>}
                     </div>
                     <div className="col-md-6">
                       <p><strong>状态：</strong>
                         <span className={`badge ${
-                          result.status === '待处�? ? 'bg-warning' :
-                          result.status === '待确�? ? 'bg-info' :
-                          result.status === '处理�? ? 'bg-primary' :
-                          result.status === '已完�? ? 'bg-success' :
-                          result.status === '已取�? ? 'bg-danger' :
+                          result.status === '待处理' ? 'bg-warning' :
+                          result.status === '待确认' ? 'bg-info' :
+                          result.status === '处理中' ? 'bg-primary' :
+                          result.status === '已完成' ? 'bg-success' :
+                          result.status === '已取消' ? 'bg-danger' :
                           'bg-secondary'
                         }`}>
                           {result.status}
                         </span>
                       </p>
-                      <p><strong>申请时间�?/strong>{new Date(result.createdAt).toLocaleString()}</p>
-                      <p><strong>申请编码�?/strong>{result.applyCode}</p>
+                      <p><strong>申请时间：</strong>{new Date(result.createdAt).toLocaleString()}</p>
+                      <p><strong>申请编码：</strong>{result.applyCode}</p>
                     </div>
                   </div>
                   
@@ -959,7 +984,7 @@ function StatusQuery() {
                     <div className="mt-3 pt-3 border-top">
                       <div className="row">
                         <div className="col-12">
-                          <p><strong>备注信息�?/strong></p>
+                          <p><strong>备注信息：</strong></p>
                           <div className="alert alert-light">
                             <i className="fas fa-sticky-note me-2"></i>
                             {result.notes}
@@ -969,12 +994,13 @@ function StatusQuery() {
                     </div>
                   )}
                   
-                  {/* 所有申请记录列�?*/}
+                  {/* 所有申请记录列表 */}
                   {result.hasMultipleApplications && (
                     <div className="mt-3 pt-3 border-top">
                       <h6 className="mb-3">
                         <i className="fas fa-list me-2"></i>
-                        所有申请记�?                      </h6>
+                        所有申请记录
+                      </h6>
                       <div className="table-responsive">
                         <table className="table table-sm table-striped table-hover">
                           <thead className="table-light">
@@ -982,7 +1008,7 @@ function StatusQuery() {
                               <th>申请编码</th>
                               <th>套餐</th>
                               <th>地址</th>
-                              <th>状�?/th>
+                              <th>状态</th>
                               <th>申请时间</th>
                               <th>备注</th>
                             </tr>
@@ -992,17 +1018,17 @@ function StatusQuery() {
                               <tr key={app.id} className={index === 0 ? 'table-primary' : ''}>
                                 <td>
                                   <strong>{app.applyCode}</strong>
-                                  {index === 0 && <span className="badge bg-success ms-2">最�?/span>}
+                                  {index === 0 && <span className="badge bg-success ms-2">最新</span>}
                                 </td>
                                 <td>{app.package}</td>
                                 <td>{app.address}</td>
                                 <td>
                                   <span className={`badge ${
-                                    app.status === '待处�? ? 'bg-warning' :
-                                    app.status === '待确�? ? 'bg-info' :
-                                    app.status === '处理�? ? 'bg-primary' :
-                                    app.status === '已完�? ? 'bg-success' :
-                                    app.status === '已取�? ? 'bg-danger' :
+                                    app.status === '待处理' ? 'bg-warning' :
+                                    app.status === '待确认' ? 'bg-info' :
+                                    app.status === '处理中' ? 'bg-primary' :
+                                    app.status === '已完成' ? 'bg-success' :
+                                    app.status === '已取消' ? 'bg-danger' :
                                     'bg-secondary'
                                   }`}>
                                     {app.status}
@@ -1028,12 +1054,13 @@ function StatusQuery() {
                   {(result.idCardFront || result.idCardBack || result.passportPhoto || result.other || result.japaneseName) && (
                     <div className="mt-3 pt-3 border-top">
                       <div style={{ background: '#faece6', borderRadius: '10px 10px 0 0', padding: '12px 24px', fontWeight: 700, fontSize: '1.25rem', marginBottom: '10px', borderBottom: '1.5px solid #f5c9b0' }}>
-                        提交的材�?                      </div>
-                      <div className="mb-2">
-                        <strong>确认时间�?/strong>{new Date(result.updatedAt || result.createdAt).toLocaleString()}
+                        提交的材料
                       </div>
                       <div className="mb-2">
-                        <strong>日语读音�?/strong>{result.japaneseName || '�?}
+                        <strong>确认时间：</strong>{new Date(result.updatedAt || result.createdAt).toLocaleString()}
+                      </div>
+                      <div className="mb-2">
+                        <strong>日语读音：</strong>{result.japaneseName || '—'}
                       </div>
                       <div className="mb-2">
                         <strong>上传的证件照片：</strong>
@@ -1044,14 +1071,14 @@ function StatusQuery() {
                           {result.idCardFront ? (
                             <img 
                               src={buildImageUrl(result.idCardFront)} 
-                              alt="在留卡正�? 
+                              alt="在留卡正面" 
                               className="img-fluid border rounded" 
                               style={{ maxHeight: 120, width: 'auto', cursor: 'pointer' }}
                               onClick={() => handleImagePreview(result.idCardFront)}
                               title="点击查看大图"
                             />
                           ) : (
-                            <div className="text-muted">�?/div>
+                            <div className="text-muted">无</div>
                           )}
                         </div>
                         <div className="col-md-3 text-center">
@@ -1059,14 +1086,14 @@ function StatusQuery() {
                           {result.idCardBack ? (
                             <img 
                               src={buildImageUrl(result.idCardBack)} 
-                              alt="在留卡反�? 
+                              alt="在留卡反面" 
                               className="img-fluid border rounded" 
                               style={{ maxHeight: 120, width: 'auto', cursor: 'pointer' }}
                               onClick={() => handleImagePreview(result.idCardBack)}
                               title="点击查看大图"
                             />
                           ) : (
-                            <div className="text-muted">�?/div>
+                            <div className="text-muted">无</div>
                           )}
                         </div>
                         <div className="col-md-3 text-center">
@@ -1081,11 +1108,11 @@ function StatusQuery() {
                               title="点击查看大图"
                             />
                           ) : (
-                            <div className="text-muted">�?/div>
+                            <div className="text-muted">无</div>
                           )}
                         </div>
                         <div className="col-md-3 text-center">
-                          <div className="mb-1"><strong>其他图片�?/strong></div>
+                          <div className="mb-1"><strong>其他图片：</strong></div>
                           {result.other ? (
                             <img 
                               src={buildImageUrl(result.other)} 
@@ -1096,7 +1123,7 @@ function StatusQuery() {
                               title="点击查看大图"
                             />
                           ) : (
-                            <div className="text-muted">�?/div>
+                            <div className="text-muted">无</div>
                           )}
                         </div>
                       </div>
@@ -1108,7 +1135,7 @@ function StatusQuery() {
                     <div className="d-flex gap-2">
                       {shouldShowActionButtons() && (
                         <>
-                          {['待处�?, '待确�?, '处理�?].includes(result.status) && (
+                          {['待处理', '待确认', '处理中'].includes(result.status) && (
                             <button className="btn btn-outline-danger" onClick={handleCancel}>
                               取消申请
                             </button>
@@ -1116,14 +1143,14 @@ function StatusQuery() {
                         </>
                       )}
                       
-                      {(result.status === '待确�? || result.status === '处理�? || result.status === '已完�?) && (
+                      {(result.status === '待确认' || result.status === '处理中' || result.status === '已完成') && (
                         <>
                           {!hasSubmittedMaterials() ? (
                             <>
                               <button className="btn btn-primary" onClick={handleEdit}>
                                 提交材料
                               </button>
-                              {['待处�?, '待确�?, '处理�?].includes(result.status) && (
+                              {['待处理', '待确认', '处理中'].includes(result.status) && (
                                 <button className="btn btn-outline-danger" onClick={handleCancel}>
                                   取消
                                 </button>
@@ -1144,7 +1171,7 @@ function StatusQuery() {
                                 申请取消
                               </button>
                             </>
-                          ) : result.status === '处理�? ? (
+                          ) : result.status === '处理中' ? (
                             <>
                               <div className="alert alert-info mb-3">
                                 <i className="fas fa-clock me-2"></i>
@@ -1182,13 +1209,14 @@ function StatusQuery() {
                     {!result.customerType ? (
                       <div className="alert alert-info">
                         <i className="fas fa-info-circle me-2"></i>
-                        <strong>请稍�?/strong><br/>
-                        工作人员正在为您确认办理类型，确认后您将能看到需要提交的材料清单和问题�?br/>
-                        如有疑问，请联系客服�?                      </div>
+                        <strong>请稍候</strong><br/>
+                        工作人员正在为您确认办理类型，确认后您将能看到需要提交的材料清单和问题。<br/>
+                        如有疑问，请联系客服。
+                      </div>
                     ) : (
                       <>
                         <div className="alert alert-light mb-3">
-                          <strong>办理类型�?/strong>{result.customerType.typeName}
+                          <strong>办理类型：</strong>{result.customerType.typeName}
                           <p className="mb-0 mt-2 text-muted small">
                             <i className="fas fa-info-circle me-1"></i>
                             请按照要求上传材料并回答问题
@@ -1205,23 +1233,23 @@ function StatusQuery() {
                           <div className="d-flex align-items-start">
                             <i className="fas fa-lightbulb me-2" style={{ color: '#17a2b8', fontSize: '0.9rem' }}></i>
                             <div style={{ fontSize: '0.85rem' }}>
-                              <strong>💡 温馨提示�?/strong>
+                              <strong>💡 温馨提示：</strong>
                               <ul className="mb-0 mt-1" style={{ paddingLeft: '18px' }}>
-                                <li><strong>可以分批提交材料�?/strong>如果您现在只有部分材料，可以先提交已有的，后续再补充缺失的材料�?/li>
-                                <li>�?span className="text-danger">*</span>号的为必填项，但您可以选择"先提交已有材料，稍后补充"�?/li>
-                                <li>提交后，您可以随时通过"申请修改"来补充或更新材料�?/li>
+                                <li><strong>可以分批提交材料！</strong>如果您现在只有部分材料，可以先提交已有的，后续再补充缺失的材料。</li>
+                                <li>带<span className="text-danger">*</span>号的为必填项，但您可以选择"先提交已有材料，稍后补充"。</li>
+                                <li>提交后，您可以随时通过"申请修改"来补充或更新材料。</li>
                               </ul>
                             </div>
                           </div>
                         </div>
 
-                        {/* 同行人选项�?*/}
+                        {/* 同行人选项卡 */}
                         {(() => {
                           const allPersons = [
                             { personId: 'main', personName: result.name || '主申请人', isMain: true },
                             ...(result.companions || []).map((name, i) => ({ 
                               personId: `comp${i}`, 
-                              personName: name || `同行�?${i + 1}`,
+                              personName: name || `同行人 ${i + 1}`,
                               isMain: false 
                             }))
                           ];
@@ -1256,11 +1284,12 @@ function StatusQuery() {
 
                         {/* 材料清单 */}
                         {result.customerType.materials && result.customerType.materials.length > 0 && (() => {
-                          // 构建所有人员列�?                          const allPersons = [
+                          // 构建所有人员列表
+                          const allPersons = [
                             { personId: 'main', personName: result.name || '主申请人', isMain: true },
                             ...(result.companions || []).map((name, i) => ({ 
                               personId: `comp${i}`, 
-                              personName: name || `同行�?${i + 1}`,
+                              personName: name || `同行人 ${i + 1}`,
                               isMain: false 
                             }))
                           ];
@@ -1278,7 +1307,7 @@ function StatusQuery() {
                                   </span>
                                 )}
                                 <span className="text-muted ms-2" style={{ fontSize: '0.75rem' }}>
-                                  点击材料卡片可上�?管理图片
+                                  点击材料卡片可上传/管理图片
                                 </span>
                               </h5>
 
@@ -1286,7 +1315,8 @@ function StatusQuery() {
                                 {result.customerType.materials.map((material, index) => {
                                   const isPersonalMaterial = material.materialType === 'personal';
                                   
-                                  // 在多人情况下，所有材料都需要为每个人单独存�?                                  // 在单人情况下，才使用简单的materialId作为key
+                                  // 在多人情况下，所有材料都需要为每个人单独存储
+                                  // 在单人情况下，才使用简单的materialId作为key
                                   const uploadKey = hasMultiplePeople 
                                     ? `${material.materialId}_${currentPerson.personId}` 
                                     : material.materialId;
@@ -1295,10 +1325,11 @@ function StatusQuery() {
                                   
                                   // 检查该材料是否已经在后台提交过（且有文件）
                                   const isAlreadySubmitted = result.materials && result.materials.some(m => {
-                                    // 必须有图片文件才算真正提�?                                    const hasImages = m.images && m.images.length > 0;
+                                    // 必须有图片文件才算真正提交
+                                    const hasImages = m.images && m.images.length > 0;
                                     if (!hasImages) return false;
                                     
-                                    // 在多人情况下，需要同时匹�?materialId �?personId
+                                    // 在多人情况下，需要同时匹配 materialId 和 personId
                                     if (hasMultiplePeople) {
                                       return m.materialId === material.materialId && m.personId === currentPerson.personId;
                                     }
@@ -1337,7 +1368,7 @@ function StatusQuery() {
                                             height: '100%'
                                           }}>
                                             <div>
-                                              {hasFiles ? '�?已提�? : '未提�?}
+                                              {hasFiles ? '✓ 已提交' : '未提交'}
                                             </div>
                                             {hasMultiplePeople && isPersonalMaterial && (
                                               <div style={{
@@ -1352,7 +1383,7 @@ function StatusQuery() {
                                             )}
                                           </div>
 
-                                          {/* 中间：标题和描述�?*/}
+                                          {/* 中间：标题和描述区 */}
                                           <div style={{ flex: 1, padding: '6px 10px', display: 'flex', alignItems: 'center' }}>
                                             <div className="rounded-circle d-flex align-items-center justify-content-center me-2" style={{
                                               width: '20px',
@@ -1397,7 +1428,7 @@ function StatusQuery() {
                                             </div>
                                           </div>
 
-                                          {/* 右侧：图片预览和上传按钮�?*/}
+                                          {/* 右侧：图片预览和上传按钮区 */}
                                           <div style={{
                                             padding: '6px',
                                             display: 'flex',
@@ -1416,7 +1447,7 @@ function StatusQuery() {
                                               onChange={(e) => {
                                                 const files = Array.from(e.target.files);
                                                 if (files.length > 0) {
-                                                  console.log(`上传材料: uploadKey=${uploadKey}, 文件�?${files.length}, 当前人员=${currentPerson.personId} (${currentPerson.personName})`);
+                                                  console.log(`上传材料: uploadKey=${uploadKey}, 文件数=${files.length}, 当前人员=${currentPerson.personId} (${currentPerson.personName})`);
                                                   setConfirmData(prev => ({
                                                     ...prev,
                                                     materials: {
@@ -1425,7 +1456,8 @@ function StatusQuery() {
                                                     }
                                                   }));
                                                   
-                                                  // 为所有图片创建预�?                                                  const previewPromises = files.map(file => {
+                                                  // 为所有图片创建预览
+                                                  const previewPromises = files.map(file => {
                                                     return new Promise((resolve) => {
                                                       const reader = new FileReader();
                                                       reader.onload = (e) => resolve(e.target.result);
@@ -1494,7 +1526,8 @@ function StatusQuery() {
                                                     ))}
                                                   </div>
                                                   <div className="text-center" style={{ fontSize: '0.6rem', color: '#6b7280', marginBottom: '3px' }}>
-                                                    �?{confirmData.materialPreviews[uploadKey].length} �?                                                  </div>
+                                                    共 {confirmData.materialPreviews[uploadKey].length} 张
+                                                  </div>
                                                   <button
                                                     type="button"
                                                     className="btn btn-sm btn-outline-primary w-100"
@@ -1534,11 +1567,12 @@ function StatusQuery() {
 
                         {/* 问题答案 */}
                         {result.customerType.questions && result.customerType.questions.length > 0 && (() => {
-                          // 构建所有人员列�?                          const allPersons = [
+                          // 构建所有人员列表
+                          const allPersons = [
                             { personId: 'main', personName: result.name || '主申请人', isMain: true },
                             ...(result.companions || []).map((name, i) => ({ 
                               personId: `comp${i}`, 
-                              personName: name || `同行�?${i + 1}`,
+                              personName: name || `同行人 ${i + 1}`,
                               isMain: false 
                             }))
                           ];
@@ -1558,14 +1592,15 @@ function StatusQuery() {
                               </h5>
 
                               {result.customerType.questions.map((question, index) => {
-                                // 所有问题答案都是多人共用的（不区分个人问题�?                                const answerKey = question.questionId;
+                                // 所有问题答案都是多人共用的（不区分个人问题）
+                                const answerKey = question.questionId;
                                 
                                 return (
                                   <div key={question.questionId} className="mb-2">
                                     <label className="form-label fw-bold mb-1" style={{ fontSize: '0.9rem' }}>
                                       {index + 1}. {question.question}
                                       {question.required && <span className="text-danger ms-1">*</span>}
-                                      {!question.required && <span className="text-muted ms-1" style={{ fontSize: '0.8rem' }}>(可�?</span>}
+                                      {!question.required && <span className="text-muted ms-1" style={{ fontSize: '0.8rem' }}>(可选)</span>}
                                       {hasMultiplePeople && (
                                         <span className="badge bg-info ms-2" style={{ fontSize: '0.65rem', color: '#fff', padding: '2px 6px' }}>
                                           多人共用
@@ -1590,7 +1625,7 @@ function StatusQuery() {
                                           [answerKey]: e.target.value
                                         }
                                       }))}
-                                      placeholder="请输入您的答�?
+                                      placeholder="请输入您的答案"
                                     />
                                   </div>
                                 );
@@ -1601,7 +1636,7 @@ function StatusQuery() {
 
                         {/* 备注 */}
                         <div className="mb-2">
-                          <label className="form-label fw-bold mb-1" style={{ fontSize: '0.9rem' }}>备注�?/label>
+                          <label className="form-label fw-bold mb-1" style={{ fontSize: '0.9rem' }}>备注：</label>
                           <textarea
                             className="form-control form-control-sm"
                             rows="2"
@@ -1610,12 +1645,12 @@ function StatusQuery() {
                             onChange={(e) => setConfirmData({...confirmData, notes: e.target.value})}
                             placeholder="如有其他需要说明的内容，请在此填写"
                           />
-                          <small className="text-muted" style={{ fontSize: '0.75rem' }}>可�?/small>
+                          <small className="text-muted" style={{ fontSize: '0.75rem' }}>可选</small>
                         </div>
                         
                         {hasSubmittedMaterials() && (
                           <div className="mb-2">
-                            <label className="form-label fw-bold mb-1" style={{ fontSize: '0.9rem' }}>补充说明�?/label>
+                            <label className="form-label fw-bold mb-1" style={{ fontSize: '0.9rem' }}>补充说明：</label>
                             <textarea
                               className="form-control form-control-sm"
                               rows="2"
@@ -1624,7 +1659,7 @@ function StatusQuery() {
                               onChange={(e) => setConfirmData({...confirmData, modificationReason: e.target.value})}
                               placeholder="如需补充说明，请在此填写"
                             />
-                            <small className="text-muted" style={{ fontSize: '0.75rem' }}>可�?/small>
+                            <small className="text-muted" style={{ fontSize: '0.75rem' }}>可选</small>
                           </div>
                         )}
                         
@@ -1632,7 +1667,8 @@ function StatusQuery() {
                           {!hasSubmittedMaterials() && (
                             <div className="alert alert-info mb-2" style={{ fontSize: '0.8rem', padding: '6px 10px' }}>
                               <i className="fas fa-hand-point-right me-2"></i>
-                              <strong>提示�?/strong>即使部分材料尚未准备好，也可以先提交已有的材料。系统会提示您缺失的项目，您可以选择继续提交�?                            </div>
+                              <strong>提示：</strong>即使部分材料尚未准备好，也可以先提交已有的材料。系统会提示您缺失的项目，您可以选择继续提交。
+                            </div>
                           )}
                           <div className="d-flex gap-2">
                             {hasSubmittedMaterials() ? (
@@ -1641,7 +1677,8 @@ function StatusQuery() {
                               </button>
                             ) : (
                               <button className="btn btn-success" onClick={handleConfirm}>
-                                确认并提�?                              </button>
+                                确认并提交
+                              </button>
                             )}
                             <button className="btn btn-secondary" onClick={() => setShowMaterialForm(false)}>
                               取消
@@ -1656,8 +1693,10 @@ function StatusQuery() {
 
               {/* 显示过程记录 - 只显示客户自己的操作 */}
               {result.processLog && result.processLog.filter(log => {
-                // 过滤掉管理员和客服的操作，只显示客户/用户的操�?                const action = log.action || '';
-                // 后台操作的关键词：管理员、客服、审�?                const isAdminAction = action.includes('管理�?) || 
+                // 过滤掉管理员和客服的操作，只显示客户/用户的操作
+                const action = log.action || '';
+                // 后台操作的关键词：管理员、客服、审核
+                const isAdminAction = action.includes('管理员') || 
                                      action.includes('客服') || 
                                      action.includes('审核');
                 return !isAdminAction;
@@ -1670,8 +1709,10 @@ function StatusQuery() {
                     <div className="timeline">
                       {result.processLog
                         .filter(log => {
-                          // 只显示客�?用户的操作记�?                          const action = log.action || '';
-                          // 后台操作的关键词：管理员、客服、审�?                          const isAdminAction = action.includes('管理�?) || 
+                          // 只显示客户/用户的操作记录
+                          const action = log.action || '';
+                          // 后台操作的关键词：管理员、客服、审核
+                          const isAdminAction = action.includes('管理员') || 
                                                action.includes('客服') || 
                                                action.includes('审核');
                           return !isAdminAction;
@@ -1694,10 +1735,10 @@ function StatusQuery() {
                                     {log.images.idCardFront && (
                                       <div className="col-md-3">
                                         <div className="text-center">
-                                          <small className="text-muted">在留卡正�?/small>
+                                          <small className="text-muted">在留卡正面</small>
                                           <img 
                                             src={buildImageUrl(log.images.idCardFront)} 
-                                            alt="在留卡正�? 
+                                            alt="在留卡正面" 
                                             className="img-fluid border rounded" 
                                             style={{ maxHeight: 80, width: 'auto', cursor: 'pointer' }}
                                             onError={(e) => {
@@ -1713,10 +1754,10 @@ function StatusQuery() {
                                     {log.images.idCardBack && (
                                       <div className="col-md-3">
                                         <div className="text-center">
-                                          <small className="text-muted">在留卡反�?/small>
+                                          <small className="text-muted">在留卡反面</small>
                                           <img 
                                             src={buildImageUrl(log.images.idCardBack)} 
-                                            alt="在留卡反�? 
+                                            alt="在留卡反面" 
                                             className="img-fluid border rounded" 
                                             style={{ maxHeight: 80, width: 'auto', cursor: 'pointer' }}
                                             onError={(e) => {
@@ -1781,7 +1822,7 @@ function StatusQuery() {
             </div>
           )}
 
-          {/* 错误和成功消�?*/}
+          {/* 错误和成功消息 */}
           {error && <div className="alert alert-danger mt-3">{error}</div>}
           {success && <div className="alert alert-success mt-3">{success}</div>}
         </div>

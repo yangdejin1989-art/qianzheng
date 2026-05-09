@@ -8,19 +8,19 @@ const getCurrencySymbol = (currency) => {
     'CNY': '¥',
     'JPY': '¥',
     'USD': '$',
-    'EUR': '�?
+    'EUR': '€'
   };
   return symbols[currency] || '¥';
 };
 
 const getCurrencyName = (currency) => {
   const names = {
-    'CNY': '人民�?,
+    'CNY': '人民币',
     'JPY': '日元',
     'USD': '美元',
     'EUR': '欧元'
   };
-  return names[currency] || '人民�?;
+  return names[currency] || '人民币';
 };
 
 function PackageDetail({ packageId, onBack, onApply }) {
@@ -39,17 +39,22 @@ function PackageDetail({ packageId, onBack, onApply }) {
     line: '',
     notes: ''
   });
-  const [selectedVisaTypeIndex, setSelectedVisaTypeIndex] = useState(0); // 选择的签证类型索�?  const [applyLoading, setApplyLoading] = useState(false);
+  const [selectedVisaTypeIndex, setSelectedVisaTypeIndex] = useState(0); // 选择的签证类型索引
+  const [applyLoading, setApplyLoading] = useState(false);
   const [applySuccess, setApplySuccess] = useState(false);
   const [successId, setSuccessId] = useState('');
   
-  // 客户类型相关状�?  const [customerTypes, setCustomerTypes] = useState([]);
-  const [showCustomerTypePicker, setShowCustomerTypePicker] = useState(false); // 移动端选择�?  const [selectedCustomerType, setSelectedCustomerType] = useState('');
+  // 客户类型相关状态
+  const [customerTypes, setCustomerTypes] = useState([]);
+  const [showCustomerTypePicker, setShowCustomerTypePicker] = useState(false); // 移动端选择器
+  const [selectedCustomerType, setSelectedCustomerType] = useState('');
   
-  // 多人申请相关状�?  const [applicantCount, setApplicantCount] = useState(1);
+  // 多人申请相关状态
+  const [applicantCount, setApplicantCount] = useState(1);
   const [additionalApplicants, setAdditionalApplicants] = useState([]);
 
-  // 移动端检�?  const [isMobile, setIsMobile] = useState(false);
+  // 移动端检测
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     const checkMobile = () => {
@@ -62,12 +67,13 @@ function PackageDetail({ packageId, onBack, onApply }) {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // 滚动锁定：当弹窗打开时完全锁定背景滚�?  useEffect(() => {
+  // 滚动锁定：当弹窗打开时完全锁定背景滚动
+  useEffect(() => {
     if (showCustomerTypePicker && isMobile) {
       // 保存当前滚动位置
       const scrollY = window.scrollY;
       
-      // 完全锁定背景：使�?fixed 定位，但保持视觉位置不变
+      // 完全锁定背景：使用 fixed 定位，但保持视觉位置不变
       document.body.style.position = 'fixed';
       document.body.style.top = `-${scrollY}px`;
       document.body.style.left = '0';
@@ -76,17 +82,20 @@ function PackageDetail({ packageId, onBack, onApply }) {
       document.body.style.overflow = 'hidden';
       
       return () => {
-        // 恢复样式，但不改变滚动位�?        document.body.style.position = '';
+        // 恢复样式，但不改变滚动位置
+        document.body.style.position = '';
         document.body.style.top = '';
         document.body.style.left = '';
         document.body.style.right = '';
         document.body.style.width = '';
         document.body.style.overflow = '';
-        // 注意：不调用 scrollTo，让浏览器自然恢�?      };
+        // 注意：不调用 scrollTo，让浏览器自然恢复
+      };
     }
   }, [showCustomerTypePicker, isMobile]);
 
-  // 加载客户类型（从材料模板获取�?  const loadCustomerTypes = async (packageId) => {
+  // 加载客户类型（从材料模板获取）
+  const loadCustomerTypes = async (packageId) => {
     try {
       const response = await axios.get(buildApiUrl(`/api/material-templates/package/${packageId}`));
       if (response.data && response.data.customerTypes) {
@@ -103,8 +112,10 @@ function PackageDetail({ packageId, onBack, onApply }) {
       try {
         const response = await axios.get(buildApiUrl(`/api/packages/${packageId}`));
         setPackageData(response.data);
-        // 设置套餐ID而不是名�?        setApplyForm(prev => ({ ...prev, packageId: response.data._id }));
-        // 如果有多个签证类型，默认选择第一�?        if (response.data.visaTypes && response.data.visaTypes.length > 0) {
+        // 设置套餐ID而不是名称
+        setApplyForm(prev => ({ ...prev, packageId: response.data._id }));
+        // 如果有多个签证类型，默认选择第一个
+        if (response.data.visaTypes && response.data.visaTypes.length > 0) {
           setSelectedVisaTypeIndex(0);
         }
         // 加载客户类型
@@ -122,7 +133,8 @@ function PackageDetail({ packageId, onBack, onApply }) {
     }
   }, [packageId]);
 
-  // 关闭弹窗的处理函数（防止滚动�?  const handleClosePicker = (e) => {
+  // 关闭弹窗的处理函数（防止滚动）
+  const handleClosePicker = (e) => {
     if (e) {
       e.preventDefault();
       e.stopPropagation();
@@ -135,23 +147,25 @@ function PackageDetail({ packageId, onBack, onApply }) {
     
     // 验证必填字段
     if (!applyForm.name || !applyForm.phone || !applyForm.address || !applyForm.packageId) {
-      setError('请填写所有必填字�?);
+      setError('请填写所有必填字段');
       return;
     }
 
-    // 验证微信或LINE至少填一�?    if (!applyForm.wechat && !applyForm.line) {
+    // 验证微信或LINE至少填一个
+    if (!applyForm.wechat && !applyForm.line) {
       setError('请至少填写微信号或LINE号其中一个，方便我们与您联系');
       return;
     }
 
-    // 验证手机号格式（国际格式�?-15位数字）
+    // 验证手机号格式（国际格式，8-15位数字）
     const phoneRegex = /^\d{8,15}$/;
     if (!phoneRegex.test(applyForm.phone)) {
-      setError('请输入正确的手机号码�?-15位数字）');
+      setError('请输入正确的手机号码（8-15位数字）');
       return;
     }
 
-    // 验证邮箱格式（如果填写了邮箱�?    if (applyForm.email) {
+    // 验证邮箱格式（如果填写了邮箱）
+    if (applyForm.email) {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(applyForm.email)) {
         setError('请输入正确的邮箱地址');
@@ -163,20 +177,23 @@ function PackageDetail({ packageId, onBack, onApply }) {
     setError('');
 
     try {
-      // 获取选择的签证类型信�?      let visaType = '';
+      // 获取选择的签证类型信息
+      let visaType = '';
       let visaPrice = 0;
       let visaCurrency = 'CNY';
       
       if (packageData) {
         if (packageData.visaTypes && packageData.visaTypes.length > 0) {
-          // 有多个签证类型，使用用户选择�?          const selectedVisaType = packageData.visaTypes[selectedVisaTypeIndex];
+          // 有多个签证类型，使用用户选择的
+          const selectedVisaType = packageData.visaTypes[selectedVisaTypeIndex];
           if (selectedVisaType) {
             visaType = selectedVisaType.type || '';
             visaPrice = selectedVisaType.price || 0;
             visaCurrency = selectedVisaType.currency || 'CNY';
           }
         } else if (packageData.visaType) {
-          // 旧格式，只有一个签证类�?          visaType = packageData.visaType;
+          // 旧格式，只有一个签证类型
+          visaType = packageData.visaType;
           visaPrice = packageData.price || 0;
           visaCurrency = packageData.currency || 'CNY';
         }
@@ -185,7 +202,9 @@ function PackageDetail({ packageId, onBack, onApply }) {
       // 构建提交数据
       const submitData = {
         ...applyForm,
-        phone: `${applyForm.phoneCountryCode} ${applyForm.phone}`, // 合并国家代码和号�?        visaType: visaType,        // 签证次数（单次、多次等�?        visaPrice: visaPrice,      // 价格
+        phone: `${applyForm.phoneCountryCode} ${applyForm.phone}`, // 合并国家代码和号码
+        visaType: visaType,        // 签证次数（单次、多次等）
+        visaPrice: visaPrice,      // 价格
         visaCurrency: visaCurrency // 币种
       };
       
@@ -220,7 +239,7 @@ function PackageDetail({ packageId, onBack, onApply }) {
       <div className="container mt-5">
         <div className="text-center">
           <div className="spinner-border" role="status">
-            <span className="visually-hidden">加载�?..</span>
+            <span className="visually-hidden">加载中...</span>
           </div>
           <p className="mt-3">正在加载套餐信息...</p>
         </div>
@@ -246,8 +265,8 @@ function PackageDetail({ packageId, onBack, onApply }) {
     return (
       <div className="container mt-5">
         <div className="alert alert-warning">
-          <h4>套餐不存�?/h4>
-          <p>您访问的套餐可能已被删除或下架�?/p>
+          <h4>套餐不存在</h4>
+          <p>您访问的套餐可能已被删除或下架。</p>
           <button className="btn btn-primary" onClick={onBack}>
             返回
           </button>
@@ -273,7 +292,7 @@ function PackageDetail({ packageId, onBack, onApply }) {
             borderRadius: isMobile ? '20px' : undefined
           }}
         >
-          �?返回
+          ← 返回
         </button>
       </div>
 
@@ -327,7 +346,8 @@ function PackageDetail({ packageId, onBack, onApply }) {
                       marginBottom: isMobile ? '8px' : '1rem',
                       fontSize: isMobile ? '1rem' : '1.25rem'
                     }}>
-                      签证类型与价�?                    </h5>
+                      签证类型与价格
+                    </h5>
                     {packageData.visaTypes.map((vt, index) => (
                       <div 
                         key={index} 
@@ -355,7 +375,8 @@ function PackageDetail({ packageId, onBack, onApply }) {
                             marginBottom: isMobile ? '4px' : '0',
                             marginRight: isMobile ? '0' : '1rem'
                           }}>
-                            {getCurrencySymbol(vt.currency)}{vt.price}/�?                            <span className="text-muted ms-2" style={{ 
+                            {getCurrencySymbol(vt.currency)}{vt.price}/次
+                            <span className="text-muted ms-2" style={{ 
                               fontSize: isMobile ? '0.75rem' : '1rem'
                             }}>
                               ({getCurrencyName(vt.currency)})
@@ -388,7 +409,8 @@ function PackageDetail({ packageId, onBack, onApply }) {
                         marginBottom: isMobile ? '4px' : '0',
                         marginRight: isMobile ? '0' : '1rem'
                       }}>
-                        {getCurrencySymbol(packageData.currency)}{packageData.price}/�?                        <span className="text-muted ms-2" style={{ 
+                        {getCurrencySymbol(packageData.currency)}{packageData.price}/次
+                        <span className="text-muted ms-2" style={{ 
                           fontSize: isMobile ? '0.8rem' : '1.25rem'
                         }}>
                           ({getCurrencyName(packageData.currency)})
@@ -494,7 +516,8 @@ function PackageDetail({ packageId, onBack, onApply }) {
                       padding: isMobile ? '10px' : undefined
                     }}
                   >
-                    申请此签�?                  </button>
+                    申请此签证
+                  </button>
                 </div>
               ) : applySuccess ? (
                 <div className="text-center">
@@ -505,17 +528,19 @@ function PackageDetail({ packageId, onBack, onApply }) {
                     fontSize: isMobile ? '1rem' : '1.25rem',
                     marginBottom: isMobile ? '8px' : '1rem'
                   }}>
-                    申请提交成功�?                  </h5>
+                    申请提交成功！
+                  </h5>
                   <p style={{ 
                     fontSize: isMobile ? '0.85rem' : '1rem',
                     marginBottom: isMobile ? '6px' : '0.5rem'
                   }}>
-                    您的申请编号�?strong>{successId}</strong>
+                    您的申请编号：<strong>{successId}</strong>
                   </p>
                   <p className="small text-muted" style={{ 
                     fontSize: isMobile ? '0.75rem' : undefined
                   }}>
-                    请妥善保存编号以便后续查询进�?                  </p>
+                    请妥善保存编号以便后续查询进度
+                  </p>
                   <button 
                     className={`btn btn-outline-primary ${isMobile ? 'btn-sm' : ''}`}
                     onClick={() => {
@@ -541,7 +566,8 @@ function PackageDetail({ packageId, onBack, onApply }) {
                       padding: isMobile ? '6px 12px' : undefined
                     }}
                   >
-                    再申请一�?                  </button>
+                    再申请一份
+                  </button>
                 </div>
               ) : (
                 <form onSubmit={handleApplySubmit}>
@@ -571,7 +597,7 @@ function PackageDetail({ packageId, onBack, onApply }) {
                       fontSize: isMobile ? '0.85rem' : '1rem',
                       marginBottom: isMobile ? '4px' : '0.5rem'
                     }}>
-                      手机�?*
+                      手机号 *
                     </label>
                     <div className="input-group">
                       <select
@@ -604,7 +630,7 @@ function PackageDetail({ packageId, onBack, onApply }) {
                         name="phone"
                         value={applyForm.phone}
                         onChange={handleFormChange}
-                        placeholder="请输入手机号�?
+                        placeholder="请输入手机号码"
                         style={{ 
                           flex: '1',
                           fontSize: isMobile ? '0.85rem' : undefined,
@@ -619,7 +645,7 @@ function PackageDetail({ packageId, onBack, onApply }) {
                       fontSize: isMobile ? '0.75rem' : undefined
                     }}>
                       <i className="fas fa-info-circle me-1"></i>
-                      例如日本号码�?9012345678
+                      例如日本号码：09012345678
                     </small>
                   </div>
                   
@@ -664,7 +690,7 @@ function PackageDetail({ packageId, onBack, onApply }) {
                     />
                   </div>
 
-                  {/* 签证类型选择（如果有多个签证类型�?*/}
+                  {/* 签证类型选择（如果有多个签证类型） */}
                   {packageData && packageData.visaTypes && packageData.visaTypes.length > 1 && (
                     <div style={{ marginBottom: isMobile ? '10px' : '1rem' }}>
                       <label className="form-label" style={{ 
@@ -712,7 +738,7 @@ function PackageDetail({ packageId, onBack, onApply }) {
                             ? `${packageData.visaTypes[0].type} - ${getCurrencySymbol(packageData.visaTypes[0].currency)}${packageData.visaTypes[0].price} (${getCurrencyName(packageData.visaTypes[0].currency)})`
                             : packageData.visaType
                               ? `${packageData.visaType} - ${getCurrencySymbol(packageData.currency)}${packageData.price} (${getCurrencyName(packageData.currency)})`
-                              : '未设�?
+                              : '未设置'
                         }
                         readOnly
                         style={{
@@ -744,7 +770,7 @@ function PackageDetail({ packageId, onBack, onApply }) {
                             fontSize: '0.95rem'
                           }}
                         >
-                          <option value="">不选择（可后续补充�?/option>
+                          <option value="">不选择（可后续补充）</option>
                           {customerTypes.map(type => (
                             <option key={type.typeId} value={type.typeId}>
                               {type.typeName} {type.description && `- ${type.description}`}
@@ -767,7 +793,7 @@ function PackageDetail({ packageId, onBack, onApply }) {
                           <span>
                             {selectedCustomerType
                               ? `${customerTypes.find(ct => ct.typeId === selectedCustomerType)?.typeName || ''}`
-                              : '不选择（可后续补充�?}
+                              : '不选择（可后续补充）'}
                           </span>
                           <i className="fas fa-chevron-down" style={{ color: '#999', fontSize: '0.85rem' }}></i>
                         </button>
@@ -779,7 +805,8 @@ function PackageDetail({ packageId, onBack, onApply }) {
                         marginTop: isMobile ? '4px' : '6px'
                       }}>
                         <i className="fas fa-info-circle me-1"></i>
-                        选择办理类型后，系统将自动关联相应的材料清单和问题模�?                      </small>
+                        选择办理类型后，系统将自动关联相应的材料清单和问题模板
+                      </small>
                     </div>
                   )}
 
@@ -789,14 +816,15 @@ function PackageDetail({ packageId, onBack, onApply }) {
                     marginBottom: isMobile ? '10px' : '1rem'
                   }}>
                     <i className="fas fa-info-circle me-2"></i>
-                    <strong>重要�?/strong>微信号或LINE号至少填写一�?                  </div>
+                    <strong>重要：</strong>微信号或LINE号至少填写一个
+                  </div>
 
                   <div style={{ marginBottom: isMobile ? '10px' : '1rem' }}>
                     <label className="form-label" style={{ 
                       fontSize: isMobile ? '0.85rem' : '1rem',
                       marginBottom: isMobile ? '4px' : '0.5rem'
                     }}>
-                      微信�?* 
+                      微信号 * 
                       <small className="text-muted ms-2" style={{ 
                         fontSize: isMobile ? '0.7rem' : undefined
                       }}>
@@ -822,7 +850,7 @@ function PackageDetail({ packageId, onBack, onApply }) {
                       fontSize: isMobile ? '0.85rem' : '1rem',
                       marginBottom: isMobile ? '4px' : '0.5rem'
                     }}>
-                      LINE�?* 
+                      LINE号 * 
                       <small className="text-muted ms-2" style={{ 
                         fontSize: isMobile ? '0.7rem' : undefined
                       }}>
@@ -835,7 +863,7 @@ function PackageDetail({ packageId, onBack, onApply }) {
                       name="line"
                       value={applyForm.line}
                       onChange={handleFormChange}
-                      placeholder="请输入LINE�?
+                      placeholder="请输入LINE号"
                       style={{
                         fontSize: isMobile ? '0.85rem' : undefined,
                         padding: isMobile ? '8px' : undefined
@@ -883,7 +911,7 @@ function PackageDetail({ packageId, onBack, onApply }) {
                       fontSize: isMobile ? '0.85rem' : '1rem',
                       marginBottom: isMobile ? '4px' : '0.5rem'
                     }}>
-                      备注 (可�?
+                      备注 (可选)
                     </label>
                     <textarea
                       className="form-control"
@@ -917,7 +945,7 @@ function PackageDetail({ packageId, onBack, onApply }) {
                         padding: isMobile ? '10px' : undefined
                       }}
                     >
-                      {applyLoading ? '提交�?..' : '提交申请'}
+                      {applyLoading ? '提交中...' : '提交申请'}
                     </button>
                     <button 
                       type="button" 
@@ -938,7 +966,7 @@ function PackageDetail({ packageId, onBack, onApply }) {
         </div>
       </div>
 
-      {/* 移动�?- 办理类型选择器弹层（放在组件根部，确保正确的层级和定位） */}
+      {/* 移动端 - 办理类型选择器弹层（放在组件根部，确保正确的层级和定位） */}
       {showCustomerTypePicker && isMobile && (
         <div
           style={{
@@ -957,7 +985,8 @@ function PackageDetail({ packageId, onBack, onApply }) {
           }}
           onClick={handleClosePicker}
           onTouchMove={(e) => {
-            // 只在遮罩层上时阻止滚动传�?            if (e.target === e.currentTarget) {
+            // 只在遮罩层上时阻止滚动传播
+            if (e.target === e.currentTarget) {
               e.preventDefault();
             }
           }}
@@ -985,13 +1014,14 @@ function PackageDetail({ packageId, onBack, onApply }) {
               // 记录触摸起始位置，用于判断是滚动还是点击
             }}
             onTouchMove={(e) => {
-              // 允许弹窗内容滚动，但阻止事件冒泡到背�?              e.stopPropagation();
+              // 允许弹窗内容滚动，但阻止事件冒泡到背景
+              e.stopPropagation();
             }}
             onTouchEnd={(e) => {
               e.stopPropagation();
             }}
           >
-            {/* 顶部拖拽指示�?*/}
+            {/* 顶部拖拽指示条 */}
             <div style={{
               padding: '8px 0',
               display: 'flex',
@@ -1007,7 +1037,7 @@ function PackageDetail({ packageId, onBack, onApply }) {
               }} />
             </div>
 
-            {/* 标题�?*/}
+            {/* 标题栏 */}
             <div style={{
               padding: '16px 20px',
               borderBottom: '1px solid #e5e7eb',
@@ -1113,7 +1143,8 @@ function PackageDetail({ packageId, onBack, onApply }) {
                   color: '#111827',
                   fontWeight: selectedCustomerType === '' ? '500' : '400'
                 }}>
-                  不选择（可后续补充�?                </div>
+                  不选择（可后续补充）
+                </div>
               </div>
 
               {/* 其他选项 */}
@@ -1194,7 +1225,7 @@ function PackageDetail({ packageId, onBack, onApply }) {
               })}
             </div>
 
-            {/* 底部安全区域（iOS�?*/}
+            {/* 底部安全区域（iOS） */}
             <div style={{
               height: 'env(safe-area-inset-bottom)',
               background: '#fff'

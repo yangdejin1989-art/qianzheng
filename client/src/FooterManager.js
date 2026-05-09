@@ -19,7 +19,7 @@ function FooterManager({ token, subTab }) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('/api/footer');
+        const response = await axios.get('http://localhost:5000/api/footer');
         const data = response.data || {};
         
         // 确保数据结构完整
@@ -62,8 +62,8 @@ function FooterManager({ token, subTab }) {
   const handleSave = async () => {
     setError('');
     try {
-      console.log('准备保存的数�?', footer);
-      const response = await axios.put('/api/footer', footer, {
+      console.log('准备保存的数据:', footer);
+      const response = await axios.put('http://localhost:5000/api/footer', footer, {
         headers: { Authorization: `Bearer ${token}` }
       });
       console.log('保存成功，服务器返回:', response.data);
@@ -118,7 +118,7 @@ function FooterManager({ token, subTab }) {
     const formData = new FormData();
     formData.append('image', file);
     try {
-      const res = await axios.post('/api/footer/qrcode', formData, {
+      const res = await axios.post('http://localhost:5000/api/footer/qrcode', formData, {
         headers: { 'Content-Type': 'multipart/form-data', Authorization: `Bearer ${token}` }
       });
       
@@ -129,8 +129,8 @@ function FooterManager({ token, subTab }) {
         setFooter({ ...footer, qrcodes });
       }
     } catch (error) {
-      console.error('二维码上传失�?', error);
-      alert('二维码上传失败，请重�?);
+      console.error('二维码上传失败:', error);
+      alert('二维码上传失败，请重试');
     }
   };
 
@@ -154,12 +154,12 @@ function FooterManager({ token, subTab }) {
     }
   };
 
-  if (loading) return <div>加载�?..</div>;
-  if (!dataReady) return <div>数据准备�?..</div>;
+  if (loading) return <div>加载中...</div>;
+  if (!dataReady) return <div>数据准备中...</div>;
 
   return (
     <div style={{ padding: '20px', background: '#f8fafc', minHeight: '100vh' }}>
-      {/* 统一的页面头�?*/}
+      {/* 统一的页面头部 */}
       <div style={{ 
         background: '#fff', 
         borderRadius: '8px', 
@@ -172,11 +172,11 @@ function FooterManager({ token, subTab }) {
             <h3 style={{ margin: '0 0 8px 0', color: '#1f2937', fontSize: '24px' }}>
               {subTab === 'about' && '📖 关于我们'}
               {subTab === 'companyInfo' && '🏢 公司信息'}
-              {subTab === 'contacts' && '📞 联系方式/二维�?}
+              {subTab === 'contacts' && '📞 联系方式/二维码'}
             </h3>
             <p style={{ margin: 0, color: '#6b7280', fontSize: '14px' }}>
-              {subTab === 'about' && '管理关于我们页面的内容信�?}
-              {subTab === 'companyInfo' && '管理公司基本信息和介�?}
+              {subTab === 'about' && '管理关于我们页面的内容信息'}
+              {subTab === 'companyInfo' && '管理公司基本信息和介绍'}
               {subTab === 'contacts' && '管理联系方式和二维码信息'}
             </p>
           </div>
@@ -194,7 +194,7 @@ function FooterManager({ token, subTab }) {
                 onClick={subTab === 'about' ? handleAddAbout : handleAddCompanyInfo}
                 style={{ fontSize: '14px', padding: '8px 20px' }}
               >
-                �?新增子项
+                ➕ 新增子项
               </button>
             )}
             {subTab === 'contacts' && (
@@ -203,7 +203,8 @@ function FooterManager({ token, subTab }) {
                 onClick={addQrcode}
                 style={{ fontSize: '14px', padding: '8px 20px' }}
               >
-                📱 添加二维�?              </button>
+                📱 添加二维码
+              </button>
             )}
           </div>
         </div>
@@ -250,7 +251,7 @@ function FooterManager({ token, subTab }) {
                   </span>
                   <div className="input-group" style={{ maxWidth: '300px' }}>
                     <span className="input-group-text" style={{ background: '#f9fafb', fontSize: '12px' }}>
-                      🏷�?标题
+                      🏷️ 标题
                     </span>
                     <input 
                       className="form-control form-control-sm" 
@@ -266,7 +267,7 @@ function FooterManager({ token, subTab }) {
                   onClick={()=>handleRemoveAbout(idx)}
                   style={{ fontSize: '12px', padding: '4px 8px' }}
                 >
-                  🗑�?删除
+                  🗑️ 删除
                 </button>
               </div>
 
@@ -276,14 +277,14 @@ function FooterManager({ token, subTab }) {
                   key={`about-editor-${idx}`}
                   value={item.content || ''} 
                   onChange={val=>handleAboutChange(idx, 'content', val)} 
-                  placeholder="输入富文本内�?.." 
+                  placeholder="输入富文本内容..." 
                   height={120}
                 />
               </div>
             </div>
           ))}
 
-          {/* 空状�?*/}
+          {/* 空状态 */}
           {(!footer.about || footer.about.length === 0) && (
             <div style={{ 
               background: '#fff', 
@@ -294,9 +295,10 @@ function FooterManager({ token, subTab }) {
             }}>
               <div style={{ fontSize: '48px', marginBottom: '16px' }}>📖</div>
               <h4 style={{ color: '#6b7280', marginBottom: '8px' }}>暂无关于我们内容</h4>
-              <p style={{ color: '#9ca3af', marginBottom: '20px' }}>点击上方"新增子项"按钮开始创建内�?/p>
+              <p style={{ color: '#9ca3af', marginBottom: '20px' }}>点击上方"新增子项"按钮开始创建内容</p>
               <button className="btn btn-primary" onClick={handleAddAbout}>
-                �?添加第一个子�?              </button>
+                ➕ 添加第一个子项
+              </button>
             </div>
           )}
         </div>
@@ -353,7 +355,7 @@ function FooterManager({ token, subTab }) {
                   onClick={()=>handleRemoveCompanyInfo(idx)}
                   style={{ fontSize: '12px', padding: '4px 8px' }}
                 >
-                  🗑�?删除
+                  🗑️ 删除
                 </button>
               </div>
 
@@ -363,14 +365,14 @@ function FooterManager({ token, subTab }) {
                   key={`company-editor-${idx}`}
                   value={item.content || ''} 
                   onChange={val=>handleCompanyInfoChange(idx, 'content', val)} 
-                  placeholder="输入富文本内�?.." 
+                  placeholder="输入富文本内容..." 
                   height={120}
                 />
               </div>
             </div>
           ))}
 
-          {/* 空状�?*/}
+          {/* 空状态 */}
           {(!footer.companyInfo || footer.companyInfo.length === 0) && (
             <div style={{ 
               background: '#fff', 
@@ -381,14 +383,15 @@ function FooterManager({ token, subTab }) {
             }}>
               <div style={{ fontSize: '48px', marginBottom: '16px' }}>🏢</div>
               <h4 style={{ color: '#6b7280', marginBottom: '8px' }}>暂无公司信息内容</h4>
-              <p style={{ color: '#9ca3af', marginBottom: '20px' }}>点击上方"新增子项"按钮开始创建内�?/p>
+              <p style={{ color: '#9ca3af', marginBottom: '20px' }}>点击上方"新增子项"按钮开始创建内容</p>
               <button className="btn btn-primary" onClick={handleAddCompanyInfo}>
-                �?添加第一个子�?              </button>
+                ➕ 添加第一个子项
+              </button>
             </div>
           )}
         </div>
       )}
-      {/* 联系方式/二维码页�?*/}
+      {/* 联系方式/二维码页面 */}
       {subTab === 'contacts' && (
         <div style={{ display: 'grid', gap: '16px' }}>
           {/* 联系方式区域 */}
@@ -435,7 +438,7 @@ function FooterManager({ token, subTab }) {
             </div>
           </div>
 
-          {/* 二维码区�?*/}
+          {/* 二维码区域 */}
           <div style={{ 
             background: '#fff', 
             borderRadius: '8px', 
@@ -466,7 +469,7 @@ function FooterManager({ token, subTab }) {
                   📱
                 </span>
                 <span style={{ fontWeight: '600', color: '#1f2937', fontSize: '16px' }}>
-                  二维码管�?({(footer.qrcodes || []).length}�?
+                  二维码管理 ({(footer.qrcodes || []).length}个)
                 </span>
               </div>
               <button 
@@ -474,7 +477,8 @@ function FooterManager({ token, subTab }) {
                 onClick={addQrcode}
                 style={{ fontSize: '12px', padding: '4px 12px' }}
               >
-                �?添加二维�?              </button>
+                ➕ 添加二维码
+              </button>
             </div>
 
             <div style={{ padding: '16px 20px' }}>
@@ -491,7 +495,7 @@ function FooterManager({ token, subTab }) {
                         <div className="col-md-4">
                           <div className="input-group input-group-sm">
                             <span className="input-group-text" style={{ background: '#f3f4f6', fontSize: '11px' }}>
-                              🏷�?说明
+                              🏷️ 说明
                             </span>
                             <input 
                               className="form-control" 
@@ -515,8 +519,8 @@ function FooterManager({ token, subTab }) {
                           {item.imageUrl ? (
                             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                               <img 
-                                src={`${item.imageUrl}`} 
-                                alt="二维�? 
+                                src={`http://localhost:5000${item.imageUrl}`} 
+                                alt="二维码" 
                                 style={{
                                   width: '40px', 
                                   height: '40px', 
@@ -525,10 +529,10 @@ function FooterManager({ token, subTab }) {
                                   border: '1px solid #d1d5db'
                                 }}
                               />
-                              <span style={{ fontSize: '11px', color: '#10b981' }}>�?已上�?/span>
+                              <span style={{ fontSize: '11px', color: '#10b981' }}>✅ 已上传</span>
                             </div>
                           ) : (
-                            <span style={{ fontSize: '11px', color: '#6b7280' }}>📷 待上�?/span>
+                            <span style={{ fontSize: '11px', color: '#6b7280' }}>📷 待上传</span>
                           )}
                         </div>
                         <div className="col-md-1">
@@ -537,7 +541,8 @@ function FooterManager({ token, subTab }) {
                             onClick={()=>removeQrcode(idx)}
                             style={{ fontSize: '11px', padding: '2px 6px' }}
                           >
-                            🗑�?                          </button>
+                            🗑️
+                          </button>
                         </div>
                       </div>
                     </div>

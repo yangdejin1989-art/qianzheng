@@ -8,7 +8,8 @@ const FinancialReport = ({ token, currentUser }) => {
   const [loading, setLoading] = useState(false);
   const [staffList, setStaffList] = useState([]);
   
-  // 筛选条�?  const [filters, setFilters] = useState({
+  // 筛选条件
+  const [filters, setFilters] = useState({
     startDate: '',
     endDate: '',
     assignedTo: 'all'
@@ -88,9 +89,11 @@ const FinancialReport = ({ token, currentUser }) => {
   const exportToExcel = () => {
     if (!reportData) return;
 
-    // 创建工作�?    const wb = XLSX.utils.book_new();
+    // 创建工作簿
+    const wb = XLSX.utils.book_new();
 
-    // 格式化时间到�?    const formatDateTime = (date) => {
+    // 格式化时间到秒
+    const formatDateTime = (date) => {
       if (!date) return '';
       const d = new Date(date);
       return d.toLocaleString('zh-CN', { 
@@ -108,12 +111,13 @@ const FinancialReport = ({ token, currentUser }) => {
     const orderDetailsData = [
       ['订单明细'],
       [],
-      ['申请时间', '申请编码', '姓名', '手机�?, '办理方式', '签证类型', '办理类型', '支付时间', '支付方式', '支付金额', '支付�?, '成本费用', '结算时间', '利润', '负责�?]
+      ['申请时间', '申请编码', '姓名', '手机号', '办理方式', '签证类型', '办理类型', '支付时间', '支付方式', '支付金额', '支付人', '成本费用', '结算时间', '利润', '负责人']
     ];
 
     if (reportData.orderDetails && reportData.orderDetails.length > 0) {
       reportData.orderDetails.forEach(order => {
-        // 如果有多笔支付，每笔支付占一�?        if (order.payments && order.payments.length > 0) {
+        // 如果有多笔支付，每笔支付占一行
+        if (order.payments && order.payments.length > 0) {
           order.payments.forEach((payment, index) => {
             orderDetailsData.push([
               index === 0 ? formatDateTime(order.createdAt) : '',
@@ -124,7 +128,7 @@ const FinancialReport = ({ token, currentUser }) => {
               index === 0 ? order.package : '',
               index === 0 ? order.customerType : '',
               formatDateTime(payment.paymentDate),
-              payment.paymentType || '支付�?,
+              payment.paymentType || '支付宝',
               payment.amount,
               payment.payerName,
               index === 0 ? order.cost : '',
@@ -134,7 +138,8 @@ const FinancialReport = ({ token, currentUser }) => {
             ]);
           });
         } else {
-          // 没有支付记录的订�?          orderDetailsData.push([
+          // 没有支付记录的订单
+          orderDetailsData.push([
             formatDateTime(order.createdAt),
             order.applyCode,
             order.applicantName,
@@ -162,34 +167,37 @@ const FinancialReport = ({ token, currentUser }) => {
       { wch: 20 }, // 申请时间
       { wch: 15 }, // 申请编码
       { wch: 12 }, // 姓名
-      { wch: 15 }, // 手机�?      { wch: 12 }, // 办理方式
+      { wch: 15 }, // 手机号
+      { wch: 12 }, // 办理方式
       { wch: 15 }, // 签证类型
       { wch: 15 }, // 办理类型
       { wch: 20 }, // 支付时间
       { wch: 12 }, // 支付方式
       { wch: 12 }, // 支付金额
-      { wch: 12 }, // 支付�?      { wch: 12 }, // 成本费用
+      { wch: 12 }, // 支付人
+      { wch: 12 }, // 成本费用
       { wch: 20 }, // 结算时间
       { wch: 12 }, // 利润
-      { wch: 12 }  // 负责�?    ];
+      { wch: 12 }  // 负责人
+    ];
     
     XLSX.utils.book_append_sheet(wb, ws1, '订单明细');
 
     // 2. 总体统计数据
     const summaryData = [
-      ['财务报表汇�?],
+      ['财务报表汇总'],
       ['生成时间', formatDateTime(new Date())],
-      ['筛选条�?],
-      ['开始日�?, filters.startDate || '不限'],
+      ['筛选条件'],
+      ['开始日期', filters.startDate || '不限'],
       ['结束日期', filters.endDate || '不限'],
-      ['负责�?, filters.assignedTo === 'all' ? '全部' : filters.assignedTo === 'unassigned' ? '未分�? : staffList.find(s => s._id === filters.assignedTo)?.displayName || filters.assignedTo],
+      ['负责人', filters.assignedTo === 'all' ? '全部' : filters.assignedTo === 'unassigned' ? '未分配' : staffList.find(s => s._id === filters.assignedTo)?.displayName || filters.assignedTo],
       [],
       ['统计数据'],
       ['订单总数', reportData.summary.totalOrders],
-      ['总收�?, reportData.summary.totalIncome],
-      ['总成�?, reportData.summary.totalCost],
+      ['总收入', reportData.summary.totalIncome],
+      ['总成本', reportData.summary.totalCost],
       ['净利润', reportData.summary.profit],
-      ['利润�?, reportData.summary.profitRate + '%'],
+      ['利润率', reportData.summary.profitRate + '%'],
     ];
 
     const ws2 = XLSX.utils.aoa_to_sheet(summaryData);
@@ -200,14 +208,14 @@ const FinancialReport = ({ token, currentUser }) => {
       { wch: 20 }
     ];
     
-    XLSX.utils.book_append_sheet(wb, ws2, '财务汇�?);
+    XLSX.utils.book_append_sheet(wb, ws2, '财务汇总');
 
     // 3. 员工业绩统计（仅管理员）
     if (isAdmin && reportData.staffStats && reportData.staffStats.length > 0) {
       const staffData = [
         ['员工业绩统计'],
         [],
-        ['员工', '订单�?, '收入', '成本', '利润']
+        ['员工', '订单数', '收入', '成本', '利润']
       ];
 
       reportData.staffStats.forEach(staff => {
@@ -220,7 +228,8 @@ const FinancialReport = ({ token, currentUser }) => {
         ]);
       });
 
-      // 添加合计�?      const totalOrders = reportData.staffStats.reduce((sum, s) => sum + s.orderCount, 0);
+      // 添加合计行
+      const totalOrders = reportData.staffStats.reduce((sum, s) => sum + s.orderCount, 0);
       const totalIncome = reportData.staffStats.reduce((sum, s) => sum + s.income, 0);
       const totalCost = reportData.staffStats.reduce((sum, s) => sum + s.cost, 0);
       const totalProfit = reportData.staffStats.reduce((sum, s) => sum + s.profit, 0);
@@ -248,13 +257,14 @@ const FinancialReport = ({ token, currentUser }) => {
       XLSX.utils.book_append_sheet(wb, ws3, '员工业绩');
     }
 
-    // 生成文件�?    const exportDate = new Date().toLocaleDateString('zh-CN').replace(/\//g, '-');
+    // 生成文件名
+    const exportDate = new Date().toLocaleDateString('zh-CN').replace(/\//g, '-');
     const dateRange = `${filters.startDate || '不限'}-${filters.endDate || '至今'}`;
     let fileName;
     
     if (filters.assignedTo && filters.assignedTo !== 'all') {
       const staffName = filters.assignedTo === 'unassigned' 
-        ? '未分�? 
+        ? '未分配' 
         : staffList.find(s => s._id === filters.assignedTo)?.displayName || '员工';
       fileName = `${exportDate}_${staffName}_${dateRange}.xlsx`;
     } else {
@@ -270,7 +280,7 @@ const FinancialReport = ({ token, currentUser }) => {
       <div className="financial-report">
         <div className="text-center p-5">
           <div className="spinner-border text-primary" role="status">
-            <span className="visually-hidden">加载�?..</span>
+            <span className="visually-hidden">加载中...</span>
           </div>
         </div>
       </div>
@@ -296,12 +306,12 @@ const FinancialReport = ({ token, currentUser }) => {
         )}
       </div>
 
-      {/* 筛选条�?*/}
+      {/* 筛选条件 */}
       <div className="filter-section card">
         <div className="card-body">
           <div className="row g-2">
             <div className="col-md-3">
-              <label className="form-label small">开始日�?/label>
+              <label className="form-label small">开始日期</label>
               <input
                 type="date"
                 className="form-control form-control-sm"
@@ -320,14 +330,14 @@ const FinancialReport = ({ token, currentUser }) => {
             </div>
             {isAdmin && (
               <div className="col-md-3">
-                <label className="form-label small">负责�?/label>
+                <label className="form-label small">负责人</label>
                 <select
                   className="form-select form-select-sm"
                   value={filters.assignedTo}
                   onChange={(e) => handleFilterChange('assignedTo', e.target.value)}
                 >
                   <option value="all">全部</option>
-                  <option value="unassigned">未分�?/option>
+                  <option value="unassigned">未分配</option>
                   {staffList.map(staff => (
                     <option key={staff._id} value={staff._id}>
                       {staff.displayName || staff.username}
@@ -343,7 +353,7 @@ const FinancialReport = ({ token, currentUser }) => {
                 disabled={loading}
               >
                 <i className="fas fa-search me-1"></i>
-                {loading ? '查询�?..' : '查询'}
+                {loading ? '查询中...' : '查询'}
               </button>
             </div>
           </div>
@@ -376,7 +386,7 @@ const FinancialReport = ({ token, currentUser }) => {
                       <i className="fas fa-arrow-down"></i>
                     </div>
                     <div className="stat-info">
-                      <div className="stat-label">总收�?/div>
+                      <div className="stat-label">总收入</div>
                       <div className="stat-value text-success">
                         {formatMoney(reportData.summary.totalIncome)}
                       </div>
@@ -392,7 +402,7 @@ const FinancialReport = ({ token, currentUser }) => {
                       <i className="fas fa-arrow-up"></i>
                     </div>
                     <div className="stat-info">
-                      <div className="stat-label">总成�?/div>
+                      <div className="stat-label">总成本</div>
                       <div className="stat-value text-warning">
                         {formatMoney(reportData.summary.totalCost)}
                       </div>
@@ -413,7 +423,7 @@ const FinancialReport = ({ token, currentUser }) => {
                         {formatMoney(reportData.summary.profit)}
                       </div>
                       <div className="stat-extra">
-                        利润�? {formatPercent(reportData.summary.profitRate)}
+                        利润率: {formatPercent(reportData.summary.profitRate)}
                       </div>
                     </div>
                   </div>
@@ -437,7 +447,7 @@ const FinancialReport = ({ token, currentUser }) => {
                     <thead className="table-light">
                       <tr>
                         <th>员工</th>
-                        <th className="text-center">订单�?/th>
+                        <th className="text-center">订单数</th>
                         <th className="text-end">收入</th>
                         <th className="text-end">成本</th>
                         <th className="text-end">利润</th>

@@ -1,5 +1,5 @@
 // HomeNoticeBoard.js
-// 首页公告栏展示组件（最多显�?条，更紧凑的排版�?
+// 首页公告栏展示组件（最多显示8条，更紧凑的排版）
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { buildApiUrl } from './config';
@@ -17,7 +17,7 @@ function HomeNoticeBoard({ onViewMore }) {
     axios.get(buildApiUrl('/api/notices')).then(res => {
       const visibleNotices = res.data.filter(n => n.visible);
       setAllNotices(visibleNotices);
-      setNotices(visibleNotices.slice(0, 8)); // 只取�?�?
+      setNotices(visibleNotices.slice(0, 8)); // 只取前8个
     });
     
     return () => window.removeEventListener('resize', onResize);
@@ -44,7 +44,7 @@ function HomeNoticeBoard({ onViewMore }) {
                 textAlign: isMobile ? 'center' : 'left'
               }}>
                 <i className="fas fa-bullhorn me-2"></i>
-                公告�?
+                公告栏
               </h2>
               {allNotices.length > 8 && (
                 <button 
@@ -141,7 +141,7 @@ function HomeNoticeBoard({ onViewMore }) {
             {allNotices.length > 8 && (
               <div className="text-center mt-3">
                 <small className="text-muted">
-                  显示 {notices.length} / {allNotices.length} 条公�?
+                  显示 {notices.length} / {allNotices.length} 条公告
                 </small>
               </div>
             )}
