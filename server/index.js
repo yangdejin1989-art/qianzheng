@@ -4657,7 +4657,11 @@ app.use('/api/material-templates', materialTemplateRoutes);
 const questionTemplateRoutes = require('./routes/questionTemplateRoutes');
 app.use('/api/question-templates', questionTemplateRoutes);
 
-app.listen(config.port, '0.0.0.0', () => {
-  console.log(`Server is running on http://localhost:${config.port}`);
-  console.log(`Server is also accessible on http://192.168.80.98:${config.port}`);
-}); 
+if (require.main === module) {
+  app.listen(config.port, '0.0.0.0', () => {
+    console.log(`Server is running on http://localhost:${config.port}`);
+    console.log(`Server is also accessible on http://192.168.80.98:${config.port}`);
+  });
+}
+
+module.exports = app;
