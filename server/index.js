@@ -25,15 +25,27 @@ app.use(express.json({ limit: '500mb' }));
 app.use(express.urlencoded({ limit: '500mb', extended: true }));
 
 // 连接 MongoDB
-mongoose.connect(config.mongoUri, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
+const dbReady = mongoose.connect(config.mongoUri, {
+  serverSelectionTimeoutMS: 10000,
 });
 
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB 连接错误:'));
 db.once('open', () => {
   console.log('已成功连接到 MongoDB');
+});
+
+app.use('/api', async (req, res, next) => {
+  try {
+    await dbReady;
+    next();
+  } catch (err) {
+    console.error('MongoDB connection failed:', err.message);
+    res.status(500).json({
+      message: 'Database connection failed',
+      error: err.message
+    });
+  }
 });
 
 // 加载所有数据模型（在数据库连接后）
@@ -117,7 +129,9 @@ async function initAdmin() {
     console.log('已初始化默认管理员账号：admin/123456');
   }
 }
-initAdmin();
+dbReady.then(initAdmin).catch(err => {
+  console.error('Admin initialization skipped:', err.message);
+});
 
 // 配置邮件发送器 - 支持Gmail、QQ邮箱和163邮箱
 function createTransporter() {
@@ -162,7 +176,9 @@ function generateVerificationCode() {
 }
 
 // 启动时测试邮件连接
-testEmailConnection();
+if (!process.env.VERCEL) {
+  testEmailConnection();
+}
 
 // 发送邮箱验证码接口 - 支持双验证方式
 app.post('/api/send-verification-code', async (req, res) => {
