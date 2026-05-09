@@ -25,6 +25,9 @@ app.use(express.json({ limit: '500mb' }));
 app.use(express.urlencoded({ limit: '500mb', extended: true }));
 
 // 连接 MongoDB
+// 设置环境变量使用 Node.js 原生 DNS 解析（修复 Windows SRV 记录问题）
+process.env.USE_NODEJSdns = '1';
+
 const dbReady = mongoose.connect(config.mongoUri, {
   serverSelectionTimeoutMS: 10000,
 });
