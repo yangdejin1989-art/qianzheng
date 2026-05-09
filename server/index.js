@@ -58,9 +58,11 @@ const { checkIPBlacklist, checkEmailBlacklist, checkPhoneBlacklist } = require('
 const { authenticate, requireAdmin, requireAdminOrStaff } = require('./middleware/authMiddleware');
 
 // 创建 uploads 目录（如不存在）
-const uploadDir = path.join(__dirname, 'uploads');
+const uploadDir = process.env.VERCEL
+  ? path.join('/tmp', 'uploads')
+  : path.join(__dirname, 'uploads');
 if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir);
+  fs.mkdirSync(uploadDir, { recursive: true });
 }
 
 // 配置 multer
