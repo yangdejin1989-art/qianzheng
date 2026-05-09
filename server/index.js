@@ -123,10 +123,33 @@ app.post('/api/upload', upload.single('image'), async (req, res) => {
 // 初始化默认管理员账号（admin/123456）
 async function initAdmin() {
   const exist = await Admin.findOne({ username: 'admin' });
+  const adminDefaults = {
+    role: 'admin',
+    displayName: 'Admin',
+    isActive: true,
+    permissions: {
+      orderManagement: true,
+      packageManagement: true,
+      templateManagement: true,
+      blacklistManagement: true,
+      faqManagement: true,
+      noticeManagement: true,
+      userManagement: true
+    },
+    updatedAt: new Date()
+  };
+
   if (!exist) {
     const hash = await bcrypt.hash('123456', 10);
-    await Admin.create({ username: 'admin', password: hash });
-    console.log('已初始化默认管理员账号：admin/123456');
+    await Admin.create({
+      username: 'admin',
+      password: hash,
+      ...adminDefaults
+    });
+    console.log('Initialized default admin account: admin/123456');
+  } else if (exist.role !== 'admin' || !exist.isActive) {
+    await Admin.updateOne({ username: 'admin' }, { $set: adminDefaults });
+    console.log('Admin account permissions have been repaired.');
   }
 }
 dbReady.then(initAdmin).catch(err => {
