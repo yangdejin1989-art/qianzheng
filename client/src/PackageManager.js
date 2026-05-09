@@ -9,19 +9,19 @@ const getCurrencySymbol = (currency) => {
     'CNY': '¥',
     'JPY': '¥',
     'USD': '$',
-    'EUR': '€'
+    'EUR': '�?
   };
   return symbols[currency] || '¥';
 };
 
 const getCurrencyName = (currency) => {
   const names = {
-    'CNY': '人民币',
+    'CNY': '人民�?,
     'JPY': '日元',
     'USD': '美元',
     'EUR': '欧元'
   };
-  return names[currency] || '人民币';
+  return names[currency] || '人民�?;
 };
 
 function PackageManager({ token }) {
@@ -30,8 +30,7 @@ function PackageManager({ token }) {
   const [form, setForm] = useState({
     name: '',
     speed: '',
-    visaTypes: [], // 多个签证类型及价格（包含币种）
-    description: '',
+    visaTypes: [], // 多个签证类型及价格（包含币种�?    description: '',
     features: [],
     details: '',
     order: 0,
@@ -40,23 +39,21 @@ function PackageManager({ token }) {
   });
   const [newFeature, setNewFeature] = useState('');
   const [newVisaType, setNewVisaType] = useState({ type: '', currency: 'CNY', price: '', originalPrice: '' });
-  const [editingVisaTypeIndex, setEditingVisaTypeIndex] = useState(null); // 正在编辑的签证类型索引
-  const [file, setFile] = useState(null);
+  const [editingVisaTypeIndex, setEditingVisaTypeIndex] = useState(null); // 正在编辑的签证类型索�?  const [file, setFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(''); // 图片预览URL
   const [error, setError] = useState('');
   const formRef = useRef(null);
   const [showForm, setShowForm] = useState(false);
 
   const fetchPackages = () => {
-    axios.get('http://localhost:5000/api/packages').then(res => setPackages(res.data));
+    axios.get('/api/packages').then(res => setPackages(res.data));
   };
 
   useEffect(() => {
     fetchPackages();
   }, []);
 
-  // 清理预览URL，避免内存泄漏
-  useEffect(() => {
+  // 清理预览URL，避免内存泄�?  useEffect(() => {
     return () => {
       if (previewUrl) {
         URL.revokeObjectURL(previewUrl);
@@ -99,9 +96,9 @@ function PackageManager({ token }) {
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm('确定删除这个套餐？')) {
+    if (window.confirm('确定删除这个套餐�?)) {
       try {
-        await axios.delete(`http://localhost:5000/api/packages/${id}`, {
+        await axios.delete(`/api/packages/${id}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         fetchPackages();
@@ -212,14 +209,14 @@ function PackageManager({ token }) {
       }
 
       if (editing) {
-        await axios.put(`http://localhost:5000/api/packages/${editing}`, formData, {
+        await axios.put(`/api/packages/${editing}`, formData, {
           headers: { 
             'Content-Type': 'multipart/form-data',
             Authorization: `Bearer ${token}` 
           }
         });
       } else {
-        await axios.post('http://localhost:5000/api/packages', formData, {
+        await axios.post('/api/packages', formData, {
           headers: { 
             'Content-Type': 'multipart/form-data',
             Authorization: `Bearer ${token}` 
@@ -250,7 +247,7 @@ function PackageManager({ token }) {
     } catch (err) {
       console.error('保存失败:', err);
       console.error('错误响应:', err.response?.data);
-      setError(err.response?.data?.message || '操作失败：' + (err.message || '未知错误'));
+      setError(err.response?.data?.message || '操作失败�? + (err.message || '未知错误'));
     }
   };
 
@@ -275,7 +272,7 @@ function PackageManager({ token }) {
                 <div className="card h-100 shadow-sm" style={{ borderRadius: 6, fontSize: 13 }}>
                   {pkg.imageUrl && (
                     <img
-                      src={`http://localhost:5000${pkg.imageUrl}`}
+                      src={`${pkg.imageUrl}`}
                       className="card-img-top"
                       alt={pkg.name}
                       style={{ height: '120px', objectFit: 'cover', borderTopLeftRadius: 6, borderTopRightRadius: 6 }}
@@ -290,8 +287,7 @@ function PackageManager({ token }) {
                           <div key={idx} className="d-flex align-items-center mb-1">
                             <span className="badge bg-info text-dark me-1" style={{ fontSize: 10 }}>{vt.type}</span>
                             <span className="text-danger fw-bold" style={{ fontSize: 13 }}>
-                              {getCurrencySymbol(vt.currency)}{vt.price}/次
-                            </span>
+                              {getCurrencySymbol(vt.currency)}{vt.price}/�?                            </span>
                             {vt.originalPrice && vt.originalPrice > vt.price && (
                               <span className="text-muted text-decoration-line-through ms-1" style={{ fontSize: 11 }}>
                                 {getCurrencySymbol(vt.currency)}{vt.originalPrice}
@@ -308,8 +304,7 @@ function PackageManager({ token }) {
                         )}
                         <div className="d-flex align-items-center mb-1">
                           <span className="text-danger fw-bold" style={{ fontSize: 15 }}>
-                            {getCurrencySymbol(pkg.currency)}{pkg.price}/次
-                            <span className="text-muted ms-1" style={{ fontSize: 12 }}>({getCurrencyName(pkg.currency)})</span>
+                            {getCurrencySymbol(pkg.currency)}{pkg.price}/�?                            <span className="text-muted ms-1" style={{ fontSize: 12 }}>({getCurrencyName(pkg.currency)})</span>
                           </span>
                           {pkg.originalPrice && pkg.originalPrice > pkg.price && (
                             <span className="text-muted text-decoration-line-through ms-2" style={{ fontSize: 12 }}>
@@ -357,7 +352,7 @@ function PackageManager({ token }) {
             <h4 className="section-title mb-3" style={{ fontSize: 15 }}>{editing ? '编辑套餐' : '新增套餐'}</h4>
             <form onSubmit={handleSubmit} className="form-container" ref={formRef}>
               <div className="row g-3">
-                {/* 左侧：编辑表单 */}
+                {/* 左侧：编辑表�?*/}
                 <div className="col-lg-8">
                   <div className="row g-2">
                 <div className="col-md-6">
@@ -392,14 +387,14 @@ function PackageManager({ token }) {
                     style={{ fontSize: 13, padding: '6px 10px' }}
                     value={form.order}
                     onChange={e => setForm(f => ({ ...f, order: Number(e.target.value) }))}
-                    placeholder="数字越小越靠前"
+                    placeholder="数字越小越靠�?
                   />
                 </div>
                 </div>
 
-                {/* 签证类型和价格列表 */}
+                {/* 签证类型和价格列�?*/}
                 <div className="mb-2 mt-2">
-                  <label className="form-label fw-bold mb-1" style={{ fontSize: 13 }}>签证类型与价格</label>
+                  <label className="form-label fw-bold mb-1" style={{ fontSize: 13 }}>签证类型与价�?/label>
                   <div className="border rounded p-2" style={{ backgroundColor: '#f8f9fa' }}>
                     {form.visaTypes.map((vt, index) => (
                       <div key={index} className="d-flex align-items-center gap-2 mb-2 p-2" style={{ 
@@ -408,7 +403,7 @@ function PackageManager({ token }) {
                         border: editingVisaTypeIndex === index ? '2px solid #ffc107' : 'none'
                       }}>
                         <span className="badge bg-info text-dark">{vt.type}</span>
-                        <span className="text-danger fw-bold">{getCurrencySymbol(vt.currency)}{vt.price}/次</span>
+                        <span className="text-danger fw-bold">{getCurrencySymbol(vt.currency)}{vt.price}/�?/span>
                         {vt.originalPrice && (
                           <span className="text-muted text-decoration-line-through">{getCurrencySymbol(vt.currency)}{vt.originalPrice}</span>
                         )}
@@ -453,10 +448,10 @@ function PackageManager({ token }) {
                           value={newVisaType.currency}
                           onChange={e => setNewVisaType({...newVisaType, currency: e.target.value})}
                         >
-                          <option value="CNY">¥ 人民币</option>
+                          <option value="CNY">¥ 人民�?/option>
                           <option value="JPY">¥ 日元</option>
                           <option value="USD">$ 美元</option>
-                          <option value="EUR">€ 欧元</option>
+                          <option value="EUR">�?欧元</option>
                         </select>
                       </div>
                       <div className="col-2">
@@ -475,7 +470,7 @@ function PackageManager({ token }) {
                           type="number"
                           className="form-control form-control-sm"
                           style={{ fontSize: 12 }}
-                          placeholder="原价（选填）"
+                          placeholder="原价（选填�?
                           value={newVisaType.originalPrice}
                           onChange={e => setNewVisaType({...newVisaType, originalPrice: e.target.value})}
                           onKeyPress={e => e.key === 'Enter' && (e.preventDefault(), addVisaType())}
@@ -499,8 +494,7 @@ function PackageManager({ token }) {
                               onClick={cancelEditVisaType}
                               title="取消编辑"
                             >
-                              ✕
-                        </button>
+                              �?                        </button>
                           )}
                         </div>
                       </div>
@@ -519,13 +513,13 @@ function PackageManager({ token }) {
                 </div>
 
               <div className="mb-2">
-                <label className="form-label fw-bold mb-1" style={{ fontSize: 13 }}>简短描述</label>
+                <label className="form-label fw-bold mb-1" style={{ fontSize: 13 }}>简短描�?/label>
                 <textarea
                   className="form-control form-control-lg"
                   style={{ fontSize: 13, padding: '6px 10px' }}
                   value={form.description}
                   onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
-                  placeholder="套餐的简短介绍"
+                  placeholder="套餐的简短介�?
                   rows="2"
                 />
               </div>
@@ -580,13 +574,12 @@ function PackageManager({ token }) {
                     id="packageVisible"
                   />
                   <label className="form-check-label fw-bold" htmlFor="packageVisible" style={{ fontSize: 13 }}>
-                    显示此套餐
-                  </label>
+                    显示此套�?                  </label>
                 </div>
               </div>
                 </div>
 
-                {/* 右侧：图片预览 */}
+                {/* 右侧：图片预�?*/}
                 <div className="col-lg-4">
                   <div className="sticky-top" style={{ top: '20px' }}>
                     <label className="form-label fw-bold mb-2" style={{ fontSize: 13 }}>套餐图片</label>
@@ -602,7 +595,7 @@ function PackageManager({ token }) {
                           boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
                         }}>
                           <img 
-                            src={previewUrl || `http://localhost:5000${form.imageUrl}`} 
+                            src={previewUrl || `${form.imageUrl}`} 
                             alt="套餐图片" 
                             style={{ 
                               width: '100%', 
@@ -669,7 +662,7 @@ function PackageManager({ token }) {
                       }}
                     />
                     <small className="text-muted d-block mt-1" style={{ fontSize: 11 }}>
-                      建议尺寸：800x600px，支持 JPG、PNG 格式
+                      建议尺寸�?00x600px，支�?JPG、PNG 格式
                     </small>
                   </div>
                 </div>

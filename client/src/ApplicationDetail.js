@@ -44,8 +44,7 @@ function ApplicationDetail({ id, onBack }) {
   const [modalPosition, setModalPosition] = useState({ left: '50%' });
   const [modalCenterY, setModalCenterY] = useState(0);
   const mainContentRef = useRef(null);
-  const [activePersonIndex, setActivePersonIndex] = useState(0); // 当前选中的人员索引（0=主申请人）
-  
+  const [activePersonIndex, setActivePersonIndex] = useState(0); // 当前选中的人员索引（0=主申请人�?  
   // 问题答案编辑相关
   const [isEditingQuestions, setIsEditingQuestions] = useState(false);
   const [editedQuestions, setEditedQuestions] = useState([]);
@@ -98,8 +97,7 @@ function ApplicationDetail({ id, onBack }) {
         const pkg = packages.find(p => p.name === application.package);
         if (!pkg) return;
         
-        // 获取该签证类型的材料模板，其中包含客户类型列表
-        const response = await axios.get(buildApiUrl(`/api/material-templates/package/${pkg._id}`));
+        // 获取该签证类型的材料模板，其中包含客户类型列�?        const response = await axios.get(buildApiUrl(`/api/material-templates/package/${pkg._id}`));
         if (response.data && response.data.customerTypes) {
           setCustomerTypes(response.data.customerTypes);
         }
@@ -113,8 +111,7 @@ function ApplicationDetail({ id, onBack }) {
     }
   }, [application, packages]);
 
-  // 监听滚动事件，实时更新弹窗位置
-  useEffect(() => {
+  // 监听滚动事件，实时更新弹窗位�?  useEffect(() => {
     const handleScroll = () => {
       if (previewImage && previewImage.centerY !== undefined) {
         const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
@@ -208,7 +205,7 @@ function ApplicationDetail({ id, onBack }) {
       <div className="container mt-4">
         <div className="text-center">
           <div className="spinner-border" role="status">
-            <span className="visually-hidden">加载中...</span>
+            <span className="visually-hidden">加载�?..</span>
           </div>
         </div>
       </div>
@@ -225,7 +222,7 @@ function ApplicationDetail({ id, onBack }) {
   if (!application) {
     return (
       <div className="container mt-4">
-        <div className="alert alert-warning">未找到订单信息</div>
+        <div className="alert alert-warning">未找到订单信�?/div>
         <button className="btn btn-secondary" onClick={onBack}>返回</button>
       </div>
     );
@@ -253,18 +250,16 @@ function ApplicationDetail({ id, onBack }) {
   };
   const handleSave = async () => {
     try {
-      // 检查签证类型是否改变
-      const packageChanged = editData.package !== application.package;
+      // 检查签证类型是否改�?      const packageChanged = editData.package !== application.package;
       
       if (packageChanged && application.customerType) {
-        // 如果签证类型改变且已有办理类型，需要确认
-        const confirmMsg = `⚠️ 注意：您正在更改签证类型\n\n` +
+        // 如果签证类型改变且已有办理类型，需要确�?        const confirmMsg = `⚠️ 注意：您正在更改签证类型\n\n` +
           `原签证类型：${application.package}\n` +
           `新签证类型：${editData.package}\n\n` +
           `更改签证类型后，系统将：\n` +
-          `• 清空当前的办理类型（${application.customerType.typeName}）\n` +
-          `• 清空已配置的材料清单\n` +
-          `• 清空已配置的问题答案\n\n` +
+          `�?清空当前的办理类型（${application.customerType.typeName}）\n` +
+          `�?清空已配置的材料清单\n` +
+          `�?清空已配置的问题答案\n\n` +
           `您需要重新为客户选择办理类型。\n\n` +
           `确认要更改吗？`;
         
@@ -291,17 +286,16 @@ function ApplicationDetail({ id, onBack }) {
           email: editData.email,
           companions: editData.companions
         });
-      // 保留原有数据，只更新后端返回的字段
-      setApplication({ ...application, ...response.data, id: response.data._id });
+      // 保留原有数据，只更新后端返回的字�?      setApplication({ ...application, ...response.data, id: response.data._id });
       setIsEditing(false);
       
       if (packageChanged) {
-        alert('签证类型已更换！\n\n请为客户重新选择办理类型，系统将自动关联新的材料清单和问题模板。');
+        alert('签证类型已更换！\n\n请为客户重新选择办理类型，系统将自动关联新的材料清单和问题模板�?);
       } else {
-        alert('保存成功！');
+        alert('保存成功�?);
       }
     } catch (err) {
-      alert('保存失败：' + (err.response?.data?.message || '网络错误'));
+      alert('保存失败�? + (err.response?.data?.message || '网络错误'));
     }
   };
   const handleCancel = () => {
@@ -334,9 +328,8 @@ function ApplicationDetail({ id, onBack }) {
     // 根据是新选择还是更换，显示不同的确认消息
     let confirmMsg;
     if (isChanging) {
-      // 检查是否有原办理类型
-      if (!application.customerType || !application.customerType.typeName) {
-        alert('错误：当前没有办理类型，请直接选择而不是更换。');
+      // 检查是否有原办理类�?      if (!application.customerType || !application.customerType.typeName) {
+        alert('错误：当前没有办理类型，请直接选择而不是更换�?);
         return;
       }
       
@@ -344,10 +337,10 @@ function ApplicationDetail({ id, onBack }) {
         `原办理类型：${application.customerType.typeName}\n` +
         `新办理类型：${selectedType.typeName}\n\n` +
         `更换办理类型后，系统将：\n` +
-        `• ✅ 保留相同材料的图片（如护照、照片等通用材料）\n` +
-        `• ❌ 删除仅属于原办理类型的材料\n` +
-        `• ✅ 添加新办理类型特有的材料\n` +
-        `• ❌ 清空所有问题答案\n\n` +
+        `�?�?保留相同材料的图片（如护照、照片等通用材料）\n` +
+        `�?�?删除仅属于原办理类型的材料\n` +
+        `�?�?添加新办理类型特有的材料\n` +
+        `�?�?清空所有问题答案\n\n` +
         `注：只有两种办理类型都需要的材料，其图片才会保留！\n\n` +
         `确认要更换吗？`;
     } else {
@@ -365,37 +358,35 @@ function ApplicationDetail({ id, onBack }) {
       };
       
       console.log('🔄 正在更新办理类型:', {
-        原办理类型: application.customerType?.typeName || '无',
-        新办理类型: selectedType.typeName,
-        是否为更换: isChanging
+        原办理类�? application.customerType?.typeName || '�?,
+        新办理类�? selectedType.typeName,
+        是否为更�? isChanging
       });
       
       const response = await axios.put(buildApiUrl(`/api/applications/${application.id}`), {
         customerType,
-        customerTypeChanged: isChanging // 告知后端是否为更换
-      });
+        customerTypeChanged: isChanging // 告知后端是否为更�?      });
       
-      console.log('✅ 办理类型更新成功:', response.data);
+      console.log('�?办理类型更新成功:', response.data);
       
-      // 保留原有数据，只更新后端返回的字段
-      setApplication({ ...application, ...response.data, id: response.data._id });
+      // 保留原有数据，只更新后端返回的字�?      setApplication({ ...application, ...response.data, id: response.data._id });
       setSelectedCustomerType('');
       
       // 关闭模态框
       setShowChangeCustomerTypeModal(false);
       
       if (isChanging) {
-        alert('办理类型已更换！\n\n✅ 相同材料的图片已保留\n❌ 原问题答案已清空\n✅ 新的材料清单和问题模板已自动关联');
+        alert('办理类型已更换！\n\n�?相同材料的图片已保留\n�?原问题答案已清空\n�?新的材料清单和问题模板已自动关联');
       } else {
-        alert('办理类型已更新！材料清单和问题模板已自动关联。');
+        alert('办理类型已更新！材料清单和问题模板已自动关联�?);
       }
       
       // 刷新页面以加载新的材料清单和问题模板
       await fetchApplication();
     } catch (err) {
-      console.error('❌ 更新办理类型失败:', err);
+      console.error('�?更新办理类型失败:', err);
       console.error('错误详情:', err.response?.data || err.message);
-      alert('更新失败：' + (err.response?.data?.message || err.message || '网络错误'));
+      alert('更新失败�? + (err.response?.data?.message || err.message || '网络错误'));
     }
   };
 
@@ -412,8 +403,7 @@ function ApplicationDetail({ id, onBack }) {
     const modalWidth = 640; // 600px + 40px padding
     const modalHeight = 440; // 400px + 40px padding
     
-    // 计算垂直位置：基于当前滚动位置
-    const centerY = scrollTop + viewportHeight / 2 - modalHeight / 2;
+    // 计算垂直位置：基于当前滚动位�?    const centerY = scrollTop + viewportHeight / 2 - modalHeight / 2;
     
     setPreviewImage({ 
       img: fullImgUrl, 
@@ -437,12 +427,11 @@ function ApplicationDetail({ id, onBack }) {
   const handleReviewSubmit = async () => {
     try {
       const response = await axios.put(buildApiUrl(`/api/applications/${application.id}/review`), reviewData);
-      // 保留原有数据，只更新后端返回的字段
-      setApplication({ ...application, ...response.data, id: response.data._id });
+      // 保留原有数据，只更新后端返回的字�?      setApplication({ ...application, ...response.data, id: response.data._id });
       setShowReviewModal(false);
-      alert('审核完成！');
+      alert('审核完成�?);
     } catch (err) {
-      alert('审核失败：' + (err.response?.data?.message || '网络错误'));
+      alert('审核失败�? + (err.response?.data?.message || '网络错误'));
     }
   };
 
@@ -450,10 +439,9 @@ function ApplicationDetail({ id, onBack }) {
     setShowReviewModal(false);
   };
 
-  // 发送材料提醒邮件
-  const sendMaterialReminderEmail = async () => {
+  // 发送材料提醒邮�?  const sendMaterialReminderEmail = async () => {
     if (!application?.customerType) {
-      alert('❌ 请先选择办理类型');
+      alert('�?请先选择办理类型');
       return;
     }
 
@@ -474,13 +462,13 @@ function ApplicationDetail({ id, onBack }) {
       );
 
       if (response.data.success) {
-        alert('✅ 材料提醒邮件发送成功，客户可通过邮件链接直接提交材料');
+        alert('�?材料提醒邮件发送成功，客户可通过邮件链接直接提交材料');
       } else {
-        alert(`❌ 邮件发送失败: ${response.data.message || '未知错误'}`);
+        alert(`�?邮件发送失�? ${response.data.message || '未知错误'}`);
       }
     } catch (error) {
-      console.error('发送材料提醒邮件失败:', error);
-      alert(`❌ 邮件发送失败: ${error.response?.data?.message || error.message || '网络错误'}`);
+      console.error('发送材料提醒邮件失�?', error);
+      alert(`�?邮件发送失�? ${error.response?.data?.message || error.message || '网络错误'}`);
     }
   };
 
@@ -496,15 +484,14 @@ function ApplicationDetail({ id, onBack }) {
       const reason = modificationAction === 'approve' ? '同意修改申请' : '拒绝修改申请';
       await axios.post(buildApiUrl(`/api/applications/${application.id}/review-modification`), {
         action: modificationAction,
-        adminReason: modificationReason || '无',
+        adminReason: modificationReason || '�?,
         // 新增: 拒绝时将状态设为待确认
         ...(modificationAction === 'reject' ? { setStatusToPending: true } : {})
       });
       alert(`${reason}成功`);
       setShowModificationDialog(false);
-      fetchApplication(); // 只刷新当前订单详情，不跳转首页
-    } catch (err) {
-      alert('操作失败：' + (err.response?.data?.message || err.message));
+      fetchApplication(); // 只刷新当前订单详情，不跳转首�?    } catch (err) {
+      alert('操作失败�? + (err.response?.data?.message || err.message));
     }
   };
 
@@ -519,12 +506,12 @@ function ApplicationDetail({ id, onBack }) {
       const reason = action === 'approve' ? '同意取消申请' : '拒绝取消申请';
       await axios.post(buildApiUrl(`/api/applications/${application.id}/review-cancellation`), {
         action: action,
-        adminReason: prompt(`请输入${reason}的原因：`) || '无'
+        adminReason: prompt(`请输�?{reason}的原因：`) || '�?
       });
       alert(`${reason}成功`);
       window.location.reload();
     } catch (err) {
-      alert('操作失败：' + (err.response?.data?.message || err.message));
+      alert('操作失败�? + (err.response?.data?.message || err.message));
     }
   };
 
@@ -538,8 +525,7 @@ function ApplicationDetail({ id, onBack }) {
                 订单详情
                 {application?.settled && (
                   <span className="badge bg-success ms-3" style={{ fontSize: '0.75rem' }}>
-                    <i className="fas fa-check-circle me-1"></i>已结算
-                  </span>
+                    <i className="fas fa-check-circle me-1"></i>已结�?                  </span>
                 )}
               </h4>
               <div>
@@ -570,9 +556,9 @@ function ApplicationDetail({ id, onBack }) {
                   </h5>
                   <table className="table table-borderless table-sm">
                     <tbody>
-                      <tr><td><strong>申请编码：</strong></td><td>{application.applyCode}</td></tr>
+                      <tr><td><strong>申请编码�?/strong></td><td>{application.applyCode}</td></tr>
                       <tr>
-                        <td><strong>姓名：</strong></td>
+                        <td><strong>姓名�?/strong></td>
                         <td>
                           {isEditing ? (
                             <input 
@@ -602,7 +588,7 @@ function ApplicationDetail({ id, onBack }) {
                         </td>
                       </tr>
                       <tr>
-                        <td><strong>地址：</strong></td>
+                        <td><strong>地址�?/strong></td>
                         <td>
                           {isEditing ? (
                             <textarea 
@@ -627,7 +613,7 @@ function ApplicationDetail({ id, onBack }) {
                               onChange={e => setEditData({...editData, wechat: e.target.value})}
                             />
                           ) : (
-                            application.wechat || '未填写'
+                            application.wechat || '未填�?
                           )}
                         </td>
                       </tr>
@@ -642,12 +628,12 @@ function ApplicationDetail({ id, onBack }) {
                               onChange={e => setEditData({...editData, line: e.target.value})}
                             />
                           ) : (
-                            application.line || '未填写'
+                            application.line || '未填�?
                           )}
                         </td>
                       </tr>
                       <tr>
-                        <td><strong>邮箱：</strong></td>
+                        <td><strong>邮箱�?/strong></td>
                         <td>
                           {isEditing ? (
                             <input 
@@ -657,7 +643,7 @@ function ApplicationDetail({ id, onBack }) {
                               onChange={e => setEditData({...editData, email: e.target.value})}
                             />
                           ) : (
-                            application.email || '未填写'
+                            application.email || '未填�?
                           )}
                         </td>
                       </tr>
@@ -669,7 +655,7 @@ function ApplicationDetail({ id, onBack }) {
                   <table className="table table-borderless table-sm">
                     <tbody>
                       <tr>
-                        <td><strong>签证套餐：</strong></td>
+                        <td><strong>签证套餐�?/strong></td>
                         <td>
                           {isEditing ? (
                             <select className="form-select form-select-sm" value={editData.package} onChange={e => setEditData({...editData, package: e.target.value})}>
@@ -684,7 +670,7 @@ function ApplicationDetail({ id, onBack }) {
                         </td>
                       </tr>
                       <tr>
-                        <td><strong>办理类型：</strong></td>
+                        <td><strong>办理类型�?/strong></td>
                         <td>
                           <div className="d-flex align-items-center gap-2">
                             {application.customerType ? (
@@ -722,7 +708,7 @@ function ApplicationDetail({ id, onBack }) {
                         </td>
                       </tr>
                       <tr>
-                        <td><strong>签证次数：</strong></td>
+                        <td><strong>签证次数�?/strong></td>
                         <td>
                           {isEditing ? (
                             <input
@@ -730,15 +716,15 @@ function ApplicationDetail({ id, onBack }) {
                               className="form-control form-control-sm"
                               value={editData.visaType || ''}
                               onChange={e => setEditData({...editData, visaType: e.target.value})}
-                              placeholder="例如：单次、一年多次"
+                              placeholder="例如：单次、一年多�?
                             />
                           ) : (
-                            application.visaType || '未填写'
+                            application.visaType || '未填�?
                           )}
                         </td>
                       </tr>
                       <tr>
-                        <td><strong>办理价格：</strong></td>
+                        <td><strong>办理价格�?/strong></td>
                         <td>
                           {isEditing ? (
                             <div className="d-flex gap-2">
@@ -751,7 +737,7 @@ function ApplicationDetail({ id, onBack }) {
                                 <option value="CNY">¥ CNY</option>
                                 <option value="JPY">¥ JPY</option>
                                 <option value="USD">$ USD</option>
-                                <option value="EUR">€ EUR</option>
+                                <option value="EUR">�?EUR</option>
                               </select>
                               <input
                                 type="number"
@@ -766,8 +752,8 @@ function ApplicationDetail({ id, onBack }) {
                             application.visaPrice ?
                             `${application.visaCurrency === 'CNY' ? '¥' :
                                application.visaCurrency === 'JPY' ? '¥' :
-                               application.visaCurrency === 'USD' ? '$' : '€'} ${application.visaPrice} (${application.visaCurrency})`
-                            : '未填写'
+                               application.visaCurrency === 'USD' ? '$' : '�?} ${application.visaPrice} (${application.visaCurrency})`
+                            : '未填�?
                           )}
                         </td>
                       </tr>
@@ -775,18 +761,18 @@ function ApplicationDetail({ id, onBack }) {
                         <td>
                           {isEditing ? (
                             <select className="form-select form-select-sm w-auto d-inline" value={editData.status} onChange={e => setEditData({...editData, status: e.target.value})}>
-                              <option value="待处理">待处理</option>
-                              <option value="待确认">待确认</option>
-                              <option value="处理中">处理中</option>
-                              <option value="已完成">已完成</option>
-                              <option value="已取消">已取消</option>
+                              <option value="待处�?>待处�?/option>
+                              <option value="待确�?>待确�?/option>
+                              <option value="处理�?>处理�?/option>
+                              <option value="已完�?>已完�?/option>
+                              <option value="已取�?>已取�?/option>
                             </select>
                           ) : (
                             <span className={`badge ${
-                              application.status === '待处理' ? 'bg-warning' :
-                              application.status === '待确认' ? 'bg-info' :
-                              application.status === '处理中' ? 'bg-primary' :
-                              application.status === '已完成' ? 'bg-success' :
+                              application.status === '待处�? ? 'bg-warning' :
+                              application.status === '待确�? ? 'bg-info' :
+                              application.status === '处理�? ? 'bg-primary' :
+                              application.status === '已完�? ? 'bg-success' :
                               'bg-secondary'
                             }`}>
                               {application.status}
@@ -795,7 +781,7 @@ function ApplicationDetail({ id, onBack }) {
                         </td>
                       </tr>
                       
-                      {/* 同行人编辑 */}
+                      {/* 同行人编�?*/}
                       {isEditing && (
                         <tr>
                           <td><strong>同行人：</strong></td>
@@ -806,7 +792,7 @@ function ApplicationDetail({ id, onBack }) {
                                   {editData.companions.map((name, index) => (
                                     <div key={index} className="input-group input-group-sm mb-2" style={{ maxWidth: '300px' }}>
                                       <span className="input-group-text" style={{ minWidth: '80px', fontSize: '0.85rem' }}>
-                                        同行人 {index + 1}
+                                        同行�?{index + 1}
                                       </span>
                                       <input
                                         type="text"
@@ -817,7 +803,7 @@ function ApplicationDetail({ id, onBack }) {
                                           setEditData({...editData, companions: newCompanions});
                                         }}
                                         className="form-control form-control-sm"
-                                        placeholder="请输入姓名"
+                                        placeholder="请输入姓�?
                                       />
                                       <button
                                         type="button"
@@ -835,7 +821,7 @@ function ApplicationDetail({ id, onBack }) {
                                   ))}
                                 </div>
                               ) : (
-                                <span className="text-muted" style={{ fontSize: '0.9rem' }}>暂无同行人</span>
+                                <span className="text-muted" style={{ fontSize: '0.9rem' }}>暂无同行�?/span>
                               )}
                               <button
                                 type="button"
@@ -845,15 +831,14 @@ function ApplicationDetail({ id, onBack }) {
                                 }}
                                 className="btn btn-sm btn-outline-primary mt-1"
                               >
-                                <i className="fas fa-plus me-1"></i>添加同行人
-                              </button>
+                                <i className="fas fa-plus me-1"></i>添加同行�?                              </button>
                             </div>
                           </td>
                         </tr>
                       )}
                       
-                      <tr><td><strong>申请时间：</strong></td><td>{new Date(application.createdAt).toLocaleString()}</td></tr>
-                      <tr><td><strong>更新时间：</strong></td><td>{new Date(application.updatedAt).toLocaleString()}</td></tr>
+                      <tr><td><strong>申请时间�?/strong></td><td>{new Date(application.createdAt).toLocaleString()}</td></tr>
+                      <tr><td><strong>更新时间�?/strong></td><td>{new Date(application.updatedAt).toLocaleString()}</td></tr>
                     </tbody>
                   </table>
                 </div>
@@ -865,8 +850,7 @@ function ApplicationDetail({ id, onBack }) {
                   <div className="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
                     <h5 className="mb-0">
                     <i className="fas fa-user-friends me-2"></i>
-                    同行人
-                  </h5>
+                    同行�?                  </h5>
                     {application.customerType && (
                       <button
                         className="btn btn-warning btn-sm"
@@ -878,8 +862,7 @@ function ApplicationDetail({ id, onBack }) {
                         }}
                       >
                         <i className="fas fa-envelope me-1"></i>
-                        发送材料提醒邮件
-                      </button>
+                        发送材料提醒邮�?                      </button>
                     )}
                   </div>
                   <div style={{ 
@@ -923,7 +906,7 @@ function ApplicationDetail({ id, onBack }) {
                       {application.name}（主申请人）
                     </button>
                     
-                    {/* 同行人标签 */}
+                    {/* 同行人标�?*/}
                     {application.companions.map((name, index) => (
                       <button
                         key={index}
@@ -965,7 +948,7 @@ function ApplicationDetail({ id, onBack }) {
               )}
 
 
-              {/* 申请材料 - 紧凑布局，一行4个 - 可上传编辑 */}
+              {/* 申请材料 - 紧凑布局，一�?�?- 可上传编�?*/}
               {application.customerType && application.customerType.materials && application.customerType.materials.length > 0 && (
                 <div className="mt-3">
                   <div className="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
@@ -982,7 +965,7 @@ function ApplicationDetail({ id, onBack }) {
                   <div className="d-flex align-items-center">
                     <small className="text-muted me-2">
                       <i className="fas fa-info-circle me-1"></i>
-                      点击材料卡片可上传/管理图片
+                      点击材料卡片可上�?管理图片
                     </small>
                     <button
                       type="button"
@@ -991,8 +974,7 @@ function ApplicationDetail({ id, onBack }) {
                       title="发送材料提交邮件给客户"
                     >
                       <i className="fas fa-paper-plane me-1"></i>
-                      发送材料邮件
-                    </button>
+                      发送材料邮�?                    </button>
                   </div>
                   </div>
                   <div style={{ 
@@ -1001,8 +983,7 @@ function ApplicationDetail({ id, onBack }) {
                     gap: '12px' 
                   }}>
                     {application.customerType.materials.map((materialTemplate, index) => {
-                      // 查找该人员是否已上传此材料（支持新旧两种格式）
-                      const currentPersonId = activePersonIndex === 0 ? 'main' : `comp${activePersonIndex - 1}`;
+                      // 查找该人员是否已上传此材料（支持新旧两种格式�?                      const currentPersonId = activePersonIndex === 0 ? 'main' : `comp${activePersonIndex - 1}`;
                       const oldPersonId = activePersonIndex === 0 ? 'main' : `companion_${activePersonIndex - 1}`;
                       
                       // 查找新格式的记录
@@ -1015,25 +996,21 @@ function ApplicationDetail({ id, onBack }) {
                         m.materialId === materialTemplate.materialId && m.personId === oldPersonId
                       );
                       
-                      // 合并新旧格式的图片（去重）
-                      let mergedImages = [];
+                      // 合并新旧格式的图片（去重�?                      let mergedImages = [];
                       if (newFormatMaterial?.images) {
                         mergedImages = [...newFormatMaterial.images];
                       }
                       if (oldFormatMaterial?.images && oldPersonId !== currentPersonId) {
-                        // 添加旧格式的图片，但要去重
-                        oldFormatMaterial.images.forEach(img => {
+                        // 添加旧格式的图片，但要去�?                        oldFormatMaterial.images.forEach(img => {
                           if (!mergedImages.includes(img)) {
                             mergedImages.push(img);
                           }
                         });
                       }
                       
-                      // 优先使用新格式，如果不存在则使用旧格式
-                      const uploadedMaterial = newFormatMaterial || oldFormatMaterial;
+                      // 优先使用新格式，如果不存在则使用旧格�?                      const uploadedMaterial = newFormatMaterial || oldFormatMaterial;
                       
-                      // 合并模板和已上传的数据
-                      const material = {
+                      // 合并模板和已上传的数�?                      const material = {
                         ...materialTemplate,
                         ...(uploadedMaterial || {}),
                         materialId: materialTemplate.materialId,
@@ -1084,8 +1061,8 @@ function ApplicationDetail({ id, onBack }) {
                             {material.materialName}
                           </h6>
                           <span className={`badge ${
-                            material.status === '已提交' ? 'bg-success' :
-                            material.status === '已审核' ? 'bg-info' :
+                            material.status === '已提�? ? 'bg-success' :
+                            material.status === '已审�? ? 'bg-info' :
                             material.status === '需补充' ? 'bg-warning' :
                             'bg-secondary'
                           }`} style={{ fontSize: '0.65rem', padding: '2px 6px' }}>
@@ -1093,7 +1070,7 @@ function ApplicationDetail({ id, onBack }) {
                           </span>
                         </div>
                         
-                        {/* 材料属性标签 */}
+                        {/* 材料属性标�?*/}
                         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px', marginBottom: '8px' }}>
                           {material.templateRequired && (
                             <span style={{ 
@@ -1146,7 +1123,7 @@ function ApplicationDetail({ id, onBack }) {
                           )}
                         </div>
                         
-                        {/* 图片展示 - 一行显示 */}
+                        {/* 图片展示 - 一行显�?*/}
                         {material.images && material.images.length > 0 ? (
                           <div style={{ marginBottom: '6px' }}>
                             <div style={{ 
@@ -1213,7 +1190,7 @@ function ApplicationDetail({ id, onBack }) {
                                       }}
                                     />
                                   </div>
-                                  {/* 删除按钮 - 悬停时显示 */}
+                                  {/* 删除按钮 - 悬停时显�?*/}
                                   <button
                                     className="delete-btn"
                                     onClick={async (e) => {
@@ -1224,7 +1201,7 @@ function ApplicationDetail({ id, onBack }) {
                                         // 计算当前选中的人员ID
                                         const currentPersonId = activePersonIndex === 0 ? 'main' : `comp${activePersonIndex - 1}`;
                                         
-                                        console.log('🗑️ 删除图片:', {
+                                        console.log('🗑�?删除图片:', {
                                           materialId: material.materialId,
                                           personId: currentPersonId,
                                           imageUrl: imgUrl
@@ -1237,10 +1214,10 @@ function ApplicationDetail({ id, onBack }) {
                                             imageUrl: imgUrl 
                                           }
                                         });
-                                        alert('图片删除成功！');
+                                        alert('图片删除成功�?);
                                         fetchApplication();
                                       } catch (err) {
-                                        alert('删除失败：' + (err.response?.data?.message || err.message));
+                                        alert('删除失败�? + (err.response?.data?.message || err.message));
                                       }
                                     }}
                                     style={{
@@ -1337,7 +1314,7 @@ function ApplicationDetail({ id, onBack }) {
                           </div>
                         )}
                         
-                        {/* 管理员上传区域 */}
+                        {/* 管理员上传区�?*/}
                         <div style={{ marginTop: '8px', paddingTop: '8px', borderTop: '1px solid #f3f4f6' }}>
                           <input
                             type="file"
@@ -1385,7 +1362,7 @@ function ApplicationDetail({ id, onBack }) {
                                 alert(`成功上传 ${files.length} 个文件！`);
                                 fetchApplication(); // 刷新数据
                               } catch (err) {
-                                alert('上传失败：' + (err.response?.data?.message || err.message));
+                                alert('上传失败�? + (err.response?.data?.message || err.message));
                               } finally {
                                 setUploadingMaterial(null);
                                 e.target.value = ''; // 重置文件输入
@@ -1401,7 +1378,7 @@ function ApplicationDetail({ id, onBack }) {
                             {uploadingMaterial === (material.materialId || index) ? (
                               <>
                                 <span className="spinner-border spinner-border-sm me-1" style={{ width: '12px', height: '12px' }}></span>
-                                上传中...
+                                上传�?..
                               </>
                             ) : (
                               <>
@@ -1418,7 +1395,7 @@ function ApplicationDetail({ id, onBack }) {
                 </div>
               )}
               
-              {/* 没有客户类型时显示提示 */}
+              {/* 没有客户类型时显示提�?*/}
               {!application.customerType && (
                 <div className="mt-3">
                   <div className="alert alert-warning" style={{ borderLeft: '4px solid #ffc107' }}>
@@ -1427,8 +1404,7 @@ function ApplicationDetail({ id, onBack }) {
                       客户未选择办理类型
                     </h6>
                     <p className="mb-2" style={{ fontSize: '0.9rem' }}>
-                      客户在申请时没有选择具体的办理类型（如：学生签证、商务签证等），因此系统无法显示材料清单。
-                    </p>
+                      客户在申请时没有选择具体的办理类型（如：学生签证、商务签证等），因此系统无法显示材料清单�?                    </p>
                     
                     {/* 办理类型选择 */}
                     {customerTypes.length > 0 && (
@@ -1437,8 +1413,7 @@ function ApplicationDetail({ id, onBack }) {
                         <div className="mb-3">
                           <label className="form-label mb-2" style={{ fontSize: '0.9rem', fontWeight: 'bold' }}>
                             <i className="fas fa-hand-pointer me-2"></i>
-                            快速选择办理类型：
-                          </label>
+                            快速选择办理类型�?                          </label>
                           <div className="d-flex gap-2">
                             <select 
                               className="form-select form-select-sm" 
@@ -1464,25 +1439,24 @@ function ApplicationDetail({ id, onBack }) {
                           </div>
                           <small className="text-muted d-block mt-2">
                             <i className="fas fa-lightbulb me-1"></i>
-                            选择后将自动关联该类型的材料清单和问题模板
-                          </small>
+                            选择后将自动关联该类型的材料清单和问题模�?                          </small>
                         </div>
                       </>
                     )}
                     
                     <hr style={{ margin: '10px 0' }} />
                     <p className="mb-0" style={{ fontSize: '0.85rem' }}>
-                      <strong>其他操作：</strong>
+                      <strong>其他操作�?/strong>
                     </p>
                     <ul style={{ fontSize: '0.85rem', marginBottom: '0', paddingLeft: '20px' }}>
                       <li>联系客户确认办理类型</li>
-                      <li>手动记录客户需要提供的材料（使用"管理员备注"）</li>
+                      <li>手动记录客户需要提供的材料（使�?管理员备�?�?/li>
                     </ul>
                   </div>
                 </div>
               )}
 
-              {/* 问题答案 - 可编辑版本（有客户类型时始终显示） */}
+              {/* 问题答案 - 可编辑版本（有客户类型时始终显示�?*/}
               {(application.customerType || (application.questionsAnswers && application.questionsAnswers.length > 0) || isEditingQuestions) && (
                 <div className="mt-3">
                   <div className="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
@@ -1492,14 +1466,12 @@ function ApplicationDetail({ id, onBack }) {
                       {!isEditingQuestions && application.questionsAnswers && application.questionsAnswers.filter(q => q.answer && q.answer.trim()).length === 0 && (
                         <small className="text-warning ms-2">
                           <i className="fas fa-exclamation-triangle me-1"></i>
-                          客户未填写，请客服补充
-                        </small>
+                          客户未填写，请客服补�?                        </small>
                       )}
                       {!isEditingQuestions && application.questionsAnswers && application.questionsAnswers.filter(q => q.answer && q.answer.trim()).length > 0 && (
                         <small className="text-success ms-2">
                           <i className="fas fa-check-circle me-1"></i>
-                          已填写 {application.questionsAnswers.filter(q => q.answer && q.answer.trim()).length}/{application.questionsAnswers.length} 个问题
-                        </small>
+                          已填�?{application.questionsAnswers.filter(q => q.answer && q.answer.trim()).length}/{application.questionsAnswers.length} 个问�?                        </small>
                       )}
                     </h5>
                     {!isEditingQuestions ? (
@@ -1524,9 +1496,9 @@ function ApplicationDetail({ id, onBack }) {
                               });
                               setIsEditingQuestions(false);
                               fetchApplication();
-                              alert('问题答案保存成功！');
+                              alert('问题答案保存成功�?);
                             } catch (err) {
-                              alert('保存失败：' + (err.response?.data?.message || err.message));
+                              alert('保存失败�? + (err.response?.data?.message || err.message));
                             }
                           }}
                         >
@@ -1590,8 +1562,7 @@ function ApplicationDetail({ id, onBack }) {
                                   {qa.inheritedFrom && (
                                     <span className="badge bg-info ms-2" style={{ fontSize: '0.65rem' }}>
                                       <i className="fas fa-link me-1"></i>
-                                      继承自主申请人
-                                    </span>
+                                      继承自主申请�?                                    </span>
                                   )}
                                 </strong>
                                 <div style={{ 
@@ -1602,7 +1573,7 @@ function ApplicationDetail({ id, onBack }) {
                                   marginTop: '4px',
                                   border: `1px solid ${qa.inheritedFrom ? '#fbbf24' : '#e5e7eb'}`
                                 }}>
-                                  {qa.answer || <span className="text-muted fst-italic">未填写</span>}
+                                  {qa.answer || <span className="text-muted fst-italic">未填�?/span>}
                                 </div>
                               </div>
                             ))}
@@ -1612,8 +1583,7 @@ function ApplicationDetail({ id, onBack }) {
                       ) : (
                         <div className="alert alert-info">
                           <i className="fas fa-info-circle me-2"></i>
-                          客户未填写详细信息，点击右上角"添加"按钮可补充
-                        </div>
+                          客户未填写详细信息，点击右上�?添加"按钮可补�?                        </div>
                       );
                     })()
                   ) : (
@@ -1621,8 +1591,7 @@ function ApplicationDetail({ id, onBack }) {
                     <div>
                       <div className="alert alert-info mb-3">
                         <i className="fas fa-info-circle me-2"></i>
-                        您可以编辑或补充客户的问题答案。新添加的问题可以编辑问题文本。
-                      </div>
+                        您可以编辑或补充客户的问题答案。新添加的问题可以编辑问题文本�?                      </div>
                       {editedQuestions.map((qa, index) => {
                         const isCustomQuestion = qa.questionId && qa.questionId.startsWith('custom_');
                         return (
@@ -1640,7 +1609,7 @@ function ApplicationDetail({ id, onBack }) {
                                     updated[index].questionText = e.target.value;
                                     setEditedQuestions(updated);
                                   }}
-                                  placeholder="请输入问题"
+                                  placeholder="请输入问�?
                                 />
                                 <label className="form-label fw-bold">答案</label>
                                 <textarea
@@ -1652,24 +1621,23 @@ function ApplicationDetail({ id, onBack }) {
                                     updated[index].answer = e.target.value;
                                     setEditedQuestions(updated);
                                   }}
-                                  placeholder="请输入答案"
+                                  placeholder="请输入答�?
                                 />
                                 <button
                                   className="btn btn-sm btn-danger position-absolute top-0 end-0 m-2"
                                   onClick={() => {
-                                    if (window.confirm('确定要删除这个问题吗？')) {
+                                    if (window.confirm('确定要删除这个问题吗�?)) {
                                       const updated = editedQuestions.filter((_, i) => i !== index);
                                       setEditedQuestions(updated);
                                     }
                                   }}
-                                  title="删除此问题"
+                                  title="删除此问�?
                                 >
                                   ×
                                 </button>
                               </>
                             ) : (
-                              // 原有问题：问题文本不可编辑，但可以删除
-                              <>
+                              // 原有问题：问题文本不可编辑，但可以删�?                              <>
                                 <label className="form-label fw-bold">{qa.questionText}</label>
                                 <textarea
                                   className="form-control"
@@ -1680,17 +1648,17 @@ function ApplicationDetail({ id, onBack }) {
                                     updated[index].answer = e.target.value;
                                     setEditedQuestions(updated);
                                   }}
-                                  placeholder="请输入答案"
+                                  placeholder="请输入答�?
                                 />
                                 <button
                                   className="btn btn-sm btn-danger position-absolute top-0 end-0 m-2"
                                   onClick={() => {
-                                    if (window.confirm('确定要删除这个问题吗？')) {
+                                    if (window.confirm('确定要删除这个问题吗�?)) {
                                       const updated = editedQuestions.filter((_, i) => i !== index);
                                       setEditedQuestions(updated);
                                     }
                                   }}
-                                  title="删除此问题"
+                                  title="删除此问�?
                                 >
                                   ×
                                 </button>
@@ -1713,8 +1681,7 @@ function ApplicationDetail({ id, onBack }) {
                         }}
                       >
                         <i className="fas fa-plus me-1"></i>
-                        添加新问题
-                      </button>
+                        添加新问�?                      </button>
                     </div>
                   )}
                 </div>
@@ -1729,11 +1696,9 @@ function ApplicationDetail({ id, onBack }) {
                       没有问题信息
                     </h6>
                     <p className="mb-2" style={{ fontSize: '0.9rem' }}>
-                      客户在申请时没有选择办理类型，也没有填写任何问题信息。
-                    </p>
+                      客户在申请时没有选择办理类型，也没有填写任何问题信息�?                    </p>
                     <p className="mb-0" style={{ fontSize: '0.85rem' }}>
-                      <strong>说明：</strong>问题模板只在客户选择了办理类型时才会自动加载。您可以联系客户了解详细情况并手动记录在"管理员备注"中。
-                    </p>
+                      <strong>说明�?/strong>问题模板只在客户选择了办理类型时才会自动加载。您可以联系客户了解详细情况并手动记录在"管理员备�?中�?                    </p>
                   </div>
                 </div>
               )}
@@ -1746,15 +1711,14 @@ function ApplicationDetail({ id, onBack }) {
                 onSettleChange={fetchApplication}
               />
 
-              {/* 管理员备注 */}
+              {/* 管理员备�?*/}
               <AdminNotesManager applicationId={id} />
 
-              {/* 管理员反馈 */}
+              {/* 管理员反�?*/}
               <div className="mt-4">
-                <h5 className="border-bottom pb-2">管理员反馈</h5>
+                <h5 className="border-bottom pb-2">管理员反�?/h5>
                 <p className="text-muted small mb-2">
-                  管理员反馈会发送给客户，用于告知客户处理结果、需要补充的材料或其他重要信息。
-                </p>
+                  管理员反馈会发送给客户，用于告知客户处理结果、需要补充的材料或其他重要信息�?                </p>
                 {isEditing ? (
                   <textarea className="form-control" rows="3" placeholder="请输入管理员反馈" value={editData.feedback} onChange={e => setEditData({...editData, feedback: e.target.value})} />
                 ) : (
@@ -1768,7 +1732,7 @@ function ApplicationDetail({ id, onBack }) {
                   applicationId={id} 
                   application={application}
                   onEmailSent={(emailData) => {
-                    console.log('邮件发送成功:', emailData);
+                    console.log('邮件发送成�?', emailData);
                     // 可以在这里添加成功提示或其他逻辑
                   }}
                 />
@@ -1779,8 +1743,8 @@ function ApplicationDetail({ id, onBack }) {
                 <div className="mt-4">
                   <h5 className="border-bottom pb-2">用户确认信息</h5>
                   <div className="row">
-                    <div className="col-md-6"><p><strong>确认时间：</strong>{new Date(application.confirmTime).toLocaleString()}</p></div>
-                    {application.japaneseName && <div className="col-md-6"><p><strong>日语读音：</strong>{application.japaneseName}</p></div>}
+                    <div className="col-md-6"><p><strong>确认时间�?/strong>{new Date(application.confirmTime).toLocaleString()}</p></div>
+                    {application.japaneseName && <div className="col-md-6"><p><strong>日语读音�?/strong>{application.japaneseName}</p></div>}
                   </div>
                   {(application.idCardFront || application.idCardBack || application.passportPhoto || application.other) && (
                     <div className="row mt-3">
@@ -1790,24 +1754,24 @@ function ApplicationDetail({ id, onBack }) {
                           {application.idCardFront && (
                             <div className="col-md-3">
                               <p className="mb-1"><strong>在留卡正面：</strong></p>
-                              <img src={buildImageUrl(application.idCardFront)} alt="在留卡正面" className="img-thumbnail pointer" style={{ maxHeight: '120px', cursor: 'pointer' }} onClick={() => handlePreview(application.idCardFront)} />
+                              <img src={buildImageUrl(application.idCardFront)} alt="在留卡正�? className="img-thumbnail pointer" style={{ maxHeight: '120px', cursor: 'pointer' }} onClick={() => handlePreview(application.idCardFront)} />
                             </div>
                           )}
                           {application.idCardBack && (
                             <div className="col-md-3">
                               <p className="mb-1"><strong>在留卡反面：</strong></p>
-                              <img src={buildImageUrl(application.idCardBack)} alt="在留卡反面" className="img-thumbnail pointer" style={{ maxHeight: '120px', cursor: 'pointer' }} onClick={() => handlePreview(application.idCardBack)} />
+                              <img src={buildImageUrl(application.idCardBack)} alt="在留卡反�? className="img-thumbnail pointer" style={{ maxHeight: '120px', cursor: 'pointer' }} onClick={() => handlePreview(application.idCardBack)} />
                             </div>
                           )}
                           {application.passportPhoto && (
                             <div className="col-md-3">
                               <p className="mb-1"><strong>护照照片页：</strong></p>
-                              <img src={buildImageUrl(application.passportPhoto)} alt="护照照片页" className="img-thumbnail pointer" style={{ maxHeight: '120px', cursor: 'pointer' }} onClick={() => handlePreview(application.passportPhoto)} />
+                              <img src={buildImageUrl(application.passportPhoto)} alt="护照照片�? className="img-thumbnail pointer" style={{ maxHeight: '120px', cursor: 'pointer' }} onClick={() => handlePreview(application.passportPhoto)} />
                             </div>
                           )}
                           {application.other && (
                             <div className="col-md-3">
-                              <p className="mb-1"><strong>其他：</strong></p>
+                              <p className="mb-1"><strong>其他�?/strong></p>
                               <img src={buildImageUrl(application.other)} alt="其他" className="img-thumbnail pointer" style={{ maxHeight: '120px', cursor: 'pointer' }} onClick={() => handlePreview(application.other)} />
                             </div>
                           )}
@@ -1825,18 +1789,18 @@ function ApplicationDetail({ id, onBack }) {
                   <div className="row">
                     {application.contactPreference && (
                       <div className="col-md-6">
-                        <p><strong>联系方式偏好：</strong>{application.contactPreference}</p>
+                        <p><strong>联系方式偏好�?/strong>{application.contactPreference}</p>
                       </div>
                     )}
                     {application.additionalMaterials && (
                       <div className="col-12">
-                        <p><strong>补充材料说明：</strong></p>
+                        <p><strong>补充材料说明�?/strong></p>
                         <div className="alert alert-light mb-0">{application.additionalMaterials}</div>
                       </div>
                     )}
                     {application.notes && (
                       <div className="col-12">
-                        <p><strong>备注：</strong></p>
+                        <p><strong>备注�?/strong></p>
                         <div className="alert alert-light mb-0">{application.notes}</div>
                       </div>
                     )}
@@ -1850,8 +1814,7 @@ function ApplicationDetail({ id, onBack }) {
                   <h5 className="border-bottom pb-2">
                     处理过程记录
                     <span className="badge bg-secondary ms-2" style={{ fontSize: '0.75rem' }}>
-                      {application.processLog.length} 条记录
-                    </span>
+                      {application.processLog.length} 条记�?                    </span>
                   </h5>
                   <div 
                     className="timeline" 
@@ -1876,7 +1839,7 @@ function ApplicationDetail({ id, onBack }) {
                           <div className="alert alert-light mb-0" style={{ backgroundColor: '#fff' }}>
                             <strong>{log.action}</strong><br />
                             {log.description}
-                            {/* 显示过程记录图片缩略图 */}
+                            {/* 显示过程记录图片缩略�?*/}
                             {log.images && Object.keys(log.images).length > 0 && (
                               <div className="mt-2 d-flex flex-wrap gap-2">
                                 {Object.entries(log.images).map(([key, img]) => (
@@ -1900,42 +1863,42 @@ function ApplicationDetail({ id, onBack }) {
                     待审核的修改申请
                   </h5>
                   <div className="alert alert-warning">
-                    <p><strong>修改原因：</strong>{application.pendingModification.modificationReason}</p>
-                    <p><strong>申请时间：</strong>{new Date(application.pendingModification.timestamp).toLocaleString()}</p>
+                    <p><strong>修改原因�?/strong>{application.pendingModification.modificationReason}</p>
+                    <p><strong>申请时间�?/strong>{new Date(application.pendingModification.timestamp).toLocaleString()}</p>
                   </div>
                   
                   <div className="row">
                     <div className="col-md-6">
-                      <p><strong>日语读音：</strong>{application.pendingModification.japaneseName}</p>
+                      <p><strong>日语读音�?/strong>{application.pendingModification.japaneseName}</p>
                     </div>
                   </div>
                   
                   {(application.pendingModification.idCardFront || application.pendingModification.idCardBack || application.pendingModification.passportPhoto || application.pendingModification.other) && (
                     <div className="row mt-3">
                       <div className="col-12">
-                        <p><strong>申请的新材料：</strong></p>
+                        <p><strong>申请的新材料�?/strong></p>
                         <div className="row g-2">
                           {application.pendingModification.idCardFront && (
                             <div className="col-md-3">
                               <p className="mb-1"><strong>在留卡正面：</strong></p>
-                              <img src={buildImageUrl(application.pendingModification.idCardFront)} alt="在留卡正面" className="img-thumbnail pointer" style={{ maxHeight: '120px', cursor: 'pointer' }} onClick={() => handlePreview(application.pendingModification.idCardFront)} />
+                              <img src={buildImageUrl(application.pendingModification.idCardFront)} alt="在留卡正�? className="img-thumbnail pointer" style={{ maxHeight: '120px', cursor: 'pointer' }} onClick={() => handlePreview(application.pendingModification.idCardFront)} />
                             </div>
                           )}
                           {application.pendingModification.idCardBack && (
                             <div className="col-md-3">
                               <p className="mb-1"><strong>在留卡反面：</strong></p>
-                              <img src={buildImageUrl(application.pendingModification.idCardBack)} alt="在留卡反面" className="img-thumbnail pointer" style={{ maxHeight: '120px', cursor: 'pointer' }} onClick={() => handlePreview(application.pendingModification.idCardBack)} />
+                              <img src={buildImageUrl(application.pendingModification.idCardBack)} alt="在留卡反�? className="img-thumbnail pointer" style={{ maxHeight: '120px', cursor: 'pointer' }} onClick={() => handlePreview(application.pendingModification.idCardBack)} />
                             </div>
                           )}
                           {application.pendingModification.passportPhoto && (
                             <div className="col-md-3">
                               <p className="mb-1"><strong>护照照片页：</strong></p>
-                              <img src={buildImageUrl(application.pendingModification.passportPhoto)} alt="护照照片页" className="img-thumbnail pointer" style={{ maxHeight: '120px', cursor: 'pointer' }} onClick={() => handlePreview(application.pendingModification.passportPhoto)} />
+                              <img src={buildImageUrl(application.pendingModification.passportPhoto)} alt="护照照片�? className="img-thumbnail pointer" style={{ maxHeight: '120px', cursor: 'pointer' }} onClick={() => handlePreview(application.pendingModification.passportPhoto)} />
                             </div>
                           )}
                           {application.pendingModification.other && (
                             <div className="col-md-3">
-                              <p className="mb-1"><strong>其他：</strong></p>
+                              <p className="mb-1"><strong>其他�?/strong></p>
                               <img src={buildImageUrl(application.pendingModification.other)} alt="其他" className="img-thumbnail pointer" style={{ maxHeight: '120px', cursor: 'pointer' }} onClick={() => handlePreview(application.pendingModification.other)} />
                             </div>
                           )}
@@ -1946,7 +1909,7 @@ function ApplicationDetail({ id, onBack }) {
                   
                   {application.pendingModification.notes && (
                     <div className="mt-3">
-                      <p><strong>备注：</strong></p>
+                      <p><strong>备注�?/strong></p>
                       <div className="alert alert-light mb-0">{application.pendingModification.notes}</div>
                     </div>
                   )}
@@ -1980,24 +1943,24 @@ function ApplicationDetail({ id, onBack }) {
                       <div className="card-body">
                         <div className="row">
                           <div className="col-md-6">
-                            <p><strong>日语读音：</strong>{history.japaneseName}</p>
+                            <p><strong>日语读音�?/strong>{history.japaneseName}</p>
                           </div>
                         </div>
                         {(history.idCardFront || history.idCardBack || history.passportPhoto || history.other) && (
                           <div className="row mt-2">
                             <div className="col-12">
-                              <p><strong>材料：</strong></p>
+                              <p><strong>材料�?/strong></p>
                               <div className="row g-2">
                                 {history.idCardFront && (
                                   <div className="col-md-3">
-                                    <small className="text-muted">在留卡正面</small>
-                                    <img src={buildImageUrl(history.idCardFront)} alt="在留卡正面" className="img-thumbnail pointer" style={{ maxHeight: '80px', cursor: 'pointer' }} onClick={() => handlePreview(history.idCardFront)} />
+                                    <small className="text-muted">在留卡正�?/small>
+                                    <img src={buildImageUrl(history.idCardFront)} alt="在留卡正�? className="img-thumbnail pointer" style={{ maxHeight: '80px', cursor: 'pointer' }} onClick={() => handlePreview(history.idCardFront)} />
                                   </div>
                                 )}
                                 {history.idCardBack && (
                                   <div className="col-md-3">
-                                    <small className="text-muted">在留卡反面</small>
-                                    <img src={buildImageUrl(history.idCardBack)} alt="在留卡反面" className="img-thumbnail pointer" style={{ maxHeight: '80px', cursor: 'pointer' }} onClick={() => handlePreview(history.idCardBack)} />
+                                    <small className="text-muted">在留卡反�?/small>
+                                    <img src={buildImageUrl(history.idCardBack)} alt="在留卡反�? className="img-thumbnail pointer" style={{ maxHeight: '80px', cursor: 'pointer' }} onClick={() => handlePreview(history.idCardBack)} />
                                   </div>
                                 )}
                                 {history.passportPhoto && (
@@ -2018,7 +1981,7 @@ function ApplicationDetail({ id, onBack }) {
                         )}
                         {history.notes && (
                           <div className="mt-2">
-                            <p><strong>备注：</strong>{history.notes}</p>
+                            <p><strong>备注�?/strong>{history.notes}</p>
                           </div>
                         )}
                       </div>
@@ -2030,7 +1993,7 @@ function ApplicationDetail({ id, onBack }) {
               {/* 对话流消息区 */}
               {application.messages && application.messages.length > 0 && (
                 <div className="mt-4">
-                  <h5 className="border-bottom pb-2">沟通记录</h5>
+                  <h5 className="border-bottom pb-2">沟通记�?/h5>
                   <div>
                     {application.messages.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp)).map((msg, idx) => (
                       <div key={idx} style={{ display: 'flex', justifyContent: msg.role === 'admin' ? 'flex-end' : 'flex-start', marginBottom: 8 }}>
@@ -2044,7 +2007,7 @@ function ApplicationDetail({ id, onBack }) {
                           alignSelf: msg.role === 'admin' ? 'flex-end' : 'flex-start'
                         }}>
                           <div style={{ fontSize: 13, color: '#888', marginBottom: 2, textAlign: msg.role === 'admin' ? 'right' : 'left' }}>
-                            {msg.role === 'admin' ? '管理员' : '客户'}
+                            {msg.role === 'admin' ? '管理�? : '客户'}
                             <span style={{ marginLeft: 8, fontSize: 11 }}>{new Date(msg.timestamp).toLocaleString()}</span>
                           </div>
                           <div style={{ whiteSpace: 'pre-line', wordBreak: 'break-all' }}>{msg.content}</div>
@@ -2070,7 +2033,7 @@ function ApplicationDetail({ id, onBack }) {
                 </div>
               )}
 
-              {/* 修改申请对话框 */}
+              {/* 修改申请对话�?*/}
               {showModificationDialog && (
                 <div className="modal show d-block" style={{ backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 2000, position: 'absolute', left: 0, top: 0, width: '100%', height: '100%' }}>
                   <div style={{
@@ -2100,13 +2063,13 @@ function ApplicationDetail({ id, onBack }) {
                         </div>
                       ) : (
                         <div className="mb-3">
-                          <label className="form-label">拒绝理由（必填）：</label>
+                          <label className="form-label">拒绝理由（必填）�?/label>
                           <textarea 
                             className="form-control" 
                             rows="3"
                             value={modificationReason}
                             onChange={(e) => setModificationReason(e.target.value)}
-                            placeholder="请输入拒绝理由..."
+                            placeholder="请输入拒绝理�?.."
                           ></textarea>
                         </div>
                       )}
@@ -2237,7 +2200,7 @@ function ApplicationDetail({ id, onBack }) {
                       </div>
                     </div>
                     
-                    {/* 底部操作栏 */}
+                    {/* 底部操作�?*/}
                     <div style={{
                       padding: '15px 20px',
                       borderTop: '1px solid #eee',
@@ -2266,7 +2229,7 @@ function ApplicationDetail({ id, onBack }) {
                       </div>
                       <div className="modal-body">
                         <div className="mb-3">
-                          <label className="form-label">审核结果：</label>
+                          <label className="form-label">审核结果�?/label>
                           <select 
                             className="form-select" 
                             value={reviewData.reviewResult} 
@@ -2277,11 +2240,11 @@ function ApplicationDetail({ id, onBack }) {
                           </select>
                         </div>
                         <div className="mb-3">
-                          <label className="form-label">审核反馈：</label>
+                          <label className="form-label">审核反馈�?/label>
                           <textarea 
                             className="form-control" 
                             rows="3" 
-                            placeholder="请输入审核反馈信息"
+                            placeholder="请输入审核反馈信�?
                             value={reviewData.feedback} 
                             onChange={e => setReviewData({...reviewData, feedback: e.target.value})}
                           />
@@ -2318,7 +2281,7 @@ function ApplicationDetail({ id, onBack }) {
             backdropFilter: 'blur(2px)'
           }}
           onClick={() => {
-            console.log('🖱️ 点击遮罩层，关闭模态框');
+            console.log('🖱�?点击遮罩层，关闭模态框');
             setShowChangeCustomerTypeModal(false);
             setSelectedCustomerType('');
           }}
@@ -2378,7 +2341,7 @@ function ApplicationDetail({ id, onBack }) {
                   lineHeight: '1'
                 }}
                 onClick={() => {
-                  console.log('❌ 点击关闭按钮');
+                  console.log('�?点击关闭按钮');
                   setShowChangeCustomerTypeModal(false);
                   setSelectedCustomerType('');
                 }}
@@ -2416,9 +2379,8 @@ function ApplicationDetail({ id, onBack }) {
                         暂无可选的办理类型
                       </strong>
                       <p style={{ margin: 0, fontSize: '0.95rem', lineHeight: '1.6' }}>
-                        当前签证类型"<strong>{application?.package}</strong>"还没有配置客户类型。<br/>
-                        请联系管理员在后台"材料与问题管理"中配置客户类型（如：个人申请、家庭申请等）。
-                      </p>
+                        当前签证类型"<strong>{application?.package}</strong>"还没有配置客户类型�?br/>
+                        请联系管理员在后�?材料与问题管�?中配置客户类型（如：个人申请、家庭申请等）�?                      </p>
                     </div>
                   </div>
                 </div>
@@ -2440,8 +2402,7 @@ function ApplicationDetail({ id, onBack }) {
                       }}></i>
                       <div style={{ flex: 1 }}>
                         <strong style={{ fontSize: '1rem', display: 'block', marginBottom: '8px', color: '#0066cc' }}>
-                          智能合并：
-                        </strong>
+                          智能合并�?                        </strong>
                         <ul style={{ 
                           margin: 0, 
                           paddingLeft: '20px', 
@@ -2449,9 +2410,9 @@ function ApplicationDetail({ id, onBack }) {
                           lineHeight: '1.8',
                           color: '#004085'
                         }}>
-                          <li>✅ 相同材料的图片将被保留（如护照、照片等）</li>
-                          <li>❌ 原办理类型特有的材料将被删除</li>
-                          <li>❌ 所有问题答案将被清空</li>
+                          <li>�?相同材料的图片将被保留（如护照、照片等�?/li>
+                          <li>�?原办理类型特有的材料将被删除</li>
+                          <li>�?所有问题答案将被清�?/li>
                         </ul>
                       </div>
                     </div>
@@ -2465,8 +2426,7 @@ function ApplicationDetail({ id, onBack }) {
                       marginBottom: '10px',
                       display: 'block'
                     }}>
-                      当前办理类型：
-                    </label>
+                      当前办理类型�?                    </label>
                     <div>
                       <span style={{
                         backgroundColor: '#6c757d',
@@ -2495,8 +2455,7 @@ function ApplicationDetail({ id, onBack }) {
                         color: '#667eea',
                         fontSize: '0.9rem'
                       }}></i>
-                      选择新的办理类型：
-                    </label>
+                      选择新的办理类型�?                    </label>
                     <select 
                       style={{
                         width: '100%',
@@ -2528,8 +2487,7 @@ function ApplicationDetail({ id, onBack }) {
                       lineHeight: '1.5'
                     }}>
                       <i className="fas fa-lightbulb" style={{ marginRight: '6px', color: '#ffc107' }}></i>
-                      选择后将自动加载新办理类型的材料清单和问题模板
-                    </small>
+                      选择后将自动加载新办理类型的材料清单和问题模�?                    </small>
                   </div>
                 </>
               )}

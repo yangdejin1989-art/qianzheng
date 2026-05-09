@@ -1,5 +1,5 @@
 // NoticeBoard.js
-// 公告栏展示组件（手风琴样式，最多显示8条）
+// 公告栏展示组件（手风琴样式，最多显�?条）
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
@@ -8,7 +8,7 @@ function NoticeBoard() {
   const [openIndex, setOpenIndex] = useState(null);
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/notices').then(res => {
+    axios.get('/api/notices').then(res => {
       setNotices(res.data.filter(n => n.visible).slice(0, 8));
     });
   }, []);
@@ -18,7 +18,7 @@ function NoticeBoard() {
       <div className="row justify-content-center">
         <div className="col-lg-8 col-md-10 col-sm-12">
           <div className="notice-card">
-        <h2 style={{marginBottom: 20, fontSize: 28}}>公告栏</h2>
+        <h2 style={{marginBottom: 20, fontSize: 28}}>公告�?/h2>
         <ul style={{listStyle:'none', padding:0, margin:0}}>
           {notices.map((notice, idx) => (
             <li key={notice._id} style={{borderBottom: idx!==notices.length-1?'1px solid #e3eaf2':'none', padding:'0'}}>

@@ -21,7 +21,7 @@ const BlacklistManager = () => {
     pages: 0
   });
 
-  // 获取黑名单列表
+  // 获取黑名单列�?
   const fetchBlacklist = async (page = 1) => {
     setLoading(true);
     try {
@@ -32,8 +32,8 @@ const BlacklistManager = () => {
       setBlacklist(response.data.data);
       setPagination(response.data.pagination);
     } catch (error) {
-      console.error('获取黑名单失败:', error);
-      setMessage('获取黑名单失败');
+      console.error('获取黑名单失�?', error);
+      setMessage('获取黑名单失�?);
     } finally {
       setLoading(false);
     }
@@ -44,7 +44,7 @@ const BlacklistManager = () => {
     e.preventDefault();
     
     if (!formData.value || !formData.reason) {
-      setMessage('请填写完整信息');
+      setMessage('请填写完整信�?);
       return;
     }
 
@@ -54,7 +54,7 @@ const BlacklistManager = () => {
         headers: { Authorization: `Bearer ${token}` }
       });
       
-      setMessage('已添加到黑名单');
+      setMessage('已添加到黑名�?);
       setShowAddForm(false);
       setFormData({ value: '', type: 'ip', reason: '', expiresAt: '', notes: '' });
       fetchBlacklist(1);
@@ -77,7 +77,7 @@ const BlacklistManager = () => {
         headers: { Authorization: `Bearer ${token}` }
       });
       
-      setMessage('已从黑名单移除');
+      setMessage('已从黑名单移�?);
       fetchBlacklist(pagination.page);
       setTimeout(() => setMessage(''), 2000);
     } catch (error) {
@@ -95,18 +95,18 @@ const BlacklistManager = () => {
     }));
   };
 
-  // 格式化时间
+  // 格式化时�?
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleString();
   };
 
-  // 检查是否过期
+  // 检查是否过�?
   const isExpired = (expiresAt) => {
     if (!expiresAt) return false;
     return new Date(expiresAt) < new Date();
   };
 
-  // 组件加载时获取数据
+  // 组件加载时获取数�?
   useEffect(() => {
     fetchBlacklist();
   }, []);
@@ -114,12 +114,12 @@ const BlacklistManager = () => {
   return (
     <div className="blacklist-manager">
       <div className="blacklist-header">
-        <h2>🛡️ 黑名单管理</h2>
+        <h2>🛡�?黑名单管�?/h2>
         <button 
           className="btn btn-primary"
           onClick={() => setShowAddForm(!showAddForm)}
         >
-          {showAddForm ? '取消' : '添加黑名单'}
+          {showAddForm ? '取消' : '添加黑名�?}
         </button>
       </div>
 
@@ -130,10 +130,10 @@ const BlacklistManager = () => {
         </div>
       )}
 
-      {/* 添加黑名单表单 */}
+      {/* 添加黑名单表�?*/}
       {showAddForm && (
         <div className="add-blacklist-form">
-          <h4>添加黑名单</h4>
+          <h4>添加黑名�?/h4>
           <form onSubmit={addToBlacklist}>
             <div className="row">
               <div className="col-md-6">
@@ -147,20 +147,20 @@ const BlacklistManager = () => {
                   >
                     <option value="ip">IP地址</option>
                     <option value="email">邮箱</option>
-                    <option value="phone">手机号</option>
+                    <option value="phone">手机�?/option>
                   </select>
                 </div>
               </div>
               <div className="col-md-6">
                 <div className="form-group">
-                  <label>值</label>
+                  <label>�?/label>
                   <input
                     type="text"
                     name="value"
                     value={formData.value}
                     onChange={handleFormChange}
                     className="form-control"
-                    placeholder={`请输入${formData.type === 'ip' ? 'IP地址' : formData.type === 'email' ? '邮箱' : '手机号'}`}
+                    placeholder={`请输�?{formData.type === 'ip' ? 'IP地址' : formData.type === 'email' ? '邮箱' : '手机�?}`}
                   />
                 </div>
               </div>
@@ -174,7 +174,7 @@ const BlacklistManager = () => {
                 value={formData.reason}
                 onChange={handleFormChange}
                 className="form-control"
-                placeholder="请输入封禁原因"
+                placeholder="请输入封禁原�?
               />
             </div>
             
@@ -221,19 +221,19 @@ const BlacklistManager = () => {
         </div>
       )}
 
-      {/* 黑名单列表 */}
+      {/* 黑名单列�?*/}
       <div className="blacklist-table">
-        <h4>黑名单列表</h4>
+        <h4>黑名单列�?/h4>
         
         {loading ? (
           <div className="text-center">
             <div className="spinner-border" role="status">
-              <span className="visually-hidden">加载中...</span>
+              <span className="visually-hidden">加载�?..</span>
             </div>
           </div>
         ) : blacklist.length === 0 ? (
           <div className="text-center text-muted">
-            暂无黑名单记录
+            暂无黑名单记�?
           </div>
         ) : (
           <div className="table-responsive">
@@ -241,11 +241,11 @@ const BlacklistManager = () => {
               <thead>
                 <tr>
                   <th>类型</th>
-                  <th>值</th>
+                  <th>�?/th>
                   <th>原因</th>
                   <th>封禁时间</th>
                   <th>过期时间</th>
-                  <th>状态</th>
+                  <th>状�?/th>
                   <th>操作</th>
                 </tr>
               </thead>
@@ -273,9 +273,9 @@ const BlacklistManager = () => {
                     </td>
                     <td>
                       {isExpired(item.expiresAt) ? (
-                        <span className="badge bg-secondary">已过期</span>
+                        <span className="badge bg-secondary">已过�?/span>
                       ) : (
-                        <span className="badge bg-danger">封禁中</span>
+                        <span className="badge bg-danger">封禁�?/span>
                       )}
                     </td>
                     <td>
@@ -304,12 +304,12 @@ const BlacklistManager = () => {
                   onClick={() => fetchBlacklist(pagination.page - 1)}
                   disabled={pagination.page === 1}
                 >
-                  上一页
+                  上一�?
                 </button>
               </li>
               <li className="page-item">
                 <span className="page-link">
-                  第 {pagination.page} 页，共 {pagination.pages} 页
+                  �?{pagination.page} 页，�?{pagination.pages} �?
                 </span>
               </li>
               <li className={`page-item ${pagination.page === pagination.pages ? 'disabled' : ''}`}>
@@ -318,7 +318,7 @@ const BlacklistManager = () => {
                   onClick={() => fetchBlacklist(pagination.page + 1)}
                   disabled={pagination.page === pagination.pages}
                 >
-                  下一页
+                  下一�?
                 </button>
               </li>
             </ul>

@@ -1,6 +1,5 @@
 // NoticeManager.js
-// 公告栏管理组件
-import React, { useEffect, useState } from 'react';
+// 公告栏管理组�?import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import ManagerLayout from './components/ManagerLayout';
 
@@ -12,7 +11,7 @@ function NoticeManager({ token }) {
   const [showForm, setShowForm] = useState(false);
 
   const fetchNotices = () => {
-    axios.get('http://localhost:5000/api/notices').then(res => setNotices(res.data));
+    axios.get('/api/notices').then(res => setNotices(res.data));
   };
   useEffect(fetchNotices, []);
 
@@ -31,8 +30,8 @@ function NoticeManager({ token }) {
   };
   
   const handleDelete = async (id) => {
-    if(window.confirm('确定删除？')){
-      await axios.delete(`http://localhost:5000/api/notices/${id}`, { headers: { Authorization: `Bearer ${token}` } });
+    if(window.confirm('确定删除�?)){
+      await axios.delete(`/api/notices/${id}`, { headers: { Authorization: `Bearer ${token}` } });
       fetchNotices();
     }
   };
@@ -42,9 +41,9 @@ function NoticeManager({ token }) {
     setError('');
     try {
       if(editing){
-        await axios.put(`http://localhost:5000/api/notices/${editing}`, form, { headers: { Authorization: `Bearer ${token}` } });
+        await axios.put(`/api/notices/${editing}`, form, { headers: { Authorization: `Bearer ${token}` } });
       }else{
-        await axios.post('http://localhost:5000/api/notices', form, { headers: { Authorization: `Bearer ${token}` } });
+        await axios.post('/api/notices', form, { headers: { Authorization: `Bearer ${token}` } });
       }
       setEditing(null);
       setForm({ title: '', content: '', visible: true });
@@ -64,7 +63,7 @@ function NoticeManager({ token }) {
   
   return (
     <div className="compact-manager">
-      <ManagerLayout title="公告栏管理" subtitle="管理公告栏内容" >
+      <ManagerLayout title="公告栏管�? subtitle="管理公告栏内�? >
         {/* 新增公告按钮 */}
         <div className="d-flex justify-content-end mb-3">
           <button className="btn btn-primary btn-sm" onClick={handleAdd}>
@@ -96,9 +95,9 @@ function NoticeManager({ token }) {
                     </td>
                     <td>
                       {notice.visible ? (
-                        <span className="badge bg-success">是</span>
+                        <span className="badge bg-success">�?/span>
                       ) : (
-                        <span className="badge bg-secondary">否</span>
+                        <span className="badge bg-secondary">�?/span>
                       )}
                     </td>
                     <td>
@@ -125,7 +124,7 @@ function NoticeManager({ token }) {
                 <label className="form-label fw-bold">标题 *</label>
                 <input 
                   className="form-control form-control-lg" 
-                  placeholder="请输入公告标题" 
+                  placeholder="请输入公告标�? 
                   value={form.title} 
                   onChange={e=>setForm({...form, title: e.target.value})} 
                   required 
@@ -135,7 +134,7 @@ function NoticeManager({ token }) {
                 <label className="form-label fw-bold">内容 *</label>
                 <textarea 
                   className="form-control form-control-lg" 
-                  placeholder="请输入公告内容" 
+                  placeholder="请输入公告内�? 
                   value={form.content} 
                   onChange={e=>setForm({...form, content: e.target.value})} 
                   rows="6"
@@ -152,8 +151,7 @@ function NoticeManager({ token }) {
                     id="noticeVisible" 
                   />
                   <label className="form-check-label fw-bold" htmlFor="noticeVisible">
-                    显示此公告
-                  </label>
+                    显示此公�?                  </label>
                 </div>
               </div>
               <div className="mb-3">

@@ -15,7 +15,7 @@ function AdminStatistics() {
   const fetchStatistics = async () => {
     try {
       setLoading(true);
-      const response = await axios.get('http://localhost:5000/api/statistics');
+      const response = await axios.get('/api/statistics');
       setStats(response.data);
     } catch (err) {
       console.error('获取统计数据失败:', err);
@@ -49,7 +49,7 @@ function AdminStatistics() {
         margin: '20px 0',
         border: '1px solid #fecaca'
       }}>
-        <div style={{ fontSize: '18px', color: '#dc2626' }}>❌ {error}</div>
+        <div style={{ fontSize: '18px', color: '#dc2626' }}>�?{error}</div>
         <button 
           onClick={fetchStatistics}
           style={{
@@ -122,7 +122,7 @@ function AdminStatistics() {
               <div style={{ fontSize: '16px', opacity: 0.9 }}>总申请数</div>
             </div>
 
-            {/* 待处理申请 */}
+            {/* 待处理申�?*/}
             <div style={{
               background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
               color: 'white',
@@ -133,10 +133,10 @@ function AdminStatistics() {
               <div style={{ fontSize: '32px', fontWeight: 'bold', marginBottom: '8px' }}>
                 {stats.applications?.pending || 0}
               </div>
-              <div style={{ fontSize: '16px', opacity: 0.9 }}>待处理申请</div>
+              <div style={{ fontSize: '16px', opacity: 0.9 }}>待处理申�?/div>
             </div>
 
-            {/* 已完成申请 */}
+            {/* 已完成申�?*/}
             <div style={{
               background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
               color: 'white',
@@ -147,7 +147,7 @@ function AdminStatistics() {
               <div style={{ fontSize: '32px', fontWeight: 'bold', marginBottom: '8px' }}>
                 {stats.applications?.completed || 0}
               </div>
-              <div style={{ fontSize: '16px', opacity: 0.9 }}>已完成申请</div>
+              <div style={{ fontSize: '16px', opacity: 0.9 }}>已完成申�?/div>
             </div>
 
             {/* 套餐统计 */}
@@ -236,7 +236,7 @@ function AdminStatistics() {
               </div>
             </div>
             <div style={{ padding: '16px', background: '#f8fafc', borderRadius: '6px' }}>
-              <div style={{ fontSize: '14px', color: '#6b7280', marginBottom: '4px' }}>完成率</div>
+              <div style={{ fontSize: '14px', color: '#6b7280', marginBottom: '4px' }}>完成�?/div>
               <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#10b981' }}>
                 {stats.applications?.completionRate || 0}%
               </div>

@@ -12,19 +12,19 @@ const getCurrencySymbol = (currency) => {
     'CNY': '¥',
     'JPY': '¥',
     'USD': '$',
-    'EUR': '€'
+    'EUR': '�?
   };
   return symbols[currency] || '¥';
 };
 
 const getCurrencyName = (currency) => {
   const names = {
-    'CNY': '人民币',
+    'CNY': '人民�?,
     'JPY': '日元',
     'USD': '美元',
     'EUR': '欧元'
   };
-  return names[currency] || '人民币';
+  return names[currency] || '人民�?;
 };
 
 function ApplyForm({ onSuccess }) {
@@ -50,22 +50,17 @@ function ApplyForm({ onSuccess }) {
   // 一起申请的人（只需要名字）
   const [companions, setCompanions] = useState([]);
   
-  // 问题模板和答案
-  const [questionTemplates, setQuestionTemplates] = useState([]);
+  // 问题模板和答�?  const [questionTemplates, setQuestionTemplates] = useState([]);
   const [customerTypes, setCustomerTypes] = useState([]);
-  const [showCustomerTypePicker, setShowCustomerTypePicker] = useState(false); // 移动端选择器
-  const [selectedCustomerType, setSelectedCustomerType] = useState('');
+  const [showCustomerTypePicker, setShowCustomerTypePicker] = useState(false); // 移动端选择�?  const [selectedCustomerType, setSelectedCustomerType] = useState('');
   const [questionAnswers, setQuestionAnswers] = useState({});
   const [showQuestions, setShowQuestions] = useState(false);
-  const [selectedVisaTypeIndex, setSelectedVisaTypeIndex] = useState(0); // 选择的签证类型索引
-  
-  // 材料模板和上传
-  const [materialTemplate, setMaterialTemplate] = useState(null);
+  const [selectedVisaTypeIndex, setSelectedVisaTypeIndex] = useState(0); // 选择的签证类型索�?  
+  // 材料模板和上�?  const [materialTemplate, setMaterialTemplate] = useState(null);
   const [activeMaterialPersonIndex, setActiveMaterialPersonIndex] = useState(0);
   const [materialsByPerson, setMaterialsByPerson] = useState({});
 
-  // 移动端检测
-  const [isMobile, setIsMobile] = useState(false);
+  // 移动端检�?  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     const checkMobile = () => {
@@ -85,8 +80,7 @@ function ApplyForm({ onSuccess }) {
         const response = await axios.get(buildApiUrl('/api/packages'));
         console.log('套餐数据:', response.data);
         setPackages(response.data);
-        // 默认选择第一个套餐
-        if (response.data && response.data.length > 0) {
+        // 默认选择第一个套�?        if (response.data && response.data.length > 0) {
           setFormData(prev => ({ ...prev, packageId: response.data[0]._id }));
           console.log('默认选择套餐:', response.data[0]._id);
           // 加载第一个套餐的客户类型
@@ -102,14 +96,12 @@ function ApplyForm({ onSuccess }) {
     fetchPackages();
   }, []);
 
-  // 加载客户类型（从材料模板获取）
-  const loadCustomerTypes = async (packageId) => {
+  // 加载客户类型（从材料模板获取�?  const loadCustomerTypes = async (packageId) => {
     try {
       const response = await axios.get(buildApiUrl(`/api/material-templates/package/${packageId}`));
       if (response.data && response.data.customerTypes) {
         setCustomerTypes(response.data.customerTypes);
-        setMaterialTemplate(response.data); // 保存完整的材料模板
-        console.log('客户类型:', response.data.customerTypes);
+        setMaterialTemplate(response.data); // 保存完整的材料模�?        console.log('客户类型:', response.data.customerTypes);
       }
     } catch (err) {
       console.error('获取客户类型失败:', err);
@@ -125,13 +117,13 @@ function ApplyForm({ onSuccess }) {
       console.log('问题模板API响应:', response.data);
       if (response.data && response.data.questions) {
         setQuestionTemplates(response.data.questions);
-        console.log('✅ 加载问题模板成功:', response.data.questions.length, '个问题');
+        console.log('�?加载问题模板成功:', response.data.questions.length, '个问�?);
       } else {
         console.log('⚠️ 没有找到问题模板');
         setQuestionTemplates([]);
       }
     } catch (err) {
-      console.error('❌ 获取问题模板失败:', err);
+      console.error('�?获取问题模板失败:', err);
       setQuestionTemplates([]);
     }
   };
@@ -149,13 +141,12 @@ function ApplyForm({ onSuccess }) {
   };
 
 
-  // 滚动锁定：当弹窗打开时完全锁定背景滚动
-  useEffect(() => {
+  // 滚动锁定：当弹窗打开时完全锁定背景滚�?  useEffect(() => {
     if (showCustomerTypePicker && isMobile) {
       // 保存当前滚动位置
       const scrollY = window.scrollY;
       
-      // 完全锁定背景：使用 fixed 定位，但保持视觉位置不变
+      // 完全锁定背景：使�?fixed 定位，但保持视觉位置不变
       document.body.style.position = 'fixed';
       document.body.style.top = `-${scrollY}px`;
       document.body.style.left = '0';
@@ -164,20 +155,17 @@ function ApplyForm({ onSuccess }) {
       document.body.style.overflow = 'hidden';
       
       return () => {
-        // 恢复样式，但不改变滚动位置
-        document.body.style.position = '';
+        // 恢复样式，但不改变滚动位�?        document.body.style.position = '';
         document.body.style.top = '';
         document.body.style.left = '';
         document.body.style.right = '';
         document.body.style.width = '';
         document.body.style.overflow = '';
-        // 注意：不调用 scrollTo，让浏览器自然恢复
-      };
+        // 注意：不调用 scrollTo，让浏览器自然恢�?      };
     }
   }, [showCustomerTypePicker, isMobile]);
 
-  // 关闭弹窗的处理函数（防止滚动）
-  const handleClosePicker = (e) => {
+  // 关闭弹窗的处理函数（防止滚动�?  const handleClosePicker = (e) => {
     if (e) {
       e.preventDefault();
       e.stopPropagation();
@@ -190,8 +178,7 @@ function ApplyForm({ onSuccess }) {
     setSelectedCustomerType(customerTypeId);
     // 先关闭弹窗，防止滚动
     setShowCustomerTypePicker(false);
-    // 延迟加载问题模板，避免立即触发页面变化
-    if (customerTypeId && formData.packageId) {
+    // 延迟加载问题模板，避免立即触发页面变�?    if (customerTypeId && formData.packageId) {
       setTimeout(() => {
       loadQuestionTemplate(formData.packageId, customerTypeId);
       setShowQuestions(true);
@@ -210,8 +197,7 @@ function ApplyForm({ onSuccess }) {
     }));
   };
 
-  // 处理材料上传（按人员）
-  const handlePersonMaterialUpload = (personId, materialId, files) => {
+  // 处理材料上传（按人员�?  const handlePersonMaterialUpload = (personId, materialId, files) => {
     setMaterialsByPerson(prev => ({
       ...prev,
       [personId]: {
@@ -219,11 +205,10 @@ function ApplyForm({ onSuccess }) {
         [materialId]: files
       }
     }));
-    console.log(`上传材料 ${materialId} 给 ${personId}:`, files.length, '个文件');
+    console.log(`上传材料 ${materialId} �?${personId}:`, files.length, '个文�?);
   };
 
-  // 获取当前客户类型的材料清单
-  const getCurrentMaterials = () => {
+  // 获取当前客户类型的材料清�?  const getCurrentMaterials = () => {
     if (!selectedCustomerType || !materialTemplate) return [];
     const customerType = materialTemplate.customerTypes.find(ct => ct.typeId === selectedCustomerType);
     return customerType?.materials || [];
@@ -238,25 +223,21 @@ function ApplyForm({ onSuccess }) {
     }));
   };
   
-  // 添加同行人
-  const addCompanion = () => {
+  // 添加同行�?  const addCompanion = () => {
     setCompanions([...companions, '']);
   };
   
-  // 更新同行人名字
-  const updateCompanion = (index, name) => {
+  // 更新同行人名�?  const updateCompanion = (index, name) => {
     const updated = [...companions];
     updated[index] = name;
     setCompanions(updated);
   };
   
-  // 删除同行人
-  const removeCompanion = (index) => {
+  // 删除同行�?  const removeCompanion = (index) => {
     setCompanions(companions.filter((_, i) => i !== index));
   };
 
-  // 验证码处理
-  const handleCaptchaChange = (value, isValid) => {
+  // 验证码处�?  const handleCaptchaChange = (value, isValid) => {
     setCaptcha(value);
     setCaptchaValid(isValid);
   };
@@ -264,8 +245,7 @@ function ApplyForm({ onSuccess }) {
   // 显示错误并滚动到错误位置
   const showError = (errorMessage) => {
     setError(errorMessage);
-    // 延迟一点时间，确保错误消息已渲染
-    setTimeout(() => {
+    // 延迟一点时间，确保错误消息已渲�?    setTimeout(() => {
       if (errorRef.current) {
         errorRef.current.scrollIntoView({ 
           behavior: 'smooth', 
@@ -286,51 +266,48 @@ function ApplyForm({ onSuccess }) {
     
     // 调试信息
     console.log('表单数据:', formData);
-    console.log('验证码:', captcha);
-    console.log('验证码状态:', captchaValid);
+    console.log('验证�?', captcha);
+    console.log('验证码状�?', captchaValid);
     
     // 验证必填字段
     if (!formData.name || !formData.phone || !formData.address || !formData.packageId) {
       const missingFields = [];
       if (!formData.name) missingFields.push('姓名');
-      if (!formData.phone) missingFields.push('手机号');
+      if (!formData.phone) missingFields.push('手机�?);
       if (!formData.address) missingFields.push('地址');
       if (!formData.packageId) missingFields.push('签证类型');
       
-      showError(`❌ 表单填写不完整！\n请填写以下必填字段：${missingFields.join('、')}`);
+      showError(`�?表单填写不完整！\n请填写以下必填字段：${missingFields.join('�?)}`);
       return;
     }
 
-    // 验证微信或LINE至少填一个
-    if (!formData.wechat && !formData.line) {
-      showError('❌ 联系方式不完整！\n请至少填写微信号或LINE号其中一个，方便我们与您联系');
+    // 验证微信或LINE至少填一�?    if (!formData.wechat && !formData.line) {
+      showError('�?联系方式不完整！\n请至少填写微信号或LINE号其中一个，方便我们与您联系');
       return;
     }
 
-    // 验证手机号格式（国际格式，8-15位数字）
+    // 验证手机号格式（国际格式�?-15位数字）
     const phoneRegex = /^\d{8,15}$/;
     if (!phoneRegex.test(formData.phone)) {
-      showError(`❌ 手机号格式错误！\n您输入的手机号：${formData.phone}\n请输入8-15位数字（例如：09012345678）`);
+      showError(`�?手机号格式错误！\n您输入的手机号：${formData.phone}\n请输�?-15位数字（例如�?9012345678）`);
       return;
     }
     
-    // 验证邮箱格式（如果填写了邮箱）
-    if (formData.email) {
+    // 验证邮箱格式（如果填写了邮箱�?    if (formData.email) {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(formData.email)) {
-        showError(`❌ 邮箱格式错误！\n您输入的邮箱：${formData.email}\n请输入正确的邮箱地址（例如：example@qq.com）`);
+        showError(`�?邮箱格式错误！\n您输入的邮箱�?{formData.email}\n请输入正确的邮箱地址（例如：example@qq.com）`);
         return;
       }
     }
 
-    // 验证验证码
-    if (!captcha || captcha.length !== 4) {
-      showError('❌ 验证码未填写！\n请输入完整的验证码（4位字符）');
+    // 验证验证�?    if (!captcha || captcha.length !== 4) {
+      showError('�?验证码未填写！\n请输入完整的验证码（4位字符）');
       return;
     }
     
     if (!captchaValid) {
-      showError('❌ 验证码错误！\n请重新输入正确的验证码');
+      showError('�?验证码错误！\n请重新输入正确的验证�?);
       return;
     }
 
@@ -338,24 +315,21 @@ function ApplyForm({ onSuccess }) {
     setError('');
 
     try {
-      // 获取选择的签证类型信息
-      let visaType = '';
+      // 获取选择的签证类型信�?      let visaType = '';
       let visaPrice = 0;
       let visaCurrency = 'CNY';
       
       const selectedPackage = packages.find(pkg => pkg._id === formData.packageId);
       if (selectedPackage) {
         if (selectedPackage.visaTypes && selectedPackage.visaTypes.length > 0) {
-          // 有多个签证类型，使用用户选择的
-          const selectedVisaType = selectedPackage.visaTypes[selectedVisaTypeIndex];
+          // 有多个签证类型，使用用户选择�?          const selectedVisaType = selectedPackage.visaTypes[selectedVisaTypeIndex];
           if (selectedVisaType) {
             visaType = selectedVisaType.type || '';
             visaPrice = selectedVisaType.price || 0;
             visaCurrency = selectedVisaType.currency || 'CNY';
           }
         } else if (selectedPackage.visaType) {
-          // 旧格式，只有一个签证类型
-          visaType = selectedPackage.visaType;
+          // 旧格式，只有一个签证类�?          visaType = selectedPackage.visaType;
           visaPrice = selectedPackage.price || 0;
           visaCurrency = selectedPackage.currency || 'CNY';
         }
@@ -374,8 +348,7 @@ function ApplyForm({ onSuccess }) {
           };
         });
 
-      // 使用FormData来支持文件上传
-      const formDataToSubmit = new FormData();
+      // 使用FormData来支持文件上�?      const formDataToSubmit = new FormData();
       
       // 添加基本字段
       formDataToSubmit.append('name', formData.name);
@@ -393,8 +366,7 @@ function ApplyForm({ onSuccess }) {
       if (visaPrice > 0) formDataToSubmit.append('visaPrice', visaPrice.toString());
       if (visaCurrency) formDataToSubmit.append('visaCurrency', visaCurrency);
       
-      // 添加同行人
-      const validCompanions = companions.filter(name => name.trim() !== '');
+      // 添加同行�?      const validCompanions = companions.filter(name => name.trim() !== '');
       formDataToSubmit.append('companions', JSON.stringify(validCompanions));
       
       // 添加客户类型
@@ -410,8 +382,7 @@ function ApplyForm({ onSuccess }) {
         formDataToSubmit.append('questionsAnswers', JSON.stringify(questionsAnswers));
       }
       
-      // 添加材料数据（统一数组，按人员标识）
-      const currentMaterials = getCurrentMaterials();
+      // 添加材料数据（统一数组，按人员标识�?      const currentMaterials = getCurrentMaterials();
       if (currentMaterials.length > 0 && Object.keys(materialsByPerson).length > 0) {
         const allPersonIds = ['main', ...validCompanions.map((_, i) => `comp${i + 1}`)];
         const allMaterials = [];
@@ -422,8 +393,7 @@ function ApplyForm({ onSuccess }) {
           const personMaterials = materialsByPerson[personId] || {};
           const personName = index === 0 ? formData.name : validCompanions[index - 1];
           
-          // 为每个材料类型添加该人员的数据
-          currentMaterials.forEach(material => {
+          // 为每个材料类型添加该人员的数�?          currentMaterials.forEach(material => {
             const files = personMaterials[material.materialId];
             const hasFiles = files && files.length > 0;
             
@@ -436,8 +406,7 @@ function ApplyForm({ onSuccess }) {
               fileCount: hasFiles ? files.length : 0
             });
             
-            // 添加该人员该材料的文件
-            if (hasFiles) {
+            // 添加该人员该材料的文�?            if (hasFiles) {
               Array.from(files).forEach(file => {
                 formDataToSubmit.append(`material_${personId}_${material.materialId}`, file);
                 totalFileCount++;
@@ -447,7 +416,7 @@ function ApplyForm({ onSuccess }) {
         });
         
         formDataToSubmit.append('materials', JSON.stringify(allMaterials));
-        console.log('提交材料数据:', allMaterials.length, '项（', allPersonIds.length, '人），共', totalFileCount, '个文件');
+        console.log('提交材料数据:', allMaterials.length, '项（', allPersonIds.length, '人），共', totalFileCount, '个文�?);
       }
       
       const response = await axios.post(buildApiUrl('/api/apply'), formDataToSubmit, {
@@ -461,11 +430,11 @@ function ApplyForm({ onSuccess }) {
       const errorMessage = err.response?.data?.message || '网络错误或服务器异常';
       const errorDetails = err.response?.data?.details || '';
       
-      let fullErrorMessage = `❌ 申请提交失败！\n\n错误原因：${errorMessage}`;
+      let fullErrorMessage = `�?申请提交失败！\n\n错误原因�?{errorMessage}`;
       if (errorDetails) {
-        fullErrorMessage += `\n详细信息：${errorDetails}`;
+        fullErrorMessage += `\n详细信息�?{errorDetails}`;
       }
-      fullErrorMessage += '\n\n请检查以上问题后重试，或联系客服协助处理。';
+      fullErrorMessage += '\n\n请检查以上问题后重试，或联系客服协助处理�?;
       
       showError(fullErrorMessage);
     } finally {
@@ -492,8 +461,7 @@ function ApplyForm({ onSuccess }) {
             fontSize: isMobile ? '0.85rem' : undefined,
             marginBottom: isMobile ? '0' : undefined
           }}>
-            请填写以下信息完成申请
-          </p>
+            请填写以下信息完成申�?          </p>
         </div>
         
         <div className="apply-form-body" style={{
@@ -530,7 +498,7 @@ function ApplyForm({ onSuccess }) {
                       value={formData.name}
                       onChange={handleChange}
                       className="form-control"
-                      placeholder="请输入您的姓名"
+                      placeholder="请输入您的姓�?
                       required
                       style={{
                         fontSize: isMobile ? '0.85rem' : undefined,
@@ -583,7 +551,7 @@ function ApplyForm({ onSuccess }) {
                         value={formData.phone}
                         onChange={handleChange}
                         className="form-control"
-                        placeholder="请输入手机号码"
+                        placeholder="请输入手机号�?
                         style={{ 
                           flex: '1',
                           fontSize: isMobile ? '0.85rem' : undefined,
@@ -598,7 +566,7 @@ function ApplyForm({ onSuccess }) {
                       fontSize: isMobile ? '0.75rem' : undefined
                     }}>
                       <i className="fas fa-info-circle me-1"></i>
-                      例如日本号码：09012345678
+                      例如日本号码�?9012345678
                     </small>
                   </div>
                 </div>
@@ -637,7 +605,7 @@ function ApplyForm({ onSuccess }) {
               </div>
             </div>
 
-            {/* 一起申请的人 */}
+            {/* 一起申请的�?*/}
             <div className="form-section" style={{
               padding: isMobile ? '12px 8px' : undefined,
               marginBottom: isMobile ? '12px' : undefined
@@ -647,7 +615,7 @@ function ApplyForm({ onSuccess }) {
                 marginBottom: isMobile ? '10px' : undefined
               }}>
                 <i className="fas fa-user-friends me-2" style={{ fontSize: isMobile ? '1rem' : undefined }}></i>
-                一起申请的人 <small className="text-muted" style={{ fontSize: isMobile ? '0.75rem' : '0.85rem', fontWeight: 'normal' }}>（可选）</small>
+                一起申请的�?<small className="text-muted" style={{ fontSize: isMobile ? '0.75rem' : '0.85rem', fontWeight: 'normal' }}>（可选）</small>
               </h4>
               
               <p className="text-muted small" style={{ 
@@ -655,8 +623,7 @@ function ApplyForm({ onSuccess }) {
                 fontSize: isMobile ? '0.75rem' : undefined
               }}>
                 <i className="fas fa-info-circle me-1"></i>
-                如有家人或朋友一起申请，请在下方填写他们的名字
-              </p>
+                如有家人或朋友一起申请，请在下方填写他们的名�?              </p>
               
               {companions.map((name, index) => (
                 <div key={index} className="input-group" style={{ marginBottom: isMobile ? '8px' : '0.5rem' }}>
@@ -673,7 +640,7 @@ function ApplyForm({ onSuccess }) {
                     value={name}
                     onChange={(e) => updateCompanion(index, e.target.value)}
                     className="form-control"
-                    placeholder="请输入姓名"
+                    placeholder="请输入姓�?
                     style={{
                       fontSize: isMobile ? '0.85rem' : undefined,
                       padding: isMobile ? '8px' : undefined
@@ -704,8 +671,7 @@ function ApplyForm({ onSuccess }) {
                 }}
               >
                 <i className="fas fa-plus me-1" style={{ fontSize: isMobile ? '0.75rem' : undefined }}></i>
-                添加同行人
-              </button>
+                添加同行�?              </button>
             </div>
 
             {/* 签证类型选择 */}
@@ -736,7 +702,7 @@ function ApplyForm({ onSuccess }) {
                     padding: isMobile ? '8px 10px' : undefined
                   }}>
                     <i className="fas fa-exclamation-triangle me-2"></i>
-                    正在加载签证类型数据，请稍候...
+                    正在加载签证类型数据，请稍�?..
                   </div>
                 ) : (
                   <select
@@ -760,12 +726,12 @@ function ApplyForm({ onSuccess }) {
                         ? pkg.visaTypes[0].price 
                         : pkg.price;
                       const multipleTypes = pkg.visaTypes && pkg.visaTypes.length > 1 
-                        ? ` 等${pkg.visaTypes.length}种` 
+                        ? ` �?{pkg.visaTypes.length}种` 
                         : '';
                       
                       return (
                         <option key={pkg._id} value={pkg._id}>
-                          {pkg.name}{displayType ? ` - ${displayType}${multipleTypes}` : ''} - {pkg.speed} - {getCurrencySymbol(pkg.currency)}{displayPrice}/次 ({getCurrencyName(pkg.currency)})
+                          {pkg.name}{displayType ? ` - ${displayType}${multipleTypes}` : ''} - {pkg.speed} - {getCurrencySymbol(pkg.currency)}{displayPrice}/�?({getCurrencyName(pkg.currency)})
                         </option>
                       );
                     })}
@@ -773,7 +739,7 @@ function ApplyForm({ onSuccess }) {
                 )}
               </div>
 
-              {/* 签证类型选择（如果选择的套餐有多个签证类型） */}
+              {/* 签证类型选择（如果选择的套餐有多个签证类型�?*/}
               {formData.packageId && (() => {
                 const selectedPackage = packages.find(pkg => pkg._id === formData.packageId);
                 if (selectedPackage && selectedPackage.visaTypes && selectedPackage.visaTypes.length > 1) {
@@ -829,10 +795,10 @@ function ApplyForm({ onSuccess }) {
                     marginBottom: isMobile ? '4px' : undefined
                   }}>
                     选择办理类型
-                    <small className="text-muted ms-2" style={{ fontSize: isMobile ? '0.7rem' : undefined }}>（可选，选择后可填写详细信息）</small>
+                    <small className="text-muted ms-2" style={{ fontSize: isMobile ? '0.7rem' : undefined }}>（可选，选择后可填写详细信息�?/small>
                   </label>
 
-                  {/* 桌面端：原生下拉；移动端：自定义选择器按钮 */}
+                  {/* 桌面端：原生下拉；移动端：自定义选择器按�?*/}
                   {!isMobile ? (
                   <select
                     value={selectedCustomerType}
@@ -842,7 +808,7 @@ function ApplyForm({ onSuccess }) {
                         fontSize: '0.95rem'
                     }}
                   >
-                    <option value="">不选择（可后续补充）</option>
+                    <option value="">不选择（可后续补充�?/option>
                     {customerTypes.map(type => (
                       <option key={type.typeId} value={type.typeId}>
                         {type.typeName} {type.description && `- ${type.description}`}
@@ -865,7 +831,7 @@ function ApplyForm({ onSuccess }) {
                       <span>
                         {selectedCustomerType
                           ? `${customerTypes.find(ct => ct.typeId === selectedCustomerType)?.typeName || ''}`
-                          : '不选择（可后续补充）'}
+                          : '不选择（可后续补充�?}
                       </span>
                       <i className="fas fa-chevron-down" style={{ color: '#999', fontSize: '0.85rem' }}></i>
                     </button>
@@ -883,7 +849,7 @@ function ApplyForm({ onSuccess }) {
               )}
             </div>
 
-            {/* 材料上传（可选） - 按材料类型分组 */}
+            {/* 材料上传（可选） - 按材料类型分�?*/}
             {selectedCustomerType && getCurrentMaterials().length > 0 && (
               <div className="form-section" style={{ padding: '15px 0' }}>
                 <h4 className="section-title" style={{ fontSize: '1rem', marginBottom: '10px' }}>
@@ -896,16 +862,15 @@ function ApplyForm({ onSuccess }) {
                 
                 <div className="alert alert-info mb-3" style={{ fontSize: '12px', padding: '8px 12px' }}>
                   <i className="fas fa-info-circle me-1"></i>
-                  可现在上传，也可稍后补充。请为每位申请人分别上传材料。
-                </div>
+                  可现在上传，也可稍后补充。请为每位申请人分别上传材料�?                </div>
 
-                {/* 按材料类型分组显示 */}
+                {/* 按材料类型分组显�?*/}
                 {getCurrentMaterials().map((material, materialIndex) => {
                   const allPersons = [
                     { personId: 'main', personName: formData.name || '主申请人', isMain: true },
                     ...companions.map((name, i) => ({ 
                       personId: `comp${i + 1}`, 
-                      personName: name || `同行人 ${i + 1}`,
+                      personName: name || `同行�?${i + 1}`,
                       isMain: false 
                     }))
                   ];
@@ -973,22 +938,20 @@ function ApplyForm({ onSuccess }) {
                                 />
                               </div>
                               
-                              {/* 状态提示 */}
+                              {/* 状态提�?*/}
                               <div style={{ minWidth: '100px', textAlign: 'right' }}>
                                 {hasFiles ? (
                                   <small className="text-success" style={{ fontSize: '0.75rem' }}>
                                     <i className="fas fa-check-circle me-1"></i>
-                                    已选 {files.length} 个
-                                  </small>
+                                    已�?{files.length} �?                                  </small>
                                 ) : (
                                   <small className="text-muted" style={{ fontSize: '0.75rem' }}>
-                                    未上传
-                                  </small>
+                                    未上�?                                  </small>
                                 )}
                               </div>
                             </div>
                             
-                            {/* 略缩图预览 */}
+                            {/* 略缩图预�?*/}
                             {hasFiles && (
                               <div style={{ 
                                 marginTop: '8px',
@@ -1061,7 +1024,7 @@ function ApplyForm({ onSuccess }) {
               </div>
             )}
 
-            {/* 详细问题（可选填写） - 紧凑版 */}
+            {/* 详细问题（可选填写） - 紧凑�?*/}
             {showQuestions && questionTemplates.length > 0 && (
               <div className="form-section" style={{ padding: '15px 0' }}>
                 <h4 className="section-title" style={{ fontSize: '1rem', marginBottom: '10px' }}>
@@ -1081,7 +1044,7 @@ function ApplyForm({ onSuccess }) {
                   <div key={question.questionId} className="form-group mb-2">
                     <label className="form-label mb-1" style={{ fontSize: '0.85rem', fontWeight: '500' }}>
                       {index + 1}. {question.questionText}
-                      {question.required && <span className="text-warning ms-1" style={{ fontSize: '0.75rem' }}>（建议填）</span>}
+                      {question.required && <span className="text-warning ms-1" style={{ fontSize: '0.75rem' }}>（建议填�?/span>}
                     </label>
                     {question.helpText && (
                       <small className="form-text text-muted d-block mb-1" style={{ fontSize: '0.75rem' }}>
@@ -1123,7 +1086,7 @@ function ApplyForm({ onSuccess }) {
                 padding: isMobile ? '8px 10px' : undefined
               }}>
                 <i className="fas fa-info-circle me-2"></i>
-                <strong>重要提示：</strong>微信号或LINE号至少填写一个（必填），方便我们与您联系办理签证事宜
+                <strong>重要提示�?/strong>微信号或LINE号至少填写一个（必填），方便我们与您联系办理签证事宜
               </div>
               
               <div className="row">
@@ -1135,8 +1098,8 @@ function ApplyForm({ onSuccess }) {
                       fontSize: isMobile ? '0.85rem' : undefined,
                       marginBottom: isMobile ? '4px' : undefined
                     }}>
-                      微信号 <span className="text-danger">*</span>
-                      <small className="text-muted ms-2" style={{ fontSize: isMobile ? '0.7rem' : undefined }}>（与LINE二选一）</small>
+                      微信�?<span className="text-danger">*</span>
+                      <small className="text-muted ms-2" style={{ fontSize: isMobile ? '0.7rem' : undefined }}>（与LINE二选一�?/small>
                     </label>
                     <input
                       type="text"
@@ -1161,8 +1124,8 @@ function ApplyForm({ onSuccess }) {
                       fontSize: isMobile ? '0.85rem' : undefined,
                       marginBottom: isMobile ? '4px' : undefined
                     }}>
-                      LINE号 <span className="text-danger">*</span>
-                      <small className="text-muted ms-2" style={{ fontSize: isMobile ? '0.7rem' : undefined }}>（与微信二选一）</small>
+                      LINE�?<span className="text-danger">*</span>
+                      <small className="text-muted ms-2" style={{ fontSize: isMobile ? '0.7rem' : undefined }}>（与微信二选一�?/small>
                     </label>
                     <input
                       type="text"
@@ -1170,7 +1133,7 @@ function ApplyForm({ onSuccess }) {
                       value={formData.line}
                       onChange={handleChange}
                       className="form-control"
-                      placeholder="请输入LINE号"
+                      placeholder="请输入LINE�?
                       style={{
                         fontSize: isMobile ? '0.85rem' : undefined,
                         padding: isMobile ? '8px' : undefined
@@ -1188,7 +1151,7 @@ function ApplyForm({ onSuccess }) {
                   marginBottom: isMobile ? '4px' : undefined
                 }}>
                   邮箱地址
-                  <small className="text-muted ms-2" style={{ fontSize: isMobile ? '0.7rem' : undefined }}>（建议填写，用于接收进度通知）</small>
+                  <small className="text-muted ms-2" style={{ fontSize: isMobile ? '0.7rem' : undefined }}>（建议填写，用于接收进度通知�?/small>
                 </label>
                 <input
                   type="email"
@@ -1196,7 +1159,7 @@ function ApplyForm({ onSuccess }) {
                   value={formData.email}
                   onChange={handleChange}
                   className="form-control"
-                  placeholder="请输入邮箱地址，我们会通过邮件发送办理进度"
+                  placeholder="请输入邮箱地址，我们会通过邮件发送办理进�?
                   style={{
                     fontSize: isMobile ? '0.85rem' : undefined,
                     padding: isMobile ? '8px' : undefined
@@ -1236,7 +1199,7 @@ function ApplyForm({ onSuccess }) {
               </div>
             </div>
 
-            {/* 验证码 */}
+            {/* 验证�?*/}
             <div className="form-section" style={{
               padding: isMobile ? '12px 8px' : undefined,
               marginBottom: isMobile ? '12px' : undefined
@@ -1251,7 +1214,7 @@ function ApplyForm({ onSuccess }) {
               <Captcha onCaptchaChange={handleCaptchaChange} />
             </div>
 
-            {/* 错误信息 - 优化版 */}
+            {/* 错误信息 - 优化�?*/}
             {error && (
               <div 
                 ref={errorRef}
@@ -1332,7 +1295,7 @@ function ApplyForm({ onSuccess }) {
                 {loading ? (
                   <>
                     <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                    提交中...
+                    提交�?..
                   </>
                 ) : (
                   <>
@@ -1346,7 +1309,7 @@ function ApplyForm({ onSuccess }) {
         </div>
       </div>
 
-      {/* 移动端 - 办理类型选择器弹层（放在组件根部，确保正确的层级和定位） */}
+      {/* 移动�?- 办理类型选择器弹层（放在组件根部，确保正确的层级和定位） */}
       {showCustomerTypePicker && isMobile && (
         <div
           style={{
@@ -1365,8 +1328,7 @@ function ApplyForm({ onSuccess }) {
           }}
           onClick={handleClosePicker}
           onTouchMove={(e) => {
-            // 只在遮罩层上时阻止滚动传播
-            if (e.target === e.currentTarget) {
+            // 只在遮罩层上时阻止滚动传�?            if (e.target === e.currentTarget) {
               e.preventDefault();
             }
           }}
@@ -1394,14 +1356,13 @@ function ApplyForm({ onSuccess }) {
               // 记录触摸起始位置，用于判断是滚动还是点击
             }}
             onTouchMove={(e) => {
-              // 允许弹窗内容滚动，但阻止事件冒泡到背景
-              e.stopPropagation();
+              // 允许弹窗内容滚动，但阻止事件冒泡到背�?              e.stopPropagation();
             }}
             onTouchEnd={(e) => {
               e.stopPropagation();
             }}
           >
-            {/* 顶部拖拽指示条 */}
+            {/* 顶部拖拽指示�?*/}
             <div style={{
               padding: '8px 0',
               display: 'flex',
@@ -1417,7 +1378,7 @@ function ApplyForm({ onSuccess }) {
               }} />
             </div>
 
-            {/* 标题栏 */}
+            {/* 标题�?*/}
             <div style={{
               padding: '16px 20px',
               borderBottom: '1px solid #e5e7eb',
@@ -1522,8 +1483,7 @@ function ApplyForm({ onSuccess }) {
                   color: '#111827',
                   fontWeight: selectedCustomerType === '' ? '500' : '400'
                 }}>
-                  不选择（可后续补充）
-                </div>
+                  不选择（可后续补充�?                </div>
               </div>
 
               {/* 其他选项 */}
@@ -1603,7 +1563,7 @@ function ApplyForm({ onSuccess }) {
               })}
             </div>
 
-            {/* 底部安全区域（iOS） */}
+            {/* 底部安全区域（iOS�?*/}
             <div style={{
               height: 'env(safe-area-inset-bottom)',
               background: '#fff'

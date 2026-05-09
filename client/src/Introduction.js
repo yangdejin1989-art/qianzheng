@@ -16,7 +16,7 @@ function Introduction() {
       const response = await axios.get(buildApiUrl('/api/introduction'));
       setIntroduction(response.data);
     } catch (error) {
-      console.error('获取产品简介失败:', error);
+      console.error('获取产品简介失�?', error);
     } finally {
       setLoading(false);
     }
@@ -27,7 +27,7 @@ function Introduction() {
       <div className="container mt-5">
         <div className="text-center">
           <div className="spinner-border" role="status">
-            <span className="visually-hidden">加载中...</span>
+            <span className="visually-hidden">加载�?..</span>
           </div>
         </div>
       </div>
@@ -40,7 +40,7 @@ function Introduction() {
 
   return (
     <div className="container" style={{ marginTop: window.innerWidth <= 768 ? '8px' : '3rem' }}>
-      {/* 主标题 */}
+      {/* 主标�?*/}
       <div className="text-center" style={{ marginBottom: window.innerWidth <= 768 ? '8px' : '3rem' }}>
         <h1 className="display-4 fw-bold" style={{ 
           color: 'var(--secondary, #012baf)',

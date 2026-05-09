@@ -17,10 +17,10 @@ function IntroductionManager({ token }) {
 
   const fetchIntroduction = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/introduction');
+      const response = await axios.get('/api/introduction');
       setIntroduction(response.data);
     } catch (error) {
-      console.error('获取产品简介失败:', error);
+      console.error('获取产品简介失�?', error);
     } finally {
       setLoading(false);
     }
@@ -29,10 +29,10 @@ function IntroductionManager({ token }) {
   const handleSave = async () => {
     setSaving(true);
     try {
-      await axios.put('http://localhost:5000/api/introduction', introduction, {
+      await axios.put('/api/introduction', introduction, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      alert('保存成功！');
+      alert('保存成功�?);
     } catch (error) {
       console.error('保存失败:', error);
       alert('保存失败，请重试');
@@ -46,8 +46,8 @@ function IntroductionManager({ token }) {
     formData.append('image', file);
     
     try {
-      console.log('开始上传图片:', file.name);
-      const response = await axios.post('http://localhost:5000/api/introduction/image', formData, {
+      console.log('开始上传图�?', file.name);
+      const response = await axios.post('/api/introduction/image', formData, {
         headers: { 
           'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${token}`
@@ -81,7 +81,7 @@ function IntroductionManager({ token }) {
   };
 
   const removeSection = (index) => {
-    if (!window.confirm('确定要删除这个区域吗？删除后无法恢复。')) {
+    if (!window.confirm('确定要删除这个区域吗？删除后无法恢复�?)) {
       return;
     }
     
@@ -103,12 +103,12 @@ function IntroductionManager({ token }) {
   };
 
   if (loading) {
-    return <div className="text-center">加载中...</div>;
+    return <div className="text-center">加载�?..</div>;
   }
 
   return (
     <div style={{ padding: '20px', background: '#f8fafc', minHeight: '100vh' }}>
-      {/* 紧凑的页面头部 */}
+      {/* 紧凑的页面头�?*/}
       <div style={{ 
         background: '#fff', 
         borderRadius: '8px', 
@@ -128,25 +128,24 @@ function IntroductionManager({ token }) {
               disabled={saving}
               style={{ fontSize: '14px', padding: '8px 20px' }}
             >
-              {saving ? '保存中...' : '💾 保存设置'}
+              {saving ? '保存�?..' : '💾 保存设置'}
             </button>
             <button 
               className="btn btn-primary" 
               onClick={addSection}
               style={{ fontSize: '14px', padding: '8px 20px' }}
             >
-              ➕ 添加区域
+              �?添加区域
             </button>
           </div>
         </div>
         
-        {/* 基本设置行 */}
+        {/* 基本设置�?*/}
         <div className="row mt-3">
           <div className="col-md-8">
             <div className="input-group">
               <span className="input-group-text" style={{ background: '#f3f4f6', border: '1px solid #d1d5db' }}>
-                📝 主标题
-              </span>
+                📝 主标�?              </span>
               <input
                 type="text"
                 className="form-control"
@@ -167,8 +166,7 @@ function IntroductionManager({ token }) {
                 onChange={(e) => setIntroduction({ ...introduction, visible: e.target.checked })}
               />
               <label className="form-check-label" htmlFor="visible" style={{ fontSize: '14px', fontWeight: '500' }}>
-                🌟 显示产品简介
-              </label>
+                🌟 显示产品简�?              </label>
             </div>
           </div>
         </div>
@@ -218,7 +216,7 @@ function IntroductionManager({ token }) {
                   borderRadius: '12px'
                 }}>
                   {section.layout === 'left-image' ? '📷 图左' : 
-                   section.layout === 'right-image' ? '📷 图右' : '📝 纯文本'}
+                   section.layout === 'right-image' ? '📷 图右' : '📝 纯文�?}
                 </span>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -239,7 +237,7 @@ function IntroductionManager({ token }) {
                   onClick={() => removeSection(index)}
                   style={{ fontSize: '12px', padding: '4px 8px' }}
                 >
-                  🗑️ 删除
+                  🗑�?删除
                 </button>
               </div>
             </div>
@@ -251,14 +249,14 @@ function IntroductionManager({ token }) {
                 <div className="col-md-6">
                   <div className="input-group input-group-sm">
                     <span className="input-group-text" style={{ background: '#f9fafb', fontSize: '12px' }}>
-                      🏷️ 标题
+                      🏷�?标题
                     </span>
                     <input
                       type="text"
                       className="form-control"
                       value={section.title}
                       onChange={(e) => updateSection(index, 'title', e.target.value)}
-                      placeholder="如：我们的愿景"
+                      placeholder="如：我们的愿�?
                       style={{ fontSize: '14px' }}
                     />
                   </div>
@@ -276,7 +274,7 @@ function IntroductionManager({ token }) {
                     >
                       <option value="left-image">图片在左</option>
                       <option value="right-image">图片在右</option>
-                      <option value="no-image">无图片</option>
+                      <option value="no-image">无图�?/option>
                     </select>
                   </div>
                 </div>
@@ -329,7 +327,7 @@ function IntroductionManager({ token }) {
                         {section.imageUrl && (
                           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                             <img 
-                              src={`http://localhost:5000${section.imageUrl}`} 
+                              src={`${section.imageUrl}`} 
                               alt="预览" 
                               style={{ 
                                 width: '60px', 
@@ -339,7 +337,7 @@ function IntroductionManager({ token }) {
                                 border: '1px solid #e5e7eb'
                               }}
                             />
-                            <span style={{ fontSize: '12px', color: '#10b981' }}>✅ 图片已上传</span>
+                            <span style={{ fontSize: '12px', color: '#10b981' }}>�?图片已上�?/span>
                           </div>
                         )}
                       </div>
@@ -351,7 +349,7 @@ function IntroductionManager({ token }) {
           </div>
         ))}
 
-        {/* 空状态 */}
+        {/* 空状�?*/}
         {introduction.sections.length === 0 && (
           <div style={{ 
             background: '#fff', 
@@ -362,10 +360,9 @@ function IntroductionManager({ token }) {
           }}>
             <div style={{ fontSize: '48px', marginBottom: '16px' }}>📝</div>
             <h4 style={{ color: '#6b7280', marginBottom: '8px' }}>暂无内容区域</h4>
-            <p style={{ color: '#9ca3af', marginBottom: '20px' }}>点击上方"添加区域"按钮开始创建内容</p>
+            <p style={{ color: '#9ca3af', marginBottom: '20px' }}>点击上方"添加区域"按钮开始创建内�?/p>
             <button className="btn btn-primary" onClick={addSection}>
-              ➕ 添加第一个区域
-            </button>
+              �?添加第一个区�?            </button>
           </div>
         )}
       </div>

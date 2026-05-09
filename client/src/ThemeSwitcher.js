@@ -125,7 +125,7 @@ function ThemeSwitcher({ isVisible, onClose }) {
                     color: theme.colors.primary,
                     fontSize: '20px'
                   }}>
-                    ✓
+                    �?
                   </div>
                 )}
               </div>
@@ -141,7 +141,7 @@ function ThemeSwitcher({ isVisible, onClose }) {
           fontSize: '14px',
           color: '#666'
         }}>
-          <strong>提示：</strong>选择主题后页面会自动刷新以应用新的配色方案。
+          <strong>提示�?/strong>选择主题后页面会自动刷新以应用新的配色方案�?
         </div>
       </div>
     </div>
