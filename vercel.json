@@ -5,7 +5,7 @@
       "src": "client/package.json",
       "use": "@vercel/static-build",
       "config": {
-        "outputDirectory": "client/build"
+        "outputDirectory": "build"
       }
     },
     {
@@ -26,5 +26,9 @@
       "src": "/(.*)",
       "dest": "/client/$1"
     }
-  ]
+  ],
+  "env": {
+    "CI": "false",
+    "DISABLE_ESLINT_PLUGIN": "true"
+  }
 }
