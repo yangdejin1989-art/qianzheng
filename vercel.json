@@ -29,6 +29,10 @@
   ],
   "env": {
     "CI": "false",
-    "DISABLE_ESLINT_PLUGIN": "true"
+    "DISABLE_ESLINT_PLUGIN": "true",
+    "MONGO_URI": "mongodb://yangdejin1989_db_user:yh5bcI6suXIoBQKN@ac-l79auul-shard-00-00.vkhuqul.mongodb.net:27017,ac-l79auul-shard-00-01.vkhuqul.mongodb.net:27017,ac-l79auul-shard-00-02.vkhuqul.mongodb.net:27017/visa-system?ssl=true&authSource=admin&replicaSet=atlas-p6z9y4-shard-0&serverSelectionTimeoutMS=30000&socketTimeoutMS=45000&connectTimeoutMS=30000",
+    "JWT_SECRET": "visa_secret_key_2024_yangdejin",
+    "EMAIL_USER": "jishu2020_service@163.com",
+    "EMAIL_PASS": "QDyQgPu328neKbEE"
   }
 }
