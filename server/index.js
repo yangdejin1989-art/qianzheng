@@ -15,6 +15,7 @@ const fs = require('fs');
 const path = require('path');
 const nodemailer = require('nodemailer');
 const config = require('./config');
+const { getCloudinaryStorage } = require('./config/cloudinary');
 
 // 导入邮件功能
 const { sendManualStatusEmail } = require('./utils/emailHelpers');
@@ -25,11 +26,11 @@ app.use(express.json({ limit: '500mb' }));
 app.use(express.urlencoded({ limit: '500mb', extended: true }));
 
 // 连接 MongoDB
-// 设置环境变量使用 Node.js 原生 DNS 解析（修复 Windows SRV 记录问题）
-process.env.USE_NODEJSdns = '1';
+// 设置环境变量使用 c-ares DNS 解析（Windows 上更稳定）
+process.env.USE_NODEJSdns = '0';
 
 const dbReady = mongoose.connect(config.mongoUri, {
-  serverSelectionTimeoutMS: 10000,
+  serverSelectionTimeoutMS: 30000,
 });
 
 const db = mongoose.connection;
@@ -72,26 +73,38 @@ const { checkIPBlacklist, checkEmailBlacklist, checkPhoneBlacklist } = require('
 // 导入认证中间件
 const { authenticate, requireAdmin, requireAdminOrStaff } = require('./middleware/authMiddleware');
 
-// 创建 uploads 目录（如不存在）
-const uploadDir = process.env.VERCEL
-  ? path.join('/tmp', 'uploads')
-  : path.join(__dirname, 'uploads');
+// 创建 uploads 目录（本地开发使用）
+const uploadDir = path.join(__dirname, 'uploads');
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
 }
 
-// 配置 multer
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, uploadDir);
-  },
-  filename: function (req, file, cb) {
-    const ext = path.extname(file.originalname);
-    const name = Date.now() + '-' + Math.round(Math.random() * 1E9) + ext;
-    cb(null, name);
-  }
-});
-// 配置 multer，移除文件大小限制
+// 根据环境选择存储方式
+let storage;
+const isCloudinaryReady = process.env.CLOUDINARY_CLOUD_NAME && 
+                          process.env.CLOUDINARY_API_KEY && 
+                          process.env.CLOUDINARY_API_SECRET;
+
+if (isCloudinaryReady) {
+  // 使用 Cloudinary 云存储
+  storage = getCloudinaryStorage();
+  console.log('✅ 使用 Cloudinary 云存储');
+} else {
+  // 使用本地存储
+  storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, uploadDir);
+    },
+    filename: function (req, file, cb) {
+      const ext = path.extname(file.originalname);
+      const name = Date.now() + '-' + Math.round(Math.random() * 1E9) + ext;
+      cb(null, name);
+    }
+  });
+  console.log('✅ 使用本地存储 (uploads/)');
+}
+
+// 配置 multer 上传
 const upload = multer({ 
   storage,
   limits: {
@@ -100,8 +113,21 @@ const upload = multer({
   }
 });
 
-// 静态托管 uploads 目录
-app.use('/uploads', express.static(uploadDir));
+// 静态托管 uploads 目录（本地开发）
+if (!isCloudinaryReady) {
+  app.use('/uploads', express.static(uploadDir));
+}
+
+// 辅助函数：获取上传后的文件 URL
+function getUploadedFileUrl(file) {
+  if (!file) return null;
+  // Cloudinary 返回的 filename 是 secure_url
+  if (file.path && file.path.startsWith('http')) {
+    return file.path;
+  }
+  // 本地存储
+  return '/uploads/' + file.filename;
+}
 
 // 通用图片上传接口
 app.post('/api/upload', upload.single('image'), async (req, res) => {
@@ -110,11 +136,12 @@ app.post('/api/upload', upload.single('image'), async (req, res) => {
       return res.status(400).json({ success: false, message: '没有上传文件' });
     }
     
-    const imageUrl = '/uploads/' + req.file.filename;
+    const imageUrl = getUploadedFileUrl(req.file);
     res.json({
       success: true,
       url: imageUrl,
       alt: req.file.originalname,
+      storage: isCloudinaryReady ? 'cloudinary' : 'local',
       message: '图片上传成功'
     });
   } catch (error) {
@@ -3236,12 +3263,13 @@ app.get('/api/carousels', async (req, res) => {
   const carousels = await Carousel.find().sort({ order: 1, createdAt: -1 });
   res.json(carousels);
 });
-// 上传轮播图
+// 上传轮播图（支持文件上传 或 直接传URL）
 app.post('/api/carousels', upload.single('image'), async (req, res) => {
-  const { order = 0, visible = true, position = 'center' } = req.body;
-  if (!req.file) return res.status(400).json({ message: '请上传图片' });
-  const imageUrl = '/uploads/' + req.file.filename;
-  const carousel = new Carousel({ imageUrl, order, visible, position });
+  const { order = 0, visible = true, position = 'center', imageUrl } = req.body;
+  // 优先使用直接传入的URL，否则使用上传的文件
+  const finalUrl = imageUrl || (req.file ? getUploadedFileUrl(req.file) : null);
+  if (!finalUrl) return res.status(400).json({ message: '请上传图片或提供URL' });
+  const carousel = new Carousel({ imageUrl: finalUrl, order, visible, position });
   await carousel.save();
   res.json(carousel);
 });
@@ -3295,7 +3323,7 @@ app.put('/api/footer', async (req, res) => {
 // Footer 二维码图片上传
 app.post('/api/footer/qrcode', upload.single('image'), async (req, res) => {
   if (!req.file) return res.status(400).json({ message: '请上传图片' });
-  const imageUrl = '/uploads/' + req.file.filename;
+  const imageUrl = getUploadedFileUrl(req.file);
   res.json({ imageUrl });
 });
 
@@ -3370,7 +3398,7 @@ app.post('/api/introduction/image', upload.single('image'), async (req, res) => 
     }
     
     console.log('收到图片上传请求:', req.file.originalname);
-    const imageUrl = '/uploads/' + req.file.filename;
+    const imageUrl = getUploadedFileUrl(req.file);
     console.log('图片保存路径:', imageUrl);
     
     res.json({ imageUrl });
@@ -3418,7 +3446,7 @@ app.post('/api/packages', upload.single('image'), async (req, res) => {
     const { name, speed, price, originalPrice, visaTypes, currency, description, features, details, order, visible } = req.body;
     console.log('接收到的数据:', { name, speed, visaTypes, price, originalPrice, currency });
     
-    const imageUrl = req.file ? '/uploads/' + req.file.filename : '';
+    const imageUrl = req.file ? getUploadedFileUrl(req.file) : '';
     
     const package = new Package({
       name,
@@ -3477,7 +3505,7 @@ app.put('/api/packages/:id', upload.single('image'), async (req, res) => {
     };
     
     if (req.file) {
-      updateData.imageUrl = '/uploads/' + req.file.filename;
+      updateData.imageUrl = getUploadedFileUrl(req.file);
     }
     
     const package = await Package.findByIdAndUpdate(req.params.id, updateData, { new: true });
